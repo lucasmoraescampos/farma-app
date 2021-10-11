@@ -1,0 +1,111 @@
+<ion-header mode="md">
+
+  <ion-toolbar>
+
+    <ion-buttons slot="start">
+
+      <ion-menu-button></ion-menu-button>
+
+    </ion-buttons>
+
+    <ion-title>Início</ion-title>
+
+  </ion-toolbar>
+
+</ion-header>
+
+<ion-content color="light">
+
+  <ion-grid class="animate__animated animate__fadeIn">
+
+    <ion-row>
+
+      <ion-col size-xs="12" size-md="6">
+
+        <ion-card>
+
+          <ion-card-header>
+
+            <ion-card-title>Total Faturado: R$ 19.200,44</ion-card-title>
+
+            <ion-card-subtitle>Meta: R$ 100.000,00</ion-card-subtitle>
+
+          </ion-card-header>
+
+          <ion-card-content>
+
+            <ion-progress-bar value="0.192" color="primary"></ion-progress-bar>
+
+            <span class="progress-value">19,2%</span>
+
+            <ion-note class="animate__animated animate__fadeIn animate__infinite">Falta R$ 80.79,56 para você cumprir sua meta</ion-note>
+
+          </ion-card-content>
+
+        </ion-card>
+
+      </ion-col>
+
+      <ion-col size-xs="12" size-md="6">
+
+        <ion-card>
+
+          <ion-card-header>
+
+            <ion-card-title>Total de clientes: 107</ion-card-title>
+
+            <ion-card-subtitle>Positivados: 8 <ion-button fill="clear" size="small">Ver todos</ion-button></ion-card-subtitle>
+
+          </ion-card-header>
+
+          <ion-card-content>
+
+            <ion-progress-bar value="0.192" color="primary"></ion-progress-bar>
+
+            <span class="progress-value">19,2%</span>
+
+            <ion-note class="animate__animated animate__fadeIn animate__infinite">Falta 99 para você cumprir sua meta!</ion-note>
+
+          </ion-card-content>
+
+        </ion-card>
+
+      </ion-col>
+
+      <ion-col size="12">
+
+        <ion-card>
+
+          <ion-card-header>
+
+            <ion-card-title>Selecione um cliente</ion-card-title>
+
+          </ion-card-header>
+
+          <ion-card-content>
+
+            <div class="input-button">
+
+              <ion-input></ion-input>
+
+              <ion-button color="primary">
+
+                <ion-icon slot="start" name="send-outline"></ion-icon> Enviar
+      
+              </ion-button>
+
+            </div>
+
+          </ion-card-content>
+
+        </ion-card>
+
+      </ion-col>
+
+    </ion-row>
+
+  </ion-grid>
+
+</ion-content>
+
+<ngx-loading [show]="loading"></ngx-loading>

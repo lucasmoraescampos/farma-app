@@ -1,0 +1,56 @@
+ion-card-header {
+    padding: 16px 16px 10px;
+}
+
+ion-card-content {
+    padding: 0 16px 16px;
+}
+
+ion-card-title {
+    font-family: "Oswald", sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--ion-color-primary);
+}
+
+ion-card-subtitle {
+    display: flex;
+    align-items: center;
+}
+
+ion-card-subtitle ion-button {
+    height: 21px;
+    font-size: 0.8rem;
+    margin-left: 10px;
+}
+
+ion-progress-bar {
+    height: 22px;
+    margin-bottom: 5px;
+}
+
+ion-note {
+    color: var(--ion-color-secondary);
+}
+
+.progress-value {
+    position: absolute;
+    top: 1.5px;
+    left: 22px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #fff;
+}
+
+.input-button {
+    display: flex;
+
+    ion-input {
+        border-radius: 0;
+    }
+
+    ion-button {
+        --border-radius: 0;
+    }
+}

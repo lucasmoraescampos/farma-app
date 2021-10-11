@@ -1,0 +1,30 @@
+.name {
+    display: block;
+    font-family: "Oswald", sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--ion-color-primary);
+}
+
+.code {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: var(--ion-color-medium);
+}
+
+.phone {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: var(--ion-color-medium);
+}
+
+ion-item {
+    --detail-icon-color: var(--ion-color-primary);
+    --detail-icon-opacity: 1;
+    
+    ion-icon {
+        font-size: 32px;
+    }
+}

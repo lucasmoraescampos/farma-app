@@ -1,0 +1,6 @@
+{
+	"appId": "io.ionic.starter",
+	"appName": "Participant",
+	"webDir": "www",
+	"bundledWebRuntime": false
+}

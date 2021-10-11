@@ -1,0 +1,79 @@
+ion-input.custom {
+    --background: var(--ion-color-light) !important;
+    --color: #495057 !important;
+    --padding-start: 15px !important;
+    --padding-end: 15px !important;
+    width: 100% !important;
+    height: 50px !important;
+    max-height: 50px !important;
+    font-size: 14px !important;
+    line-height: 1.5;
+    border: 1px solid var(--ion-color-light);
+    border-radius: 5px;
+    transition: 0.5s all ease;
+
+    &.has-focus {
+        border: 1px solid var(--ion-color-primary);
+    }
+}
+
+ion-item {
+    --highlight-background: none;
+
+    &.item-has-focus.ion-valid, &.item-has-focus.ion-invalid {
+        --highlight-background: var(--ion-color-primary) !important;
+    }
+}
+
+ion-input {
+    --padding-start: 8px !important;
+    --padding-end: 8px !important;
+    border: 0.55px solid var(--ion-item-border-color, var(--ion-border-color, var(--ion-color-step-150, rgba(0, 0, 0, 0.13))));
+    border-radius: 5px;
+    margin: 0;
+}
+
+ion-select {
+    --padding-start: 8px !important;
+    --padding-end: 8px !important;
+    border: 0.55px solid var(--ion-item-border-color, var(--ion-border-color, var(--ion-color-step-150, rgba(0, 0, 0, 0.13))));
+    border-radius: 5px;
+    margin: 0;
+    height: 49px;
+}
+
+ion-textarea {
+    --padding-start: 8px !important;
+    --padding-end: 8px !important;
+    border: 0.55px solid var(--ion-item-border-color, var(--ion-border-color, var(--ion-color-step-150, rgba(0, 0, 0, 0.13))));
+    border-radius: 5px;
+    margin-top: 0 !important;
+}
+
+ion-label.stacked {
+    font-size: 12px;
+    font-weight: 300;
+    position: absolute;
+    top: -1px;
+    left: 16px;
+    background: #fff;
+    z-index: 999999;
+}
+
+ion-button {
+    --border-radius: 5px;
+    --border-width: 0.55px;
+    --box-shadow: none;
+    font-size: 1rem;
+    height: 50px;
+    line-height: 1.5;
+    margin: 0;
+    letter-spacing: normal;
+    text-transform: none;
+}
+
+ion-button[size="small"] {
+    height: 36px;
+    font-size: 0.8rem;
+    font-weight: 400;
+}
