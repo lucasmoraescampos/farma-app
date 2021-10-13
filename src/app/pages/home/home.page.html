@@ -1,4 +1,4 @@
-<ion-header mode="md">
+<ion-header mode="ios">
 
   <ion-toolbar>
 
@@ -74,25 +74,29 @@
 
       <ion-col size="12">
 
-        <ion-card>
+        <ion-card class="customers">
 
           <ion-card-header>
 
-            <ion-card-title>Selecione um cliente</ion-card-title>
+            <ion-card-title>Clientes</ion-card-title>
 
           </ion-card-header>
 
           <ion-card-content>
 
-            <div class="input-button">
+            <ion-searchbar placeholder="Buscar"></ion-searchbar>
 
-              <ion-input></ion-input>
+            <div class="ion-scroll">
 
-              <ion-button color="primary">
+              <ion-list>
 
-                <ion-icon slot="start" name="send-outline"></ion-icon> Enviar
-      
-              </ion-button>
+                <ion-item lines="full" button="true" detail="true" *ngFor="let customer of customers" (click)="selectCustomer(customer)">
+
+                  <ion-label>{{ customer.corporate_name }}</ion-label>
+
+                </ion-item>
+
+              </ion-list>
 
             </div>
 

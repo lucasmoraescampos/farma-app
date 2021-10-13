@@ -1,5 +1,6 @@
 .ion-scroll {
     overflow-y: auto;
+    width: 100%;
     height: 100%;
 }
 
@@ -9,6 +10,27 @@
 
 .sc-ion-modal-ios-h {
     --backdrop-opacity: var(--ion-backdrop-opacity, 0.4);
+}
+
+ion-header ion-toolbar ion-title {
+    font-family: "Oswald", sans-serif;
+    font-size: 1.125rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--ion-color-primary);
+}
+
+ion-searchbar {
+    --background: rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.07) !important;
+    --border-radius: 8px !important;
+    --box-shadow: none !important;
+}
+
+ion-segment-button {
+    font-family: "Oswald", sans-serif;
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0;
 }
 
 ion-grid {
@@ -43,12 +65,6 @@ ion-card {
     margin: 0;
 }
 
-ion-searchbar {
-    --background: rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.07) !important;
-    --border-radius: 8px !important;
-    --box-shadow: none !important;
-}
-
 @media (pointer: fine) {
     .ion-scroll {
         &::-webkit-scrollbar {
@@ -64,7 +80,8 @@ ion-searchbar {
 }
 
 @media (min-width: 768px) {
-    .modal-tickets {
-        --width: calc(100% - 64px);
+    .modal-product {
+        --width: 450px;
+        --height: 350px;
     }
 }

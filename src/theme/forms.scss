@@ -31,6 +31,7 @@ ion-input {
     border: 0.55px solid var(--ion-item-border-color, var(--ion-border-color, var(--ion-color-step-150, rgba(0, 0, 0, 0.13))));
     border-radius: 5px;
     margin: 0;
+    height: 50px;
 }
 
 ion-select {
@@ -39,7 +40,7 @@ ion-select {
     border: 0.55px solid var(--ion-item-border-color, var(--ion-border-color, var(--ion-color-step-150, rgba(0, 0, 0, 0.13))));
     border-radius: 5px;
     margin: 0;
-    height: 49px;
+    height: 50px;
 }
 
 ion-textarea {
@@ -48,6 +49,7 @@ ion-textarea {
     border: 0.55px solid var(--ion-item-border-color, var(--ion-border-color, var(--ion-color-step-150, rgba(0, 0, 0, 0.13))));
     border-radius: 5px;
     margin-top: 0 !important;
+    min-height: 50px;
 }
 
 ion-label.stacked {

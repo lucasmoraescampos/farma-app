@@ -16,12 +16,12 @@ export class LayoutPage implements OnInit, OnDestroy {
   public user: any;
 
   public appPages = [
-    { title: 'Início',    url: '/home',       icon: 'home-outline' },
-    { title: 'Clientes',  url: '/customers',  icon: 'people-outline' },
-    { title: 'Produtos',  url: '/products',   icon: 'cube-outline' },
-    { title: 'Promoção',  url: '/promotion',  icon: 'ticket-outline' },
+    { title: 'Início',    url: '/home',       icon: 'home-outline'     },
+    { title: 'Clientes',  url: '/customers',  icon: 'people-outline'   },
+    { title: 'Produtos',  url: '/products',   icon: 'cube-outline'     },
+    { title: 'Promoção',  url: '/promotion',  icon: 'ticket-outline'   },
     { title: 'Agenda',    url: '/schedule',   icon: 'calendar-outline' },
-    { title: 'Pedidos',   url: '/order',      icon: 'receipt-outline' }
+    { title: 'Pedidos',   url: '/orders',     icon: 'receipt-outline'  }
   ];
   
   private unsubscribe = new Subject();

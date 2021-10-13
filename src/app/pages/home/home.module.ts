@@ -7,6 +7,7 @@ import { HomePage } from './home.page';
 import { BrMaskerModule } from 'br-mask';
 import { NgxLoadingModule } from 'ngx-loading';
 import { MoneyModule } from 'src/app/pipes/money/money.module';
+import { ModalCustomerModule } from 'src/app/components/modals/modal-customer/modal-customer.module';
 
 @NgModule({
   imports: [
@@ -17,7 +18,8 @@ import { MoneyModule } from 'src/app/pipes/money/money.module';
     BrMaskerModule,
     NgxLoadingModule,
     MoneyModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ModalCustomerModule
   ],
   declarations: [HomePage]
 })

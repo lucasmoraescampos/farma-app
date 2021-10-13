@@ -18,6 +18,23 @@ const routes: Routes = [
         path: 'customers',
         loadChildren: () => import('../customers/customers.module').then( m => m.CustomersPageModule),
         // canActivate: [AuthGuard]
+      },
+      {
+        path: 'products',
+        loadChildren: () => import('../products/products.module').then( m => m.ProductsPageModule),
+        // canActivate: [AuthGuard]
+      },
+      {
+        path: 'promotion',
+        loadChildren: () => import('../promotion/promotion.module').then( m => m.PromotionPageModule)
+      },
+      {
+        path: 'schedule',
+        loadChildren: () => import('../schedule/schedule.module').then( m => m.SchedulePageModule)
+      },
+      {
+        path: 'orders',
+        loadChildren: () => import('../orders/orders.module').then( m => m.OrdersPageModule)
       }
     ]
   }

@@ -1,0 +1,543 @@
+<ion-header class="ion-no-border" mode="ios">
+
+  <ion-toolbar>
+
+    <ion-title>Cliente</ion-title>
+
+    <ion-buttons slot="end">
+
+      <ion-button (click)="dismiss()">
+
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+
+      </ion-button>
+
+    </ion-buttons>
+
+  </ion-toolbar>
+
+  <ion-toolbar mode="md">
+
+    <ion-segment [(ngModel)]="segment" (ionChange)="segmentChanged()">
+
+      <ion-segment-button [value]="0">
+
+        <ion-label>Dados</ion-label>
+
+      </ion-segment-button>
+
+      <ion-segment-button [value]="1">
+
+        <ion-label>Pedido</ion-label>
+
+      </ion-segment-button>
+
+    </ion-segment>
+
+  </ion-toolbar>
+
+</ion-header>
+
+<ion-content>
+
+  <ion-slides (ionSlideDidChange)="slideChanged($event)">
+
+    <ion-slide>
+
+      <div class="ion-scroll">
+
+        <ion-list>
+
+          <ion-item lines="full">
+
+            <span slot="start">RAZÃO SOCIAL:</span>
+
+            <ion-label class="ion-text-wrap ion-text-end">{{ customer.corporate_name }}</ion-label>
+
+          </ion-item>
+
+          <ion-item lines="full">
+
+            <span slot="start">FANTASIA:</span>
+
+            <ion-label class="ion-text-wrap ion-text-end">{{ customer.fanatasy_name }}</ion-label>
+
+          </ion-item>
+
+          <ion-item lines="full">
+
+            <span slot="start">EMAIL:</span>
+
+            <ion-label class="ion-text-wrap ion-text-end">{{ customer.email }}</ion-label>
+
+          </ion-item>
+
+          <ion-item lines="full">
+
+            <span slot="start">CEP:</span>
+
+            <ion-label class="ion-text-wrap ion-text-end">{{ customer.cep }}</ion-label>
+
+          </ion-item>
+
+          <ion-item lines="full">
+
+            <span slot="start">ENDEREÇO:</span>
+
+            <ion-label class="ion-text-wrap ion-text-end">{{ customer.address }}</ion-label>
+
+          </ion-item>
+
+          <ion-item lines="full">
+
+            <span slot="start">BAIRRO:</span>
+
+            <ion-label class="ion-text-wrap ion-text-end">{{ customer.district }}</ion-label>
+
+          </ion-item>
+
+          <ion-item lines="full">
+
+            <span slot="start">CIDADE:</span>
+
+            <ion-label class="ion-text-wrap ion-text-end">{{ customer.city }}</ion-label>
+
+          </ion-item>
+
+          <ion-item lines="full">
+
+            <span slot="start">FONE:</span>
+
+            <ion-label class="ion-text-wrap ion-text-end">{{ customer.phone }}</ion-label>
+
+          </ion-item>
+
+          <ion-item lines="full">
+
+            <span slot="start">CNPJ:</span>
+
+            <ion-label class="ion-text-wrap ion-text-end">{{ customer.cnpj }}</ion-label>
+
+          </ion-item>
+
+          <ion-item lines="full">
+
+            <span slot="start">IE:</span>
+
+            <ion-label class="ion-text-wrap ion-text-end">{{ customer.ie }}</ion-label>
+
+          </ion-item>
+
+          <ion-item lines="full">
+
+            <span slot="start">VENDEDOR:</span>
+
+            <ion-label class="ion-text-wrap ion-text-end">{{ customer.salesman }}</ion-label>
+
+          </ion-item>
+
+        </ion-list>
+
+      </div>
+
+    </ion-slide>
+
+    <ion-slide>
+
+      <div class="ion-scroll">
+
+        <ion-grid>
+
+          <ion-row>
+
+            <ion-col size-xs="12" size-sm="6">
+
+              <ion-label class="stacked">Condição de pagamento</ion-label>
+
+              <ion-select placeholder="Selecione" interface="action-sheet" cancelText="Cancelar">
+
+                <ion-select-option value="1">A vista (D+1)</ion-select-option>
+
+                <ion-select-option value="30">BOLETO 1 DIA</ion-select-option>
+
+                <ion-select-option value="4">BOLETO 10 DIAS</ion-select-option>
+
+                <ion-select-option value="112">BOLETO 111 DIAS</ion-select-option>
+
+                <ion-select-option value="117">BOLETO 120 DIAS</ion-select-option>
+
+                <ion-select-option value="41">BOLETO 14 DIAS</ion-select-option>
+
+                <ion-select-option value="132">BOLETO 14/21 DIAS</ion-select-option>
+
+                <ion-select-option value="152">BOLETO 14/28 DIAS</ion-select-option>
+
+                <ion-select-option value="5">BOLETO 15 DIAS</ion-select-option>
+
+                <ion-select-option value="18">BOLETO 15/20 DIAS </ion-select-option>
+
+                <ion-select-option value="19">BOLETO 15/25</ion-select-option>
+
+                <ion-select-option value="17">BOLETO 15/30 DIAS </ion-select-option>
+
+                <ion-select-option value="151">BOLETO 15/45 DIAS</ion-select-option>
+
+                <ion-select-option value="145">BOLETO 173 DIAS</ion-select-option>
+
+                <ion-select-option value="146">BOLETO 192 DIAS</ion-select-option>
+
+                <ion-select-option value="6">BOLETO 20 DIAS</ion-select-option>
+
+                <ion-select-option value="21">BOLETO 20/30/40 DIAS</ion-select-option>
+
+                <ion-select-option value="11">BOLETO 21 DIAS </ion-select-option>
+
+                <ion-select-option value="35">BOLETO 21/28 DIAS</ion-select-option>
+
+                <ion-select-option value="81">BOLETO 21/28/35 DIAS</ion-select-option>
+
+                <ion-select-option value="33">BOLETO 21/35 DIAS</ion-select-option>
+
+                <ion-select-option value="91">BOLETO 21/35/49 DIAS</ion-select-option>
+
+                <ion-select-option value="69">BOLETO 21/42 DIAS</ion-select-option>
+
+                <ion-select-option value="153">BOLETO 25/35/45 DIAS</ion-select-option>
+
+                <ion-select-option value="8">BOLETO 28 DIAS </ion-select-option>
+
+                <ion-select-option value="36">BOLETO 28/35 DIAS</ion-select-option>
+
+                <ion-select-option value="23">BOLETO 28/35/42 DIAS</ion-select-option>
+
+                <ion-select-option value="52">BOLETO 28/35/42/49 DIAS</ion-select-option>
+
+                <ion-select-option value="79">BOLETO 28/35/42/49/56 DIAS</ion-select-option>
+
+                <ion-select-option value="26">BOLETO 28/42 DIAS</ion-select-option>
+
+                <ion-select-option value="28">BOLETO 28/42/56 DIAS</ion-select-option>
+
+                <ion-select-option value="63">BOLETO 28/42/56/70 DIAS</ion-select-option>
+
+                <ion-select-option value="126">BOLETO 28/49 DIAS</ion-select-option>
+
+                <ion-select-option value="109">BOLETO 28/49/70 DIAS</ion-select-option>
+
+                <ion-select-option value="51">BOLETO 28/56 DIAS</ion-select-option>
+
+                <ion-select-option value="29">BOLETO 28/56/84 DIAS</ion-select-option>
+
+                <ion-select-option value="9">BOLETO 30 DIAS</ion-select-option>
+
+                <ion-select-option value="84">BOLETO 30/40 DIAS</ion-select-option>
+
+                <ion-select-option value="65">BOLETO 30/40/50 DIAS</ion-select-option>
+
+                <ion-select-option value="22">BOLETO 30/40/60</ion-select-option>
+
+                <ion-select-option value="54">BOLETO 30/45 DIAS</ion-select-option>
+
+                <ion-select-option value="34">BOLETO 30/45/60 DIAS</ion-select-option>
+
+                <ion-select-option value="75">BOLETO 30/45/60/75 DIAS</ion-select-option>
+
+                <ion-select-option value="27">BOLETO 30/60 DIAS</ion-select-option>
+
+                <ion-select-option value="57">BOLETO 30/60/90 DIAS</ion-select-option>
+
+                <ion-select-option value="135">BOLETO 32 DIAS</ion-select-option>
+
+                <ion-select-option value="10">BOLETO 35 DIAS </ion-select-option>
+
+                <ion-select-option value="24">BOLETO 35/42 DIAS</ion-select-option>
+
+                <ion-select-option value="44">BOLETO 35/42/49 DIAS</ion-select-option>
+
+                <ion-select-option value="78">BOLETO 35/42/49/56 DIAS</ion-select-option>
+
+                <ion-select-option value="67">BOLETO 35/42/56</ion-select-option>
+
+                <ion-select-option value="120">BOLETO 35/45 DIAS</ion-select-option>
+
+                <ion-select-option value="130">BOLETO 35/45/55 DIAS</ion-select-option>
+
+                <ion-select-option value="86">BOLETO 35/49 DIAS</ion-select-option>
+
+                <ion-select-option value="77">BOLETO 35/49/63 DIAS</ion-select-option>
+
+                <ion-select-option value="138">BOLETO 38 DIAS</ion-select-option>
+
+                <ion-select-option value="90">BOLETO 40/50 DIAS</ion-select-option>
+
+                <ion-select-option value="64">BOLETO 40/50/60 DIAS</ion-select-option>
+
+                <ion-select-option value="122">BOLETO 40/50/60/70 DIAS</ion-select-option>
+
+                <ion-select-option value="125">BOLETO 40/60 DIAS</ion-select-option>
+
+                <ion-select-option value="76">BOLETO 40/60/80 DIAS</ion-select-option>
+
+                <ion-select-option value="32">BOLETO 42 DIAS</ion-select-option>
+
+                <ion-select-option value="72">BOLETO 42/49 DIAS</ion-select-option>
+
+                <ion-select-option value="42">BOLETO 42/49/56 DIAS</ion-select-option>
+
+                <ion-select-option value="74">BOLETO 42/49/56/63 DIAS</ion-select-option>
+
+                <ion-select-option value="49">BOLETO 42/56 DIAS</ion-select-option>
+
+                <ion-select-option value="47">BOLETO 42/56/70 DIAS</ion-select-option>
+
+                <ion-select-option value="94">BOLETO 42/56/70/84 DIAS</ion-select-option>
+
+                <ion-select-option value="13">BOLETO 45 DIAS</ion-select-option>
+
+                <ion-select-option value="143">BOLETO 45/55 DIAS</ion-select-option>
+
+                <ion-select-option value="58">BOLETO 45/55/65 DIAS</ion-select-option>
+
+                <ion-select-option value="56">BOLETO 45/60 DIAS</ion-select-option>
+
+                <ion-select-option value="103">BOLETO 45/60/75 DIAS</ion-select-option>
+
+                <ion-select-option value="102">BOLETO 45/60/75/90 DIAS</ion-select-option>
+
+                <ion-select-option value="127">BOLETO 45/65/75 DIAS</ion-select-option>
+
+                <ion-select-option value="108">BOLETO 45/75 DIAS</ion-select-option>
+
+                <ion-select-option value="92">BOLETO 49 DIAS</ion-select-option>
+
+                <ion-select-option value="88">BOLETO 49/56 DIAS</ion-select-option>
+
+                <ion-select-option value="31">BOLETO 49/56/63 DIAS</ion-select-option>
+
+                <ion-select-option value="43">BOLETO 49/56/63/70 DIAS</ion-select-option>
+
+                <ion-select-option value="148">BOLETO 49/63 DIAS</ion-select-option>
+
+                <ion-select-option value="68">BOLETO 49/63/70 DIAS</ion-select-option>
+
+                <ion-select-option value="89">BOLETO 49/63/77 DIAS</ion-select-option>
+
+                <ion-select-option value="66">BOLETO 50/60 DIAS</ion-select-option>
+
+                <ion-select-option value="25">BOLETO 50/60/70 DIAS</ion-select-option>
+
+                <ion-select-option value="59">BOLETO 50/70 DIAS</ion-select-option>
+
+                <ion-select-option value="142">BOLETO 50/70/90 DIAS</ion-select-option>
+
+                <ion-select-option value="114">BOLETO 55/65/75 DIAS</ion-select-option>
+
+                <ion-select-option value="121">BOLETO 55/65/75/85 DIAS</ion-select-option>
+
+                <ion-select-option value="45">BOLETO 56 DIAS</ion-select-option>
+
+                <ion-select-option value="48">BOLETO 56/63 DIAS</ion-select-option>
+
+                <ion-select-option value="40">BOLETO 56/63/70 DIAS</ion-select-option>
+
+                <ion-select-option value="50">BOLETO 56/63/70/77 DIAS</ion-select-option>
+
+                <ion-select-option value="129">BOLETO 56/70 DIAS</ion-select-option>
+
+                <ion-select-option value="124">BOLETO 56/70/84 DIAS</ion-select-option>
+
+                <ion-select-option value="16">BOLETO 60 DIAS </ion-select-option>
+
+                <ion-select-option value="110">BOLETO 60/70 DIAS</ion-select-option>
+
+                <ion-select-option value="37">BOLETO 60/70/80 DIAS </ion-select-option>
+
+                <ion-select-option value="70">BOLETO 60/75 DIAS</ion-select-option>
+
+                <ion-select-option value="141">BOLETO 60/75/90 DIAS</ion-select-option>
+
+                <ion-select-option value="113">BOLETO 60/90 DIAS</ion-select-option>
+
+                <ion-select-option value="93">BOLETO 60/90/120 DIAS</ion-select-option>
+
+                <ion-select-option value="61">BOLETO 63 DIAS</ion-select-option>
+
+                <ion-select-option value="53">BOLETO 63/70 DIAS</ion-select-option>
+
+                <ion-select-option value="55">BOLETO 63/70/77 DIAS</ion-select-option>
+
+                <ion-select-option value="96">BOLETO 63/77 DIAS</ion-select-option>
+
+                <ion-select-option value="101">BOLETO 63/77/91 DIAS</ion-select-option>
+
+                <ion-select-option value="137">BOLETO 65 DIAS</ion-select-option>
+
+                <ion-select-option value="128">BOLETO 65/70 DIAS</ion-select-option>
+
+                <ion-select-option value="123">BOLETO 65/70/75 DIAS</ion-select-option>
+
+                <ion-select-option value="46">BOLETO 7 DIAS</ion-select-option>
+
+                <ion-select-option value="39">BOLETO 70 DIAS</ion-select-option>
+
+                <ion-select-option value="134">BOLETO 70/80/90 DIAS</ion-select-option>
+
+                <ion-select-option value="133">BOLETO 70/84 DIAS</ion-select-option>
+
+                <ion-select-option value="149">BOLETO 74/84/94 DIAS</ion-select-option>
+
+                <ion-select-option value="136">BOLETO 75 DIAS</ion-select-option>
+
+                <ion-select-option value="139">BOLETO 80 DIAS</ion-select-option>
+
+                <ion-select-option value="60">BOLETO 84 DIAS</ion-select-option>
+
+                <ion-select-option value="73">BOLETO 90 DIAS</ion-select-option>
+
+                <ion-select-option value="80">BOLETO 90/120 DIAS</ion-select-option>
+
+                <ion-select-option value="100">BOLETO 90/120/150 DIAS</ion-select-option>
+
+                <ion-select-option value="38">BONIFICAÇÃO</ion-select-option>
+
+                <ion-select-option value="7">DUPLICATA 1 DIA</ion-select-option>
+
+                <ion-select-option value="85">SOMENTE PARA DEPOSITO</ion-select-option>
+
+              </ion-select>
+
+            </ion-col>
+
+            <ion-col size-xs="12" size-sm="6">
+
+              <ion-label class="stacked">Tabela de preço</ion-label>
+
+              <ion-select placeholder="Selecione" interface="action-sheet" cancelText="Cancelar">
+
+                <ion-select-option value="1">DISTRIBUIDOR</ion-select-option>
+
+                <ion-select-option value="2">REDES</ion-select-option>
+
+                <ion-select-option value="3">VAREJO</ion-select-option>
+
+              </ion-select>
+
+            </ion-col>
+
+            <ion-col size="12">
+
+              <ion-list class="products">
+
+                <ion-item lines="none">
+
+                  <ion-label class="ion-text-center">Não Existem Produtos no Pedido!</ion-label>
+
+                </ion-item>
+
+              </ion-list>
+
+              <ion-fab vertical="bottom" horizontal="end">
+
+                <ion-fab-button size="small" (click)="addProduct()">
+
+                  <ion-icon name="add"></ion-icon>
+
+                </ion-fab-button>
+
+              </ion-fab>
+
+            </ion-col>
+
+            <ion-col size="12">
+
+              <ion-label class="stacked">Comentários</ion-label>
+
+              <ion-textarea></ion-textarea>
+
+            </ion-col>
+
+            <ion-col size="12">
+
+              <ion-label class="stacked">Promoção</ion-label>
+
+              <ion-textarea></ion-textarea>
+
+            </ion-col>
+
+            <ion-col size-xs="12" size-sm="6">
+
+              <ion-label class="stacked">Autorizada por</ion-label>
+
+              <ion-input></ion-input>
+
+            </ion-col>
+
+            <ion-col size-xs="12" size-sm="6">
+
+              <ion-label class="stacked">Data de autorização</ion-label>
+
+              <ion-input></ion-input>
+
+            </ion-col>
+
+            <ion-col size-xs="12" size-sm="6">
+
+              <ion-label class="stacked">Ordem de compra</ion-label>
+
+              <ion-input></ion-input>
+
+            </ion-col>
+
+            <ion-col size-xs="12" size-sm="6">
+
+              <ion-label class="stacked">Frete</ion-label>
+
+              <ion-input></ion-input>
+
+            </ion-col>
+
+            <ion-col size-xs="12" size-sm="6">
+
+              <ion-label class="stacked">Agendamento</ion-label>
+
+              <ion-input></ion-input>
+
+            </ion-col>
+
+            <ion-col size-xs="12" size-sm="6">
+
+              <ion-label class="stacked">Paletização</ion-label>
+
+              <ion-input></ion-input>
+
+            </ion-col>
+
+          </ion-row>
+
+        </ion-grid>
+
+      </div>
+
+      <ion-footer class="ion-no-border">
+
+        <ion-grid>
+      
+          <ion-row>
+      
+            <ion-col size="12">
+      
+              <ion-button expand="block">Pedir</ion-button>
+      
+            </ion-col>
+      
+          </ion-row>
+      
+        </ion-grid>
+      
+      </ion-footer>
+
+    </ion-slide>
+
+  </ion-slides>
+
+</ion-content>

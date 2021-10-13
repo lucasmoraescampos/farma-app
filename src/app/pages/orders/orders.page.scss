@@ -1,4 +1,4 @@
-.name {
+.customer {
     display: block;
     font-family: "Oswald", sans-serif;
     font-size: 1rem;
@@ -6,24 +6,29 @@
     color: var(--ion-color-primary);
 }
 
-.code {
+.date {
     display: block;
     font-size: 0.9rem;
     font-weight: 400;
     color: var(--ion-color-medium);
 }
 
-.phone {
+.price {
     display: block;
-    font-size: 0.9rem;
+    font-size: 1.125rem;
     font-weight: 400;
-    color: var(--ion-color-medium);
+    color: var(--ion-color-dark);
+    margin: 5px 0;
+}
+
+ion-badge {
+    font-weight: 400;
 }
 
 ion-item {
     --detail-icon-color: var(--ion-color-primary);
     --detail-icon-opacity: 1;
-
+    
     &:last-child {
         --border-width: 0;
     }
