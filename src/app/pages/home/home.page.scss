@@ -7,20 +7,19 @@ ion-card-content {
 }
 
 ion-card-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     font-family: "Oswald", sans-serif;
     font-size: 0.9rem;
     font-weight: 700;
     text-transform: uppercase;
     color: var(--ion-color-primary);
+    min-height: 30px;
 }
 
-ion-card-subtitle {
-    display: flex;
-    align-items: center;
-}
-
-ion-card-subtitle ion-button {
-    height: 21px;
+ion-card-title ion-button {
+    height: 30px;
     font-size: 0.8rem;
     margin-left: 10px;
 }
@@ -32,6 +31,12 @@ ion-progress-bar {
 
 ion-note {
     color: var(--ion-color-secondary);
+}
+
+ion-searchbar {
+    padding: 0;
+    height: 50px;
+    margin-bottom: 8px;
 }
 
 .progress-value {
@@ -46,7 +51,7 @@ ion-note {
 .customers {
     .ion-scroll {
         max-height: 208px;
-        padding: 0 10px;
+        padding: 0;
     }
 
     ion-input {
@@ -58,10 +63,16 @@ ion-note {
 
         ion-item {
             --padding-start: 0;
+            --inner-padding-top: 5px;
+            --inner-padding-bottom: 5px;
             --inner-padding-start: 8px;
             --inner-padding-end: 8px;
             --detail-icon-color: var(--ion-color-primary);
             --detail-icon-opacity: 1;
+
+            ion-label {
+                margin: 0;
+            }
 
             &:last-child {
                 --border-width: 0;

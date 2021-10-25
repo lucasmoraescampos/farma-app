@@ -10,31 +10,39 @@ const routes: Routes = [
     component: LayoutPage,
     children: [
       {
+        path: '',
+        redirectTo: 'home',
+        pathMatch: 'full'
+      },
+      {
         path: 'home',
         loadChildren: () => import('../home/home.module').then( m => m.HomePageModule),
-        // canActivate: [AuthGuard]
+        canActivate: [AuthGuard]
       },
       {
         path: 'customers',
         loadChildren: () => import('../customers/customers.module').then( m => m.CustomersPageModule),
-        // canActivate: [AuthGuard]
+        canActivate: [AuthGuard]
       },
       {
         path: 'products',
         loadChildren: () => import('../products/products.module').then( m => m.ProductsPageModule),
-        // canActivate: [AuthGuard]
+        canActivate: [AuthGuard]
       },
       {
         path: 'promotion',
-        loadChildren: () => import('../promotion/promotion.module').then( m => m.PromotionPageModule)
+        loadChildren: () => import('../promotion/promotion.module').then( m => m.PromotionPageModule),
+        canActivate: [AuthGuard]
       },
       {
         path: 'schedule',
-        loadChildren: () => import('../schedule/schedule.module').then( m => m.SchedulePageModule)
+        loadChildren: () => import('../schedule/schedule.module').then( m => m.SchedulePageModule),
+        canActivate: [AuthGuard]
       },
       {
         path: 'orders',
-        loadChildren: () => import('../orders/orders.module').then( m => m.OrdersPageModule)
+        loadChildren: () => import('../orders/orders.module').then( m => m.OrdersPageModule),
+        canActivate: [AuthGuard]
       }
     ]
   }

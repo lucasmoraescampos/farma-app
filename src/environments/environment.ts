@@ -6,12 +6,7 @@ export const environment = {
 
   production: false,
 
-  apiUrl: 'http://localhost:8000',
-
-  mercadopago: {
-    publicKey: 'TEST-b01bd26b-0810-457b-8187-54db697eb8eb',
-    // publicKey: 'APP_USR-a157c6fd-6b03-4533-876a-6b4b42e11d97'
-  }
+  apiUrl: 'http://192.168.5.97:8000'
 
 };
 

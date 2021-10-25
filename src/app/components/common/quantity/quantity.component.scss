@@ -1,0 +1,24 @@
+ion-item {
+    --min-height: 0;
+    --padding-start: 0;
+    --inner-padding-end: 0;
+
+    &.lines {
+        --border-radius: 5px !important;
+        --border-width: 0.55px !important;
+    }
+
+    ion-input {
+        --padding-top: 0 !important;
+        --padding-end: 0 !important;
+        --padding-bottom: 0 !important;
+        --padding-start: 0 !important;
+        text-align: center;
+        border: none;
+    }
+
+    ion-button {
+        --border-radius: 0;
+        height: 100%;
+    }
+}

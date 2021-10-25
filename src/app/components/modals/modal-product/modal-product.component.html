@@ -2,7 +2,7 @@
 
   <ion-toolbar>
 
-    <ion-title>Adicionar Produto</ion-title>
+    <ion-title>Produto</ion-title>
 
     <ion-buttons slot="end">
 
@@ -46,51 +46,35 @@
 
       <ion-row>
 
-        <ion-col size-xs="12" size-sm="6">
+        <ion-col size="12">
 
           <ion-label class="stacked">Linha</ion-label>
 
-          <ion-select placeholder="Selecione" interface="action-sheet" cancelText="Cancelar">
+          <ion-select placeholder="Selecione" interface="action-sheet" cancelText="Cancelar" [(ngModel)]="lab_id" (ngModelChange)="labChanged()">
 
-            <ion-select-option>France Farma</ion-select-option>
+            <ion-select-option [value]="lab.id_lab" *ngFor="let lab of labs">{{ lab.nome }}</ion-select-option>
 
           </ion-select>
 
         </ion-col>
 
-        <ion-col size-xs="12" size-sm="6">
+        <ion-col class="animate__animated animate__fadeIn" size="12" *ngIf="products">
 
           <ion-label class="stacked">Produto</ion-label>
 
-          <ion-select placeholder="Selecione" interface="action-sheet" cancelText="Cancelar">
+          <ion-select placeholder="Selecione" interface="action-sheet" cancelText="Cancelar" [(ngModel)]="product_id" (ngModelChange)="productChanged()">
 
-            <ion-select-option>France Farma</ion-select-option>
+            <ion-select-option [value]="product.id_produto" *ngFor="let product of products">{{ product.nome }}</ion-select-option>
 
           </ion-select>
 
         </ion-col>
 
-        <ion-col size-xs="12" size-sm="4">
+        <ion-col class="animate__animated animate__fadeIn" size="12" *ngIf="product_id && products">
 
-          <ion-label class="stacked">Qtde {{ segment }}</ion-label>
+          <ion-label class="stacked">Desconto %</ion-label>
 
-          <ion-input></ion-input>
-
-        </ion-col>
-
-        <ion-col size-xs="12" size-sm="4">
-
-          <ion-label class="stacked">Valor CX</ion-label>
-
-          <ion-input disabled></ion-input>
-
-        </ion-col>
-
-        <ion-col size-xs="12" size-sm="4">
-
-          <ion-label class="stacked">Valor UN</ion-label>
-
-          <ion-input disabled></ion-input>
+          <ion-input type="number" min="0" max="100" [(ngModel)]="discount" (ngModelChange)="discountChanged()"></ion-input>
 
         </ion-col>
 
@@ -102,15 +86,21 @@
 
 </ion-content>
 
-<ion-footer class="ion-no-border">
+<ion-footer class="ion-no-border animate__animated animate__fadeIn" *ngIf="prices">
 
   <ion-grid>
 
     <ion-row>
 
-      <ion-col size="12">
+      <ion-col size="5">
 
-        <ion-button expand="block">Adicionar</ion-button>
+        <app-quantity [lines]="true" [min]="1" [value]="qty" [disabled]="!product_id" (changeQty)="changeQty($event)"></app-quantity>
+
+      </ion-col>
+
+      <ion-col size="7">
+
+        <ion-button class="product" expand="block" [disabled]="!product_id" (click)="save()">{{ buttonText }} <span class="total" *ngIf="total">{{ total | money }}</span></ion-button>
 
       </ion-col>
 
@@ -119,3 +109,5 @@
   </ion-grid>
 
 </ion-footer>
+
+<app-loader></app-loader>

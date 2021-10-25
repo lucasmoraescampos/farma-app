@@ -9,6 +9,8 @@ import { AppInterceptor } from './app.interceptor';
 import { NgxLoadingModule } from 'ngx-loading';
 import { registerLocaleData } from '@angular/common';
 import localeBr from '@angular/common/locales/pt';
+import { SQLite } from '@ionic-native/sqlite/ngx';
+import { StatusBar } from '@ionic-native/status-bar/ngx';
 
 registerLocaleData(localeBr, 'pt');
 
@@ -21,7 +23,7 @@ registerLocaleData(localeBr, 'pt');
     AppRoutingModule,
     HttpClientModule,
     NgxLoadingModule.forRoot({
-      backdropBackgroundColour: 'rgba(0, 0, 0, 0.5)',
+      backdropBackgroundColour: 'rgba(255, 255, 255, 0.5)',
       primaryColour: 'var(--ion-color-primary)',
       secondaryColour: 'var(--ion-color-primary)',
       tertiaryColour: 'var(--ion-color-primary)',
@@ -29,6 +31,7 @@ registerLocaleData(localeBr, 'pt');
     })
   ],
   providers: [
+    SQLite,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: HTTP_INTERCEPTORS, useClass: AppInterceptor, multi: true },
     { provide: LOCALE_ID, useValue: 'pt' }

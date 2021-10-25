@@ -12,6 +12,17 @@
     --backdrop-opacity: var(--ion-backdrop-opacity, 0.4);
 }
 
+.database-sync {
+    --width: calc(100% - 32px);
+    --height: 72px;
+    --border-radius: 8px;
+    align-items: flex-end;
+
+    .modal-wrapper {
+        margin-bottom: 16px;
+    }
+}
+
 ion-header ion-toolbar ion-title {
     font-family: "Oswald", sans-serif;
     font-size: 1.125rem;
@@ -45,6 +56,10 @@ ion-grid {
         --ion-grid-column-padding-xl: 8px;
         --ion-grid-column-padding-xs: 8px;
     }
+}
+
+ion-spinner {
+    transform: scale(1.5);
 }
 
 /* Chrome, Safari, Edge, Opera */
@@ -82,6 +97,6 @@ ion-card {
 @media (min-width: 768px) {
     .modal-product {
         --width: 450px;
-        --height: 350px;
+        --height: 398px;
     }
 }

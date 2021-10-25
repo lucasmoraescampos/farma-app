@@ -1,6 +1,15 @@
 {
 	"appId": "io.ionic.starter",
-	"appName": "Participant",
+	"appName": "France Farma",
 	"webDir": "www",
-	"bundledWebRuntime": false
+	"bundledWebRuntime": false,
+	"plugins": {
+		"SplashScreen": {
+			"launchAutoHide": false,
+			"backgroundColor": "#FFFFFF",
+			"androidScaleType": "CENTER",
+			"splashFullScreen": false,
+			"splashImmersive": true
+		}
+	}
 }

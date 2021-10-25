@@ -21,8 +21,12 @@
     margin: 5px 0;
 }
 
-ion-badge {
-    font-weight: 400;
+ion-list {
+    padding: 0;
+}
+
+ion-list-header {
+    padding: 8px;
 }
 
 ion-item {
@@ -32,4 +36,8 @@ ion-item {
     &:last-child {
         --border-width: 0;
     }
+}
+
+ion-badge {
+    font-weight: 400;
 }

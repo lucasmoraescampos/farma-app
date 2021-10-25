@@ -16,29 +16,29 @@
 
 <ion-content color="light">
 
-  <ion-grid class="animate__animated animate__fadeIn">
+  <ion-grid class="animate__animated animate__fadeIn" *ngIf="dashboard">
 
     <ion-row>
 
-      <ion-col size-xs="12" size-md="6">
+      <ion-col class="animate__animated animate__fadeIn" size-xs="12" size-md="6">
 
         <ion-card>
 
           <ion-card-header>
 
-            <ion-card-title>Total Faturado: R$ 19.200,44</ion-card-title>
+            <ion-card-title>Total Faturado: {{ dashboard.billed | money }}</ion-card-title>
 
-            <ion-card-subtitle>Meta: R$ 100.000,00</ion-card-subtitle>
+            <ion-card-subtitle>Meta: {{ dashboard.goal | money }}</ion-card-subtitle>
 
           </ion-card-header>
 
           <ion-card-content>
 
-            <ion-progress-bar value="0.192" color="primary"></ion-progress-bar>
+            <ion-progress-bar [value]="dashboard.billed / dashboard.goal" color="primary"></ion-progress-bar>
 
-            <span class="progress-value">19,2%</span>
+            <span class="progress-value">{{ (dashboard.billed * 100 / dashboard.goal) | number:'1.1-2' }}%</span>
 
-            <ion-note class="animate__animated animate__fadeIn animate__infinite">Falta R$ 80.79,56 para você cumprir sua meta</ion-note>
+            <ion-note class="animate__animated animate__fadeIn animate__infinite">Falta {{ (dashboard.goal - dashboard.billed) | money }} para você cumprir sua meta</ion-note>
 
           </ion-card-content>
 
@@ -46,25 +46,25 @@
 
       </ion-col>
 
-      <ion-col size-xs="12" size-md="6">
+      <ion-col class="animate__animated animate__fadeIn" size-xs="12" size-md="6">
 
         <ion-card>
 
           <ion-card-header>
 
-            <ion-card-title>Total de clientes: 107</ion-card-title>
+            <ion-card-title>Total de clientes: {{ dashboard.total_customers }} <ion-button fill="clear" size="small">Ver todos</ion-button></ion-card-title>
 
-            <ion-card-subtitle>Positivados: 8 <ion-button fill="clear" size="small">Ver todos</ion-button></ion-card-subtitle>
+            <ion-card-subtitle>Positivados: {{ dashboard.total_positive_customers }}</ion-card-subtitle>
 
           </ion-card-header>
 
           <ion-card-content>
 
-            <ion-progress-bar value="0.192" color="primary"></ion-progress-bar>
+            <ion-progress-bar [value]="dashboard.total_positive_customers / dashboard.total_customers" color="primary"></ion-progress-bar>
 
-            <span class="progress-value">19,2%</span>
+            <span class="progress-value">{{ (dashboard.total_positive_customers * 100 / dashboard.total_customers) | number:'1.1-2' }}%</span>
 
-            <ion-note class="animate__animated animate__fadeIn animate__infinite">Falta 99 para você cumprir sua meta!</ion-note>
+            <ion-note class="animate__animated animate__fadeIn animate__infinite">Falta {{ dashboard.total_customers - dashboard.total_positive_customers }} para você cumprir sua meta!</ion-note>
 
           </ion-card-content>
 
@@ -72,7 +72,7 @@
 
       </ion-col>
 
-      <ion-col size="12">
+      <ion-col class="animate__animated animate__fadeIn" size="12">
 
         <ion-card class="customers">
 
@@ -84,15 +84,25 @@
 
           <ion-card-content>
 
-            <ion-searchbar placeholder="Buscar"></ion-searchbar>
+            <ion-searchbar placeholder="Buscar" (ionChange)="searchChanged($event)" (ionClear)="customers = []"></ion-searchbar>
 
             <div class="ion-scroll">
 
               <ion-list>
 
+                <ion-item lines="none" *ngIf="noloader">
+
+                  <ion-label class="ion-text-center">
+
+                    <ion-spinner name="dots" color="primary"></ion-spinner>
+
+                  </ion-label>
+
+                </ion-item>
+
                 <ion-item lines="full" button="true" detail="true" *ngFor="let customer of customers" (click)="selectCustomer(customer)">
 
-                  <ion-label>{{ customer.corporate_name }}</ion-label>
+                  <ion-label class="ion-text-wrap">{{ customer.razao_social }}</ion-label>
 
                 </ion-item>
 
@@ -112,4 +122,4 @@
 
 </ion-content>
 
-<ngx-loading [show]="loading"></ngx-loading>
+<app-loader *ngIf="!noloader"></app-loader>

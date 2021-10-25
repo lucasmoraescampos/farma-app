@@ -14,49 +14,29 @@
 
 </ion-header>
 
-<ion-content color="light">
+<ion-content>
 
   <ion-slides class="swiper-no-swiping">
 
     <ion-slide>
 
       <div class="ion-scroll">
+    
+        <ion-list class="animate__animated animate__fadeIn">
 
-        <ion-grid class="animate__animated animate__fadeIn">
-    
-          <ion-row>
-    
-            <ion-col size="12">
-    
-              <ion-card>
-    
-                <ion-card-header>
-    
-                  <ion-card-title>Selecione uma linha</ion-card-title>
-    
-                </ion-card-header>
-    
-                <ion-card-content>
-    
-                  <ion-list>
-    
-                    <ion-item lines="full" button="true" detail="true" (click)="selectLine()">
-    
-                      <ion-label>France Farma</ion-label>
-    
-                    </ion-item>
-    
-                  </ion-list>
-    
-                </ion-card-content>
-    
-              </ion-card>
-    
-            </ion-col>
-    
-          </ion-row>
-    
-        </ion-grid>
+          <ion-list-header>
+
+            <ion-label>Selecione uma linha</ion-label>
+
+          </ion-list-header>
+
+          <ion-item lines="full" button="true" detail="true" (click)="selectLine()">
+
+            <ion-label>France Farma</ion-label>
+
+          </ion-item>
+
+        </ion-list>
     
       </div>
 
@@ -66,103 +46,71 @@
 
       <div class="ion-scroll">
 
-        <ion-grid class="animate__animated animate__fadeIn">
-    
-          <ion-row>
-    
-            <ion-col size="12">
+        <ion-list class="animate__animated animate__fadeIn">
 
-              <ion-card>
-          
-                <ion-card-header>
+          <ion-list-header class="ion-no-padding">
 
-                  <ion-toolbar mode="md">
+            <ion-button fill="clear" size="small" (click)="changeLine()">
 
-                    <ion-buttons slot="start">
+              <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
 
-                      <ion-button size="small" (click)="changeLine()">
+            </ion-button>
 
-                        <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
+            <ion-label>France Farma</ion-label>
 
-                      </ion-button>
-                      
-                    </ion-buttons>
+          </ion-list-header>
 
-                    <ion-card-subtitle>France Farma</ion-card-subtitle>
+          <ion-searchbar placeholder="Buscar"></ion-searchbar>
 
-                  </ion-toolbar>
+          <ion-item lines="full">
+              
+            <ion-label class="ion-text-wrap">
+  
+              <span class="name">A.G.E. Hosp Derme Almotolia 100 ml</span>
+  
+              <span class="price">R$ 111,00</span>
+  
+            </ion-label>
+  
+          </ion-item>
 
-                  <ion-toolbar>
-    
-                    <ion-searchbar placeholder="Buscar"></ion-searchbar>
-    
-                  </ion-toolbar>
-    
-                </ion-card-header>
+          <ion-item lines="full">
+              
+            <ion-label class="ion-text-wrap">
+  
+              <span class="name">A.G.E. Hosp Derme Almotolia 100 ml</span>
+  
+              <span class="price">R$ 111,00</span>
+  
+            </ion-label>
+  
+          </ion-item>
 
-                <ion-card-content>
+          <ion-item lines="full">
+              
+            <ion-label class="ion-text-wrap">
+  
+              <span class="name">A.G.E. Hosp Derme Almotolia 100 ml</span>
+  
+              <span class="price">R$ 111,00</span>
+  
+            </ion-label>
+  
+          </ion-item>
 
-                  <ion-list>
+          <ion-item lines="full">
+              
+            <ion-label class="ion-text-wrap">
+  
+              <span class="name">A.G.E. Hosp Derme Almotolia 100 ml</span>
+  
+              <span class="price">R$ 111,00</span>
+  
+            </ion-label>
+  
+          </ion-item>
 
-                    <ion-item lines="full">
-                        
-                      <ion-label class="ion-text-wrap">
-            
-                        <span class="name">A.G.E. Hosp Derme Almotolia 100 ml</span>
-            
-                        <span class="price">R$ 111,00</span>
-            
-                      </ion-label>
-            
-                    </ion-item>
-
-                    <ion-item lines="full">
-                        
-                      <ion-label class="ion-text-wrap">
-            
-                        <span class="name">A.G.E. Hosp Derme Almotolia 100 ml</span>
-            
-                        <span class="price">R$ 111,00</span>
-            
-                      </ion-label>
-            
-                    </ion-item>
-
-                    <ion-item lines="full">
-                        
-                      <ion-label class="ion-text-wrap">
-            
-                        <span class="name">A.G.E. Hosp Derme Almotolia 100 ml</span>
-            
-                        <span class="price">R$ 111,00</span>
-            
-                      </ion-label>
-            
-                    </ion-item>
-
-                    <ion-item lines="full">
-                        
-                      <ion-label class="ion-text-wrap">
-            
-                        <span class="name">A.G.E. Hosp Derme Almotolia 100 ml</span>
-            
-                        <span class="price">R$ 111,00</span>
-            
-                      </ion-label>
-            
-                    </ion-item>
-            
-                  </ion-list>
-
-                </ion-card-content>
-
-              </ion-card>
-
-            </ion-col>
-
-          </ion-row>
-
-        </ion-grid>
+        </ion-list>
 
       </div>
 

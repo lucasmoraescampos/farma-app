@@ -5,9 +5,9 @@ import { IonicModule } from '@ionic/angular';
 import { HomePageRoutingModule } from './home-routing.module';
 import { HomePage } from './home.page';
 import { BrMaskerModule } from 'br-mask';
-import { NgxLoadingModule } from 'ngx-loading';
 import { MoneyModule } from 'src/app/pipes/money/money.module';
 import { ModalCustomerModule } from 'src/app/components/modals/modal-customer/modal-customer.module';
+import { LoaderModule } from 'src/app/components/common/loader/loader.module';
 
 @NgModule({
   imports: [
@@ -16,10 +16,11 @@ import { ModalCustomerModule } from 'src/app/components/modals/modal-customer/mo
     IonicModule,
     HomePageRoutingModule,
     BrMaskerModule,
-    NgxLoadingModule,
     MoneyModule,
     ReactiveFormsModule,
-    ModalCustomerModule
+    ModalCustomerModule,
+    LoaderModule,
+    MoneyModule
   ],
   declarations: [HomePage]
 })

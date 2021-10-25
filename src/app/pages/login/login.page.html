@@ -4,23 +4,29 @@
 
     <ion-row>
 
-      <ion-col class="ion-no-padding" size-xs="12" size-md="6">
+      <ion-col class="ion-no-padding" size-xs="12" size-md="7">
 
         <div class="image"></div>
 
       </ion-col>
 
-      <ion-col size-xs="12" size-md="6">
+      <ion-col size-xs="12" size-md="5">
 
         <form class="login" [formGroup]="formGroup">
 
           <img class="logo" src="../../../assets/image/logo.png">
 
-          <ion-input class="custom" placeholder="Login" maxlength="255" formControlName="email"></ion-input>
+          <ion-input class="custom" placeholder="Login" maxlength="255" formControlName="user"></ion-input>
 
           <ion-input class="custom" type="password" placeholder="Senha" maxlength="255" formControlName="password"></ion-input>
 
-          <ion-button expand="block" (click)="login()">Entrar</ion-button>
+          <ion-button expand="block" (click)="login()">
+
+            <span *ngIf="!loading">Entrar</span>
+
+            <ion-spinner name="dots" *ngIf="loading"></ion-spinner>
+
+          </ion-button>
 
         </form>
 
@@ -31,5 +37,3 @@
   </ion-grid>
 
 </ion-content>
-
-<ngx-loading [show]="loading"></ngx-loading>

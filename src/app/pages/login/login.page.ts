@@ -29,7 +29,7 @@ export class LoginPage implements OnInit, OnDestroy {
   ngOnInit() {
 
     this.formGroup = this.formBuilder.group({
-      email:    ['', Validators.required],
+      user:     ['', Validators.required],
       password: ['', Validators.required]
     });
 
@@ -42,32 +42,29 @@ export class LoginPage implements OnInit, OnDestroy {
 
   public login() {
 
+    if (this.loading) return;
+
     if (this.formGroup.valid) {
 
       this.loading = true;
 
       this.apiSrv.login(this.formGroup.value)
         .pipe(takeUntil(this.unsubscribe))
-        .subscribe(res => {
-
-          this.loading = false;
-
-          if (res.success) {
-
-            this.navCtrl.navigateRoot(['/']);
-
-          }
-
-          else {
-
-            this.alertSrv.toast({
-              icon: 'error',
-              message: res.message
-            });
-
-          }
-
-        });
+        .subscribe(
+          res => {
+            this.loading = false;
+            if (res.success) {
+              this.navCtrl.navigateRoot(['/home']);
+            }
+            else {
+              this.alertSrv.toast({
+                icon: 'error',
+                message: res.message
+              });
+            }
+          },
+          err => this.loading = false
+        );
 
     }
 

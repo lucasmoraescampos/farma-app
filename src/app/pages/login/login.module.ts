@@ -4,7 +4,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { LoginPageRoutingModule } from './login-routing.module';
 import { LoginPage } from './login.page';
-import { NgxLoadingModule } from 'ngx-loading';
 
 @NgModule({
   imports: [
@@ -12,8 +11,7 @@ import { NgxLoadingModule } from 'ngx-loading';
     FormsModule,
     IonicModule,
     LoginPageRoutingModule,
-    ReactiveFormsModule,
-    NgxLoadingModule
+    ReactiveFormsModule
   ],
   declarations: [LoginPage]
 })

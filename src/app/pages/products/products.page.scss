@@ -6,7 +6,7 @@ ion-slide {
     text-align: left;
 }
 
-ion-card-title {
+ion-list-header ion-label {
     font-family: "Oswald", sans-serif;
     font-size: 0.9rem;
     font-weight: 700;
@@ -14,16 +14,19 @@ ion-card-title {
     color: var(--ion-color-primary);
 }
 
-ion-card-subtitle {
-    font-family: "Oswald", sans-serif;
-    font-size: 0.9rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    margin-left: 8px;
+ion-list-header ion-button {
+    --border-radius: 100%;
+    width: 46px;
+    height: 46px;
+    margin: 2px 5px 2px 2px;
 }
 
 ion-list {
     padding: 0;
+}
+
+ion-list ion-searchbar {
+    padding: 8px 16px;
 }
 
 ion-item {

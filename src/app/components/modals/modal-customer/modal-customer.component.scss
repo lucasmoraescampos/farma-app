@@ -7,11 +7,14 @@ ion-slide {
     flex-direction: column;
 }
 
+ion-card {
+    height: 127px;
+}
+
 ion-list {
     padding: 16px;
 
     ion-item {
-        --min-height: 40px;
         --padding-start: 0;
         --inner-padding-end: 0;
 
@@ -21,7 +24,6 @@ ion-list {
 
         ion-label {
             font-size: 0.9rem;
-            margin: 0;
         }
 
         &:last-child {
@@ -31,19 +33,73 @@ ion-list {
 
     &.products {
         background: var(--ion-color-light);
+        padding: 0;
 
         ion-item {
             --background: var(--ion-color-light);
+            --padding-start: 16px;
+            --inner-padding-end: 16px;
+
+            &.no-products {
+                --padding-top: 16px;
+                --padding-bottom: 16px;
+                --padding-start: 60px;
+                --inner-padding-end: 60px;
+            }
+        }
+
+        .name {
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+
+            ion-badge {
+                display: inline-table;
+                transform: scale(0.8);
+                margin-right: 5px;
+            }
+        }
+
+        .qty,
+        .price,
+        .total,
+        .ipi {
+            display: block;
+            font-size: 0.9rem;
+            margin-left: 10px;
+        }
+
+        .qty,
+        .price,
+        .ipi {
+            color: var(--ion-color-medium-shade);
+            font-weight: 300;
+        }
+
+        .total {
+            color: var(--ion-color-success);
         }
     }
 }
 
-ion-card-title {
-    font-family: "Oswald", sans-serif;
-    font-size: 0.9rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    text-align: center;
+.stacked span {
     color: var(--ion-color-primary);
-    margin-bottom: 16px;
+}
+
+ion-card-subtitle {
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--ion-color-primary);
+}
+
+.code {
+    font-size: 1.225rem;
+    font-weight: 600;
+}
+
+@media (min-width: 576px) {
+    ion-card {
+        height: auto;
+    }
 }

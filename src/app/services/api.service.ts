@@ -30,48 +30,20 @@ export class ApiService {
     return this.currentUserSubject.value;
   }
 
-  public getTickets() {
-    return this.http.get<HttpResult>(`${this.apiUrl}/tickets`);
-  }
-
-  public register(data: any) {
-    return this.http.post<HttpResult>(`${this.apiUrl}/participant`, data)
-      .pipe(map(res => {
-        if (res.success) {
-          localStorage.setItem('current_user', JSON.stringify(res.data));
-          localStorage.setItem('access_token', res.token);
-          this.currentUserSubject.next(res.data);
-        }
-        return res;
-      }));
-  }
-
-  public update(data: any) {
-    return this.http.put<HttpResult>(`${this.apiUrl}/participant`, data)
-      .pipe(map(res => {
-        if (res.success) {
-          localStorage.setItem('current_user', JSON.stringify(res.data));
-          this.currentUserSubject.next(res.data);
-        }
-        return res;
-      }));
-  }
-
   public login(data: any) {
-    return this.http.post<HttpResult>(`${this.apiUrl}/participant/login`, data)
+    return this.http.post<HttpResult>(`${this.apiUrl}/auth/login`, data)
       .pipe(map(res => {
         if (res.success) {
-          localStorage.setItem('current_user', JSON.stringify(res.data));
-          localStorage.setItem('access_token', res.token);
-          this.currentUserSubject.next(res.data);
+          localStorage.setItem('current_user', JSON.stringify(res.data.user));
+          localStorage.setItem('access_token', res.data.token);
+          this.currentUserSubject.next(res.data.user);
         }
         return res;
       }));
   }
 
   public logout() {
-    const token = localStorage.getItem('access_token');
-    return this.http.post<HttpResult>(`${this.apiUrl}/participant/logout`, { token })
+    return this.http.post<HttpResult>(`${this.apiUrl}/auth/logout`, null)
       .pipe(map(res => {
         if (res.success) {
           localStorage.clear();
@@ -81,12 +53,32 @@ export class ApiService {
       }));
   }
 
-  public getAuth() {
-    return this.http.get<HttpResult>(`${this.apiUrl}/participant`);
+  public dashboard() {
+    return this.http.get<HttpResult>(`${this.apiUrl}/dashboard`);
+  }
+
+  public searchCustomers(params: any) {
+    return this.http.get<HttpResult>(`${this.apiUrl}/customer/search`, { params: params });
+  }
+
+  public getCustomers() {
+    return this.http.get<HttpResult>(`${this.apiUrl}/customer`);
+  }
+
+  public getPaymentOptions() {
+    return this.http.get<HttpResult>(`${this.apiUrl}/order/options`);
+  }
+
+  public getProducts(params?: any) {
+    return this.http.get<HttpResult>(`${this.apiUrl}/product`, { params: params });
   }
   
-  public pay(data: any) {
-    return this.http.post<HttpResult>(`${this.apiUrl}/participant/pay`, data);
+  public getProductPrices(params: any) {
+    return this.http.get<HttpResult>(`${this.apiUrl}/product/prices`, { params: params });
   }
-  
+
+  public order(data: any) {
+    return this.http.post<HttpResult>(`${this.apiUrl}/order`, data);
+  }
+
 }

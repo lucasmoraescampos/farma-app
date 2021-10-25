@@ -1,0 +1,17 @@
+<ion-item [class.lines]="lines" [disabled]="disabled" lines="none">
+
+  <ion-button fill="clear" size="small" [disabled]="value == min || disabled" (click)="remove()">
+
+    <ion-icon slot="icon-only" name="remove-outline"></ion-icon>
+
+  </ion-button>
+
+  <ion-input inputmode="numeric" [min]="min" [max]="max" [disabled]="disabled" [(ngModel)]="value"></ion-input>
+
+  <ion-button slot="end" size="small" fill="clear" [disabled]="disabled" (click)="add()">
+
+    <ion-icon slot="icon-only" name="add-outline"></ion-icon>
+
+  </ion-button>
+
+</ion-item>
