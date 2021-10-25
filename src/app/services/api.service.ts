@@ -65,6 +65,10 @@ export class ApiService {
     return this.http.get<HttpResult>(`${this.apiUrl}/customer`);
   }
 
+  public getExpiredCustomers() {
+    return this.http.get<HttpResult>(`${this.apiUrl}/customer/expired`);
+  }
+
   public getPaymentOptions() {
     return this.http.get<HttpResult>(`${this.apiUrl}/order/options`);
   }
