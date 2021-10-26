@@ -26,73 +26,23 @@
 
       </ion-list-header>
 
-      <ion-item lines="full" button="true" detail="true">
+      <ion-item lines="full" button="true" detail="true" *ngFor="let order of orders">
 
-        <ion-badge slot="start" mode="ios" color="light">5703</ion-badge>
-          
+        <ion-badge slot="start" mode="ios" color="light">{{ order.id_pedido }}</ion-badge>
+
         <ion-label class="ion-text-wrap">
 
-          <span class="customer">OMEGA MED PROD. MEDICO HOSPITALAR LTDA</span>
+          <span class="customer">{{ order.razao_social }}</span>
 
-          <span class="date">08/10/2021</span>
+          <span class="date">{{ order.datas | date }}</span>
 
-          <span class="price">R$ 10.980,19</span>
+          <span class="price">{{ (order.total + order.ipi) | money }}</span>
 
-          <ion-badge mode="ios" color="danger">Cancelado</ion-badge>
+          <ion-badge mode="ios" color="secondary" *ngIf="order.status == '4'">Pré Faturado</ion-badge>
 
-        </ion-label>
+          <ion-badge mode="ios" color="danger" *ngIf="order.status == '2'">Cancelado</ion-badge>
 
-      </ion-item>
-
-      <ion-item lines="full" button="true" detail="true">
-
-        <ion-badge slot="start" mode="ios" color="light">5703</ion-badge>
-          
-        <ion-label class="ion-text-wrap">
-
-          <span class="customer">OMEGA MED PROD. MEDICO HOSPITALAR LTDA</span>
-
-          <span class="date">08/10/2021</span>
-
-          <span class="price">R$ 10.980,19</span>
-
-          <ion-badge mode="ios" color="dark">Pendente</ion-badge>
-
-        </ion-label>
-
-      </ion-item>
-
-      <ion-item lines="full" button="true" detail="true">
-
-        <ion-badge slot="start" mode="ios" color="light">5703</ion-badge>
-          
-        <ion-label class="ion-text-wrap">
-
-          <span class="customer">OMEGA MED PROD. MEDICO HOSPITALAR LTDA</span>
-
-          <span class="date">08/10/2021</span>
-
-          <span class="price">R$ 10.980,19</span>
-
-          <ion-badge mode="ios" color="success">Faturado</ion-badge>
-
-        </ion-label>
-
-      </ion-item>
-
-      <ion-item lines="full" button="true" detail="true">
-
-        <ion-badge slot="start" mode="ios" color="light">5703</ion-badge>
-          
-        <ion-label class="ion-text-wrap">
-
-          <span class="customer">OMEGA MED PROD. MEDICO HOSPITALAR LTDA</span>
-
-          <span class="date">08/10/2021</span>
-
-          <span class="price">R$ 10.980,19</span>
-
-          <ion-badge mode="ios" color="secondary">Pré Faturado</ion-badge>
+          <ion-badge mode="ios" color="success" *ngIf="order.status == '1'">Faturado</ion-badge>
 
         </ion-label>
 
@@ -103,3 +53,5 @@
   </div>
 
 </ion-content>
+
+<app-loader></app-loader>

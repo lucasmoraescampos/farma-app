@@ -1,0 +1,119 @@
+<ion-header class="ion-no-border" mode="ios">
+
+  <ion-toolbar>
+
+    <ion-title>Fatura</ion-title>
+
+    <ion-buttons slot="end">
+
+      <ion-button (click)="dismiss()">
+
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+
+      </ion-button>
+
+    </ion-buttons>
+
+  </ion-toolbar>
+
+</ion-header>
+
+<ion-content>
+
+  <div class="ion-scroll">
+
+    <ion-list>
+
+      <ion-item lines="none">
+
+        <span slot="start">Cliente</span>
+
+        <ion-label class="ion-text-end">{{ customer.razao_social }}</ion-label>
+
+      </ion-item>
+
+      <ion-item lines="none">
+
+        <span slot="start">CNPJ</span>
+
+        <ion-label class="ion-text-end">{{ customer.cnpj }}</ion-label>
+
+      </ion-item>
+
+      <ion-item lines="none">
+
+        <span slot="start">Empresa</span>
+
+        <ion-label class="ion-text-end">FRANCE FARM</ion-label>
+
+      </ion-item>
+
+      <ion-item lines="none">
+
+        <span slot="start">Vencimento</span>
+
+        <ion-label class="ion-text-end">04/07/2019</ion-label>
+
+      </ion-item>
+      
+      <ion-item lines="none">
+
+        <span slot="start">Pedido</span>
+
+        <ion-label class="ion-text-end">6634</ion-label>
+
+      </ion-item>
+
+      <ion-item lines="none">
+
+        <span slot="start">Nota</span>
+
+        <ion-label class="ion-text-end">6593</ion-label>
+
+      </ion-item>
+
+      <ion-item lines="none">
+
+        <span slot="start">Forma Pagto</span>
+
+        <ion-label class="ion-text-end">DP</ion-label>
+
+      </ion-item>
+
+    </ion-list>
+
+  </div>
+
+</ion-content>
+
+<ion-footer class="ion-no-border">
+
+  <ion-list>
+
+    <ion-item lines="none">
+
+      <span slot="start">Valor</span>
+
+      <ion-label class="ion-text-end">R$699,30</ion-label>
+
+    </ion-item>
+
+    <ion-item lines="none">
+
+      <span slot="start">Juros</span>
+
+      <ion-label class="ion-text-end">R$699,30</ion-label>
+
+    </ion-item>
+
+    <ion-item lines="none">
+
+      <span slot="start">Total</span>
+
+      <ion-label class="ion-text-end">R$699,30</ion-label>
+
+    </ion-item>
+
+  </ion-list>
+
+</ion-footer>

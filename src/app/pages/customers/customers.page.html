@@ -46,7 +46,7 @@
 
           <ion-toolbar>
 
-            <ion-searchbar placeholder="Buscar"></ion-searchbar>
+            <ion-searchbar placeholder="Buscar" [(ngModel)]="expiredSearch"></ion-searchbar>
 
           </ion-toolbar>
 
@@ -54,7 +54,8 @@
 
         <ion-list class="animate__animated animate__fadeIn">
 
-          <ion-item lines="full" button="true" detail="true" *ngFor="let customer of expired">
+          <ion-item lines="full" button="true" detail="false" (click)="choose(customer)"
+            *ngFor="let customer of expired | filter:'razao_social,id_cliente':expiredSearch">
 
             <ion-label>
 
@@ -82,7 +83,7 @@
 
           <ion-toolbar>
 
-            <ion-searchbar placeholder="Buscar"></ion-searchbar>
+            <ion-searchbar placeholder="Buscar" [(ngModel)]="customerSearch"></ion-searchbar>
 
           </ion-toolbar>
 
@@ -90,7 +91,8 @@
 
         <ion-list class="animate__animated animate__fadeIn">
 
-          <ion-item lines="full" button="true" detail="true" *ngFor="let customer of customers">
+          <ion-item lines="full" button="true" detail="false" (click)="selectCustomer(customer)"
+            *ngFor="let customer of customers | filter:'razao_social,id_cliente':customerSearch">
 
             <ion-label>
 

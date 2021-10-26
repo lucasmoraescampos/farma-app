@@ -1,0 +1,19 @@
+ion-item {
+    --min-height: 40px;
+
+    &:last-child {
+        --border-width: 0;
+    }
+}
+
+ion-label {
+    margin: 0;
+}
+
+ion-item span {
+    font-size: 0.875rem;
+}
+
+ion-footer ion-item {
+    --min-height: 30px;
+}

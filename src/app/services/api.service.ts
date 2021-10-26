@@ -81,6 +81,14 @@ export class ApiService {
     return this.http.get<HttpResult>(`${this.apiUrl}/product/prices`, { params: params });
   }
 
+  public getLabs() {
+    return this.http.get<HttpResult>(`${this.apiUrl}/product/labs`);
+  }
+
+  public getOrders() {
+    return this.http.get<HttpResult>(`${this.apiUrl}/order`);
+  }
+
   public order(data: any) {
     return this.http.post<HttpResult>(`${this.apiUrl}/order`, data);
   }

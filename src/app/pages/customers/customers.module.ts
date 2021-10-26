@@ -6,6 +6,8 @@ import { CustomersPageRoutingModule } from './customers-routing.module';
 import { CustomersPage } from './customers.page';
 import { LoaderModule } from 'src/app/components/common/loader/loader.module';
 import { FilterModule } from 'src/app/pipes/filter/filter.module';
+import { ModalCustomerModule } from 'src/app/components/modals/modal-customer/modal-customer.module';
+import { ModalInvoiceModule } from 'src/app/components/modals/modal-invoice/modal-invoice.module';
 
 @NgModule({
   imports: [
@@ -14,7 +16,9 @@ import { FilterModule } from 'src/app/pipes/filter/filter.module';
     IonicModule,
     CustomersPageRoutingModule,
     LoaderModule,
-    FilterModule
+    FilterModule,
+    ModalCustomerModule,
+    ModalInvoiceModule
   ],
   declarations: [CustomersPage]
 })

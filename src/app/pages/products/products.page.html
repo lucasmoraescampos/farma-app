@@ -30,9 +30,9 @@
 
           </ion-list-header>
 
-          <ion-item lines="full" button="true" detail="true" (click)="selectLine()">
+          <ion-item lines="full" button="true" detail="true" (click)="selectLab(lab)" *ngFor="let lab of labs">
 
-            <ion-label>France Farma</ion-label>
+            <ion-label>{{ lab.nome }}</ion-label>
 
           </ion-item>
 
@@ -46,65 +46,29 @@
 
       <div class="ion-scroll">
 
-        <ion-list class="animate__animated animate__fadeIn">
+        <ion-list class="animate__animated animate__fadeIn" *ngIf="labSelected">
 
           <ion-list-header class="ion-no-padding">
 
-            <ion-button fill="clear" size="small" (click)="changeLine()">
+            <ion-button fill="clear" size="small" (click)="changeLab()">
 
               <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
 
             </ion-button>
 
-            <ion-label>France Farma</ion-label>
+            <ion-label>{{ labSelected.nome }}</ion-label>
 
           </ion-list-header>
 
           <ion-searchbar placeholder="Buscar"></ion-searchbar>
 
-          <ion-item lines="full">
+          <ion-item lines="full" *ngFor="let product of products">
               
             <ion-label class="ion-text-wrap">
   
-              <span class="name">A.G.E. Hosp Derme Almotolia 100 ml</span>
+              <span class="name">{{ product.nome }}</span>
   
-              <span class="price">R$ 111,00</span>
-  
-            </ion-label>
-  
-          </ion-item>
-
-          <ion-item lines="full">
-              
-            <ion-label class="ion-text-wrap">
-  
-              <span class="name">A.G.E. Hosp Derme Almotolia 100 ml</span>
-  
-              <span class="price">R$ 111,00</span>
-  
-            </ion-label>
-  
-          </ion-item>
-
-          <ion-item lines="full">
-              
-            <ion-label class="ion-text-wrap">
-  
-              <span class="name">A.G.E. Hosp Derme Almotolia 100 ml</span>
-  
-              <span class="price">R$ 111,00</span>
-  
-            </ion-label>
-  
-          </ion-item>
-
-          <ion-item lines="full">
-              
-            <ion-label class="ion-text-wrap">
-  
-              <span class="name">A.G.E. Hosp Derme Almotolia 100 ml</span>
-  
-              <span class="price">R$ 111,00</span>
+              <span class="price">{{ product.valor_01 | money }}</span>
   
             </ion-label>
   
@@ -119,3 +83,5 @@
   </ion-slides>
 
 </ion-content>
+
+<app-loader></app-loader>
