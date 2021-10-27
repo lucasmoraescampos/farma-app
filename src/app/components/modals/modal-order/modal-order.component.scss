@@ -1,0 +1,42 @@
+ion-list {
+    padding: 0;
+}
+
+ion-item {
+    --min-height: 40px;
+
+    &:last-child {
+        --border-width: 0;
+    }
+}
+
+ion-item span {
+    min-width: 100px;
+    margin: 10px 30px 10px 0;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+ion-item ion-label {
+    font-size: 0.9rem;
+    color: var(--ion-color-medium-shade);
+}
+
+ion-item.product ion-label {
+    color: var(--ion-color-dak);
+
+    span {
+        display: block;
+        min-width: auto;
+        margin: 0;
+    }
+}
+
+ion-footer ion-item {
+    --min-height: 20px;
+
+    ion-label,
+    span {
+        margin: 0;
+    }
+}

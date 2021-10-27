@@ -6,6 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ModalProductModule } from '../modal-product/modal-product.module';
 import { LoaderModule } from '../../common/loader/loader.module';
 import { MoneyModule } from 'src/app/pipes/money/money.module';
+import { BrMaskerModule } from 'br-mask';
 
 @NgModule({
   declarations: [ModalCustomerComponent],
@@ -16,7 +17,8 @@ import { MoneyModule } from 'src/app/pipes/money/money.module';
     ReactiveFormsModule,
     ModalProductModule,
     LoaderModule,
-    MoneyModule
+    MoneyModule,
+    BrMaskerModule
   ]
 })
 export class ModalCustomerModule { }

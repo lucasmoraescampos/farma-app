@@ -69,6 +69,10 @@ export class ApiService {
     return this.http.get<HttpResult>(`${this.apiUrl}/customer/expired`);
   }
 
+  public createCustomer(data: any) {
+    return this.http.post<HttpResult>(`${this.apiUrl}/customer`, data);
+  }
+
   public getPaymentOptions() {
     return this.http.get<HttpResult>(`${this.apiUrl}/order/options`);
   }
@@ -89,7 +93,7 @@ export class ApiService {
     return this.http.get<HttpResult>(`${this.apiUrl}/order`);
   }
 
-  public order(data: any) {
+  public createOrder(data: any) {
     return this.http.post<HttpResult>(`${this.apiUrl}/order`, data);
   }
 

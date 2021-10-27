@@ -1,0 +1,407 @@
+<ion-header class="ion-no-border" mode="ios">
+
+  <ion-toolbar>
+
+    <ion-title>Cliente</ion-title>
+
+    <ion-buttons slot="end">
+
+      <ion-button (click)="dismiss()">
+
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+
+      </ion-button>
+
+    </ion-buttons>
+
+  </ion-toolbar>
+
+  <ion-toolbar mode="md">
+
+    <ion-segment [(ngModel)]="segment" (ionChange)="segmentChanged()">
+
+      <ion-segment-button [value]="0">
+
+        <ion-label>Dados</ion-label>
+
+      </ion-segment-button>
+
+      <ion-segment-button [value]="1">
+
+        <ion-label>Pedido</ion-label>
+
+      </ion-segment-button>
+
+    </ion-segment>
+
+  </ion-toolbar>
+
+</ion-header>
+
+<ion-content>
+
+  <ion-slides (ionSlideDidChange)="slideChanged($event)">
+
+    <ion-slide>
+
+      <div class="ion-scroll">
+
+        <ion-list>
+
+          <ion-item lines="full">
+
+            <span slot="start">Razão social:</span>
+
+            <ion-label class="ion-text-wrap ion-text-end">{{ customer.razao_social }}</ion-label>
+
+          </ion-item>
+
+          <ion-item lines="full">
+
+            <span slot="start">Fantasia:</span>
+
+            <ion-label class="ion-text-wrap ion-text-end">{{ customer.fantasia }}</ion-label>
+
+          </ion-item>
+
+          <ion-item lines="full">
+
+            <span slot="start">Email:</span>
+
+            <ion-label class="ion-text-wrap ion-text-end">{{ customer.email }}</ion-label>
+
+          </ion-item>
+
+          <ion-item lines="full">
+
+            <span slot="start">CEP:</span>
+
+            <ion-label class="ion-text-wrap ion-text-end">{{ customer.cep }}</ion-label>
+
+          </ion-item>
+
+          <ion-item lines="full">
+
+            <span slot="start">Endereço:</span>
+
+            <ion-label class="ion-text-wrap ion-text-end">{{ customer.end }}</ion-label>
+
+          </ion-item>
+
+          <ion-item lines="full">
+
+            <span slot="start">Bairro:</span>
+
+            <ion-label class="ion-text-wrap ion-text-end">{{ customer.bairro }}</ion-label>
+
+          </ion-item>
+
+          <ion-item lines="full">
+
+            <span slot="start">Cidade:</span>
+
+            <ion-label class="ion-text-wrap ion-text-end">{{ customer.cidade }}</ion-label>
+
+          </ion-item>
+
+          <ion-item lines="full">
+
+            <span slot="start">Fone:</span>
+
+            <ion-label class="ion-text-wrap ion-text-end">{{ customer.tel }}</ion-label>
+
+          </ion-item>
+
+          <ion-item lines="full">
+
+            <span slot="start">CNPJ:</span>
+
+            <ion-label class="ion-text-wrap ion-text-end">{{ customer.cnpj }}</ion-label>
+
+          </ion-item>
+
+          <ion-item lines="full">
+
+            <span slot="start">IE:</span>
+
+            <ion-label class="ion-text-wrap ion-text-end">{{ customer.ie }}</ion-label>
+
+          </ion-item>
+
+          <ion-item lines="full">
+
+            <span slot="start">Vendedor:</span>
+
+            <ion-label class="ion-text-wrap ion-text-end">{{ user.nome }}</ion-label>
+
+          </ion-item>
+
+        </ion-list>
+
+        <ion-grid>
+
+          <ion-row>
+
+            <ion-col size="6">
+
+              <ion-card color="light">
+
+                <ion-card-header>
+
+                  <ion-card-subtitle>Cliente</ion-card-subtitle>
+
+                </ion-card-header>
+
+                <ion-card-content>
+
+                  <span class="code">{{ customer.id_cliente }}</span>
+
+                </ion-card-content>
+
+              </ion-card>
+
+            </ion-col>
+
+            <ion-col size="6">
+
+              <ion-card color="light">
+
+                <ion-card-header>
+
+                  <ion-card-subtitle>Vendedor</ion-card-subtitle>
+
+                </ion-card-header>
+
+                <ion-card-content>
+
+                  <span class="code">{{ user.id_usuario }}</span>
+
+                </ion-card-content>
+
+              </ion-card>
+
+            </ion-col>
+
+          </ion-row>
+
+        </ion-grid>
+
+      </div>
+
+    </ion-slide>
+
+    <ion-slide>
+
+      <div class="ion-scroll">
+
+        <ion-grid [formGroup]="formGroup">
+
+          <ion-row>
+
+            <ion-col size-xs="12" size-sm="6">
+
+              <ion-label class="stacked">Condição de pagamento <span>*</span></ion-label>
+
+              <ion-select formControlName="id_prazo" placeholder="Selecione" interface="action-sheet" cancelText="Cancelar">
+
+                <ion-select-option [value]="condition.id_prazo" *ngFor="let condition of paymentOptions?.conditions">{{ condition.nome }}</ion-select-option>
+
+              </ion-select>
+
+            </ion-col>
+
+            <ion-col size-xs="12" size-sm="6">
+
+              <ion-label class="stacked">Tabela de preço <span>*</span></ion-label>
+
+              <ion-select formControlName="id_tabela" placeholder="Selecione" interface="action-sheet" cancelText="Cancelar" (ionChange)="tableChanged($event)">
+
+                <ion-select-option [value]="price.id_tabela" *ngFor="let price of paymentOptions?.prices">{{ price.descricao }}</ion-select-option>
+
+              </ion-select>
+
+            </ion-col>
+
+            <ion-col class="animate__animated animate__fadeIn" size="12" *ngIf="formControl.id_tabela.value">
+
+              <ion-list class="products">
+
+                <ion-item class="no-products" lines="none" *ngIf="cart?.products?.length == 0">
+
+                  <ion-label class="ion-text-center">Nenhum produto adicionado!</ion-label>
+
+                </ion-item>
+
+                <ion-item lines="full" button="true" detail="false" *ngFor="let product of cart?.products" (click)="changeProduct(product)">
+
+                  <ion-fab-button slot="start" color="light" size="small" (click)="$event.stopPropagation(); deleteProduct(product)">
+
+                    <ion-icon name="trash-outline" color="danger"></ion-icon>
+
+                  </ion-fab-button>
+
+                  <ion-label class="ion-text-wrap">
+
+                    <span class="name">
+
+                      <ion-badge mode="ios" color="medium">{{ product.id }}</ion-badge>
+                      
+                      {{ product.name }}
+                    
+                    </span>
+
+                    <span class="qty">
+                      
+                      {{ product.qty }} CX <small>({{ product.upc }} UN)</small>
+                    
+                    </span>
+
+                    <span class="price">
+                      
+                      {{ product.price | money }} CX <small>({{ (product.price / product.upc) | money }} UN)</small>
+                    
+                    </span>
+
+                    <span class="ipi">
+                      
+                      {{ product.ipi | money }} <small>IPI</small>
+                    
+                    </span>
+
+                    <span class="total">
+                      
+                      {{ product.total | money }} <small *ngIf="product.discount">{{ product.discount }}% OFF</small>
+                    
+                    </span>
+
+                  </ion-label>
+
+                </ion-item>
+
+              </ion-list>
+
+              <ion-fab vertical="bottom" horizontal="end">
+
+                <ion-fab-button size="small" (click)="addProduct()">
+
+                  <ion-icon name="add"></ion-icon>
+
+                </ion-fab-button>
+
+              </ion-fab>
+
+            </ion-col>
+
+            <ion-col size="12">
+
+              <ion-label class="stacked">Comentários</ion-label>
+
+              <ion-textarea formControlName="comment"></ion-textarea>
+
+            </ion-col>
+
+            <ion-col size="12">
+
+              <ion-label class="stacked">Promoção</ion-label>
+
+              <ion-textarea formControlName="promotion"></ion-textarea>
+
+            </ion-col>
+
+            <ion-col size-xs="12" size-sm="6">
+
+              <ion-label class="stacked">Autorizada por</ion-label>
+
+              <ion-input formControlName="authorization"></ion-input>
+
+            </ion-col>
+
+            <ion-col size-xs="12" size-sm="6">
+
+              <ion-label class="stacked">Data de autorização</ion-label>
+
+              <ion-input formControlName="authorized_at"></ion-input>
+
+            </ion-col>
+
+            <ion-col size-xs="12" size-sm="6">
+
+              <ion-label class="stacked">Ordem de compra</ion-label>
+
+              <ion-input formControlName="purchase_order"></ion-input>
+
+            </ion-col>
+
+            <ion-col size-xs="12" size-sm="6">
+
+              <ion-label class="stacked">Frete <span>*</span></ion-label>
+
+              <ion-select formControlName="freight" placeholder="Selecione" interface="action-sheet" cancelText="Cancelar">
+
+                <ion-select-option value="CIF">CIF</ion-select-option>
+
+                <ion-select-option value="FOB">FOB</ion-select-option>
+
+              </ion-select>
+
+            </ion-col>
+
+            <ion-col size-xs="12" size-sm="6">
+
+              <ion-label class="stacked">Agendamento <span>*</span></ion-label>
+
+              <ion-select formControlName="scheduling" placeholder="Selecione" interface="action-sheet" cancelText="Cancelar">
+
+                <ion-select-option [value]="true">Sim</ion-select-option>
+
+                <ion-select-option [value]="false">Não</ion-select-option>
+
+              </ion-select>
+
+            </ion-col>
+
+            <ion-col size-xs="12" size-sm="6">
+
+              <ion-label class="stacked">Paletização <span>*</span></ion-label>
+
+              <ion-select formControlName="palletizing" placeholder="Selecione" interface="action-sheet" cancelText="Cancelar">
+
+                <ion-select-option [value]="true">Sim</ion-select-option>
+
+                <ion-select-option [value]="false">Não</ion-select-option>
+
+              </ion-select>
+
+            </ion-col>
+
+          </ion-row>
+
+        </ion-grid>
+
+      </div>
+
+      <ion-footer class="ion-no-border">
+
+        <ion-grid>
+      
+          <ion-row>
+      
+            <ion-col size="12">
+      
+              <ion-button expand="block" [disabled]="formGroup.invalid" (click)="save()">Pedir</ion-button>
+      
+            </ion-col>
+      
+          </ion-row>
+      
+        </ion-grid>
+      
+      </ion-footer>
+
+    </ion-slide>
+
+  </ion-slides>
+
+</ion-content>
+
+<app-loader></app-loader>

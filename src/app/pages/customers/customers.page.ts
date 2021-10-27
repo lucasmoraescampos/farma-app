@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActionSheetController, IonSlides, ModalController } from '@ionic/angular';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { ModalCustomerOrderComponent } from 'src/app/components/modals/modal-customer-order/modal-customer-order.component';
 import { ModalCustomerComponent } from 'src/app/components/modals/modal-customer/modal-customer.component';
 import { ModalInvoiceComponent } from 'src/app/components/modals/modal-invoice/modal-invoice.component';
 import { ApiService } from 'src/app/services/api.service';
@@ -87,11 +88,28 @@ export class CustomersPage implements OnInit, OnDestroy {
   public async selectCustomer(customer: any) {
 
     const modal = await this.modalCtrl.create({
-      component: ModalCustomerComponent,
+      component: ModalCustomerOrderComponent,
       componentProps: {
         customer: customer
       }
     });
+
+    return await modal.present();
+
+  }
+
+  public async newCustomer() {
+
+    const modal = await this.modalCtrl.create({
+      component: ModalCustomerComponent
+    });
+
+    modal.onDidDismiss()
+      .then(res => {
+        if (res.data) {
+          this.customers.unshift(res.data);
+        }
+      });
 
     return await modal.present();
 

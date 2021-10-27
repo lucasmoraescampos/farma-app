@@ -52,9 +52,10 @@
 
         </ion-header>
 
-        <ion-list class="animate__animated animate__fadeIn">
+        <ion-list>
 
-          <ion-item lines="full" button="true" detail="false" (click)="choose(customer)"
+          <ion-item class="animate__animated animate__fadeIn" lines="full" button="true" detail="false"
+            (click)="choose(customer)"
             *ngFor="let customer of expired | filter:'razao_social,id_cliente':expiredSearch">
 
             <ion-label>
@@ -89,9 +90,10 @@
 
         </ion-header>
 
-        <ion-list class="animate__animated animate__fadeIn">
+        <ion-list>
 
-          <ion-item lines="full" button="true" detail="false" (click)="selectCustomer(customer)"
+          <ion-item class="animate__animated animate__fadeIn" lines="full" button="true" detail="false"
+            (click)="selectCustomer(customer)"
             *ngFor="let customer of customers | filter:'razao_social,id_cliente':customerSearch">
 
             <ion-label>
@@ -107,6 +109,16 @@
           </ion-item>
 
         </ion-list>
+
+        <ion-fab vertical="bottom" horizontal="end">
+
+          <ion-fab-button (click)="newCustomer()">
+
+            <ion-icon name="add"></ion-icon>
+
+          </ion-fab-button>
+
+        </ion-fab>
 
       </div>
 

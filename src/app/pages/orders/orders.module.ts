@@ -6,6 +6,7 @@ import { OrdersPageRoutingModule } from './orders-routing.module';
 import { OrdersPage } from './orders.page';
 import { LoaderModule } from 'src/app/components/common/loader/loader.module';
 import { MoneyModule } from 'src/app/pipes/money/money.module';
+import { ModalOrderModule } from 'src/app/components/modals/modal-order/modal-order.module';
 
 @NgModule({
   imports: [
@@ -14,7 +15,8 @@ import { MoneyModule } from 'src/app/pipes/money/money.module';
     IonicModule,
     OrdersPageRoutingModule,
     LoaderModule,
-    MoneyModule
+    MoneyModule,
+    ModalOrderModule
   ],
   declarations: [OrdersPage]
 })

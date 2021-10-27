@@ -18,7 +18,7 @@
 
   <div class="ion-scroll">
 
-    <ion-list class="animate__animated animate__fadeIn">
+    <ion-list>
 
       <ion-list-header>
 
@@ -26,7 +26,8 @@
 
       </ion-list-header>
 
-      <ion-item lines="full" button="true" detail="true" *ngFor="let order of orders">
+      <ion-item class="animate__animated animate__fadeIn" lines="full" button="true" detail="false"
+        (click)="detail(order)" *ngFor="let order of orders">
 
         <ion-badge slot="start" mode="ios" color="light">{{ order.id_pedido }}</ion-badge>
 

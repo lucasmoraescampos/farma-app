@@ -44,7 +44,7 @@
 
         <span slot="start">Empresa</span>
 
-        <ion-label class="ion-text-end">FRANCE FARM</ion-label>
+        <ion-label class="ion-text-end">{{ customer.empresa }}</ion-label>
 
       </ion-item>
 
@@ -52,7 +52,7 @@
 
         <span slot="start">Vencimento</span>
 
-        <ion-label class="ion-text-end">04/07/2019</ion-label>
+        <ion-label class="ion-text-end">{{ customer.venc }}</ion-label>
 
       </ion-item>
       
@@ -60,7 +60,7 @@
 
         <span slot="start">Pedido</span>
 
-        <ion-label class="ion-text-end">6634</ion-label>
+        <ion-label class="ion-text-end">{{ customer.pedido }}</ion-label>
 
       </ion-item>
 
@@ -68,7 +68,7 @@
 
         <span slot="start">Nota</span>
 
-        <ion-label class="ion-text-end">6593</ion-label>
+        <ion-label class="ion-text-end">{{ customer.nota }}</ion-label>
 
       </ion-item>
 
@@ -76,7 +76,7 @@
 
         <span slot="start">Forma Pagto</span>
 
-        <ion-label class="ion-text-end">DP</ion-label>
+        <ion-label class="ion-text-end">{{ customer.tipo_documento }}</ion-label>
 
       </ion-item>
 
@@ -94,7 +94,7 @@
 
       <span slot="start">Valor</span>
 
-      <ion-label class="ion-text-end">R$699,30</ion-label>
+      <ion-label class="ion-text-end">{{ customer.valor | money }}</ion-label>
 
     </ion-item>
 
@@ -102,7 +102,7 @@
 
       <span slot="start">Juros</span>
 
-      <ion-label class="ion-text-end">R$699,30</ion-label>
+      <ion-label class="ion-text-end">{{ customer.juros | money }}</ion-label>
 
     </ion-item>
 
@@ -110,7 +110,7 @@
 
       <span slot="start">Total</span>
 
-      <ion-label class="ion-text-end">R$699,30</ion-label>
+      <ion-label class="ion-text-end">{{ customer.valor + customer.juros | money }}</ion-label>
 
     </ion-item>
 

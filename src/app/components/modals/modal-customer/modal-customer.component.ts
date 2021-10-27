@@ -1,13 +1,11 @@
-import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { IonSlides, ModalController } from '@ionic/angular';
+import { ModalController } from '@ionic/angular';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { Product } from 'src/app/models/product';
+import { UtilsHelper } from 'src/app/helpers/utils.helper';
 import { AlertService } from 'src/app/services/alert.service';
 import { ApiService } from 'src/app/services/api.service';
-import { CartService } from 'src/app/services/cart.service';
-import { ModalProductComponent } from '../modal-product/modal-product.component';
 
 @Component({
   selector: 'app-modal-customer',
@@ -16,54 +14,40 @@ import { ModalProductComponent } from '../modal-product/modal-product.component'
 })
 export class ModalCustomerComponent implements OnInit, OnDestroy {
 
-  @ViewChild(IonSlides) slides: IonSlides;
-
-  @Input() customer: any;
-
-  public user: any;
-
-  public segment: number = 0;
-
-  public paymentOptions: any;
-
-  public cart: any;
-
   public formGroup: FormGroup;
 
   private unsubscribe = new Subject();
 
   constructor(
-    private modalCtrl: ModalController,
     private apiSrv: ApiService,
     private formBuilder: FormBuilder,
-    private cartSrv: CartService,
+    private modalCtrl: ModalController,
     private alertSrv: AlertService
   ) { }
 
   ngOnInit() {
 
-    this.user = this.apiSrv.getCurrentUser();
-
     this.formGroup = this.formBuilder.group({
-      id_cliente:     [this.customer.id_cliente],
-      id_prazo:       ['', Validators.required],
-      id_tabela:      ['', Validators.required],
-      freight:        ['', Validators.required],
-      scheduling:     ['', Validators.required],
-      palletizing:    ['', Validators.required],
-      comment:        [''],
-      promotion:      [''],
-      authorization:  [''],
-      authorized_at:  [''],
-      purchase_order: ['']
+      razao_social: ['', Validators.required],
+      cnpj:         ['', Validators.required],
+      cel:          ['', Validators.required],
+      email:        ['', Validators.required],
+      grupo:        ['', Validators.required],
+      fantasia:     [''],
+      ie:           [''],
+      tel:          [''],
+      cep:          [''],
+      end:          [''],
+      bairro:       [''],
+      cidade:       [''],
+      estado:       [''],
+      ref1:         [''],
+      refnum1:      [''],
+      ref2:         [''],
+      refnum2:      [''],
+      ref3:         [''],
+      refnum3:      ['']
     });
-
-    this.cartSrv.clear();
-
-    this.cartSrv.currentUser.pipe(takeUntil(this.unsubscribe))
-      .subscribe(cart => this.cart = cart);
-
-    this.initPaymentOptions();
 
   }
 
@@ -72,128 +56,65 @@ export class ModalCustomerComponent implements OnInit, OnDestroy {
     this.unsubscribe.complete();
   }
 
-  ionViewDidEnter() {
-    this.slides.update();
-  }
-
-  public get formControl() {
-    return this.formGroup.controls;
-  }
-
   public dismiss() {
     this.modalCtrl.dismiss();
   }
 
-  public segmentChanged() {
-    this.slides.slideTo(this.segment);
-  }
-
-  public slideChanged(ev: any) {
-    this.segment = ev.target.swiper.activeIndex;
-  }
-
-  public tableChanged(ev: any) {
-    this.cartSrv.setIdTabela(ev.detail.value);
-  }
-
-  public async addProduct() {
-
-    const modal = await this.modalCtrl.create({
-      component: ModalProductComponent,
-      cssClass: 'modal-product',
-      componentProps: {
-        table_id: this.formControl.id_tabela.value,
-        labs: this.paymentOptions.labs
-      }
-    });
-
-    return await modal.present();
-
-  }
-
-  public async changeProduct(product: any) {
-
-    const modal = await this.modalCtrl.create({
-      component: ModalProductComponent,
-      cssClass: 'modal-product',
-      componentProps: {
-        product_id: product.id,
-        lab_id: product.lab_id,
-        table_id: this.formControl.id_tabela.value,
-        labs: this.paymentOptions.labs,
-        discount: product.discount,
-        buttonText: 'Atualizar'
-      }
-    });
-
-    return await modal.present();
-    
-  }
-
-  public deleteProduct(product: any) {
-
-    this.alertSrv.show({
-      icon: 'warning',
-      title: product.name,
-      message: 'Tem certeza que deseja excluir?',
-      confirmButtonText: 'Excluir',
-      onConfirm: () => {
-        this.cartSrv.deleteProduct(product.id);
-      }
-    });
-
-  }
-
   public save() {
-
-    if (this.cart?.products?.length == 0) {
-
-      this.alertSrv.toast({
-        icon: 'error',
-        message: 'Adicione produtos ao pedido!'
-      });
-
-      return;
-
-    }
 
     if (this.formGroup.valid) {
 
-      const data: any = this.formGroup.value;
+      const data = this.formGroup.value;
 
-      data.products = [];
-
-      this.cart.products.forEach((product: Product) => {
-        data.products.push({
-          id: product.id,
-          qty: product.packaging_type == 'UN' ? product.qty / product.upc : product.qty,
-          discount: product.discount
+      if (!UtilsHelper.validateEmail(data.email)) {
+        
+        return this.alertSrv.toast({
+          icon: 'error',
+          message: 'Email Inválido!'
         });
-      });
 
-      this.apiSrv.order(data)
+      }
+
+      if (!UtilsHelper.validateDocumentNumber(data.cnpj)) {
+        
+        return this.alertSrv.toast({
+          icon: 'error',
+          message: 'CNPJ Inválido!'
+        });
+
+      }
+      
+      data.ddd = data.tel.slice(1, 3);
+
+      data.tel = data.tel.slice(5);
+
+      this.apiSrv.createCustomer(data)
         .pipe(takeUntil(this.unsubscribe))
         .subscribe(res => {
 
-          this.alertSrv.toast({
-            icon: 'success',
-            message: res.message
-          });
+          if (res.success) {
 
-          this.modalCtrl.dismiss();
+            this.alertSrv.toast({
+              icon: 'success',
+              message: res.message
+            });
+
+            this.modalCtrl.dismiss(res.data);
+
+          }
+
+          else {
+
+            this.alertSrv.toast({
+              icon: 'error',
+              message: res.message
+            });
+
+          }
 
         });
-
+        
     }
 
   }
-
-  private initPaymentOptions() {
-    this.apiSrv.getPaymentOptions()
-      .pipe(takeUntil(this.unsubscribe))
-      .subscribe(res => {
-        this.paymentOptions = res.data;
-      });
-  }
-
 }

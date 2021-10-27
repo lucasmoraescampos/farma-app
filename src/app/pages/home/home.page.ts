@@ -2,11 +2,11 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { IonSlides, ModalController } from '@ionic/angular';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { ModalCustomerComponent } from 'src/app/components/modals/modal-customer/modal-customer.component';
 import { ApiService } from 'src/app/services/api.service';
 import { ConnectionStatus, Network } from '@capacitor/network';
 import { SQLiteService } from 'src/app/services/sqlite.service';
 import { Capacitor } from '@capacitor/core';
+import { ModalCustomerOrderComponent } from 'src/app/components/modals/modal-customer-order/modal-customer-order.component';
 
 @Component({
   selector: 'app-home',
@@ -94,7 +94,7 @@ export class HomePage implements OnInit, OnDestroy {
   public async selectCustomer(customer: any) {
 
     const modal = await this.modalCtrl.create({
-      component: ModalCustomerComponent,
+      component: ModalCustomerOrderComponent,
       componentProps: {
         customer: customer
       }

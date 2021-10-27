@@ -6,8 +6,9 @@ import { CustomersPageRoutingModule } from './customers-routing.module';
 import { CustomersPage } from './customers.page';
 import { LoaderModule } from 'src/app/components/common/loader/loader.module';
 import { FilterModule } from 'src/app/pipes/filter/filter.module';
-import { ModalCustomerModule } from 'src/app/components/modals/modal-customer/modal-customer.module';
 import { ModalInvoiceModule } from 'src/app/components/modals/modal-invoice/modal-invoice.module';
+import { ModalCustomerOrderModule } from 'src/app/components/modals/modal-customer-order/modal-customer-order.module';
+import { ModalCustomerModule } from 'src/app/components/modals/modal-customer/modal-customer.module';
 
 @NgModule({
   imports: [
@@ -17,8 +18,9 @@ import { ModalInvoiceModule } from 'src/app/components/modals/modal-invoice/moda
     CustomersPageRoutingModule,
     LoaderModule,
     FilterModule,
-    ModalCustomerModule,
-    ModalInvoiceModule
+    ModalCustomerOrderModule,
+    ModalInvoiceModule,
+    ModalCustomerModule
   ],
   declarations: [CustomersPage]
 })

@@ -14,7 +14,10 @@ export class ModalInvoiceComponent implements OnInit {
     private modalCtrl: ModalController
   ) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.customer.valor = this.customer.valor.replace(',', '.');
+    this.customer.juros = this.customer.juros.replace(',', '.');
+  }
 
   public dismiss() {
     this.modalCtrl.dismiss();
