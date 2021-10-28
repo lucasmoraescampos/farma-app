@@ -32,11 +32,41 @@ ion-item.product ion-label {
     }
 }
 
-ion-footer ion-item {
-    --min-height: 20px;
+ion-footer {
+    ion-item {
+        --min-height: 20px;
 
-    ion-label,
-    span {
-        margin: 0;
+        ion-label,
+        span {
+            margin: 0;
+        }
+
+        .total {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #222;
+        }
+    }
+
+    ion-button {
+        margin: 16px 16px 0;
+    }
+}
+
+@media print {
+    ion-header {
+        ion-buttons {
+            display: none;
+        }
+
+        ion-title {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            color: #222;
+        }
+    }
+
+    ion-footer ion-item:not(:nth-child(3)) {
+        display: none;
     }
 }

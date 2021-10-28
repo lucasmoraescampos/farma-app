@@ -27,7 +27,7 @@
       </ion-list-header>
 
       <ion-item class="animate__animated animate__fadeIn" lines="full" button="true" detail="false"
-        (click)="detail(order)" *ngFor="let order of orders">
+        (click)="detail(order.id_pedido)" *ngFor="let order of orders">
 
         <ion-badge slot="start" mode="ios" color="light">{{ order.id_pedido }}</ion-badge>
 

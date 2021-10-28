@@ -21,7 +21,7 @@ export class ApiService {
   ) {
 
     this.currentUserSubject = new BehaviorSubject<any>(JSON.parse(localStorage.getItem('current_user')));
-    
+
     this.currentUser = this.currentUserSubject.asObservable();
 
   }
@@ -80,7 +80,7 @@ export class ApiService {
   public getProducts(params?: any) {
     return this.http.get<HttpResult>(`${this.apiUrl}/product`, { params: params });
   }
-  
+
   public getProductPrices(params: any) {
     return this.http.get<HttpResult>(`${this.apiUrl}/product/prices`, { params: params });
   }
@@ -91,6 +91,10 @@ export class ApiService {
 
   public getOrders() {
     return this.http.get<HttpResult>(`${this.apiUrl}/order`);
+  }
+
+  public getOrderById(id: number) {
+    return this.http.get<HttpResult>(`${this.apiUrl}/order/${id}`);
   }
 
   public createOrder(data: any) {

@@ -2,6 +2,8 @@
 
   <ion-toolbar>
 
+    <ion-badge slot="start" color="dark" *ngIf="order.novo">Cliente Novo</ion-badge>
+
     <ion-title>Pedido</ion-title>
 
     <ion-buttons slot="end">
@@ -24,131 +26,131 @@
 
     <ion-list>
 
-      <ion-item lines="none">
+      <ion-item lines="none" *ngIf="order.vendedor">
 
         <span slot="start">Vendedor</span>
 
-        <ion-label class="ion-text-wrap ion-text-end">FREDERICO GARCIA</ion-label>
+        <ion-label class="ion-text-wrap ion-text-end">{{ order.vendedor }}</ion-label>
 
       </ion-item>
 
-      <ion-item lines="none">
+      <ion-item lines="none" *ngIf="order.cod_vendedor">
 
         <span slot="start">Código do<br>Vendedor</span>
 
-        <ion-label class="ion-text-wrap ion-text-end">F03</ion-label>
+        <ion-label class="ion-text-wrap ion-text-end">{{ order.cod_vendedor }}</ion-label>
 
       </ion-item>
 
-      <ion-item lines="none">
+      <ion-item lines="none" *ngIf="order.pag_prazo">
 
         <span slot="start">Prazo de<br>Pagamento</span>
 
-        <ion-label class="ion-text-wrap ion-text-end">BOLETO 7 DIAS</ion-label>
+        <ion-label class="ion-text-wrap ion-text-end">{{ order.pag_prazo }}</ion-label>
 
       </ion-item>
 
-      <ion-item lines="none">
+      <ion-item lines="none" *ngIf="order.promo">
 
         <span slot="start">Promoção</span>
 
-        <ion-label class="ion-text-wrap ion-text-end">/ /</ion-label>
+        <ion-label class="ion-text-wrap ion-text-end">{{ order.promo }}</ion-label>
 
       </ion-item>
 
-      <ion-item lines="none">
+      <ion-item lines="none" *ngIf="order.promo_aut_por">
 
         <span slot="start">Promoção<br>Autorizada Por</span>
 
-        <ion-label class="ion-text-wrap ion-text-end">Frederico</ion-label>
+        <ion-label class="ion-text-wrap ion-text-end">{{ order.promo_aut_por }}</ion-label>
 
       </ion-item>
 
-      <ion-item lines="none">
+      <ion-item lines="none" *ngIf="order.promo_data_aut">
 
         <span slot="start">Data da<br>Autorização</span>
 
-        <ion-label class="ion-text-wrap ion-text-end">27/10/2021</ion-label>
+        <ion-label class="ion-text-wrap ion-text-end">{{ order.promo_data_aut }}</ion-label>
 
       </ion-item>
 
-      <ion-item lines="none">
+      <ion-item lines="none" *ngIf="order.comentario">
 
         <span slot="start">Comentários</span>
 
-        <ion-label class="ion-text-wrap ion-text-end">Álcool Gel com Carbopol e Válvula Pump. Entregar neste endereço: Rua 19 nº 260 5º andar Centro Goiânia - GO (Sede do SESC)</ion-label>
+        <ion-label class="ion-text-wrap ion-text-end">{{ order.comentario }}</ion-label>
 
       </ion-item>
 
-      <ion-item lines="none">
+      <ion-item lines="none" *ngIf="order.cliente">
 
         <span slot="start">Cliente</span>
 
-        <ion-label class="ion-text-wrap ion-text-end">FEDERACAO DO COMERCIO DO ESTADO DE GOIAS</ion-label>
+        <ion-label class="ion-text-wrap ion-text-end">{{ order.cliente }}</ion-label>
 
       </ion-item>
 
-      <ion-item lines="none">
+      <ion-item lines="none" *ngIf="order.cnpj">
 
         <span slot="start">CNPJ</span>
 
-        <ion-label class="ion-text-wrap ion-text-end">01.640.671/0001-80</ion-label>
+        <ion-label class="ion-text-wrap ion-text-end">{{ order.cnpj }}</ion-label>
 
       </ion-item>
 
-      <ion-item lines="none">
+      <ion-item lines="none" *ngIf="order.fantasia">
 
         <span slot="start">Fantasia</span>
 
-        <ion-label class="ion-text-wrap ion-text-end">FECOMERCIO</ion-label>
+        <ion-label class="ion-text-wrap ion-text-end">{{ order.fantasia }}</ion-label>
 
       </ion-item>
 
-      <ion-item lines="none">
+      <ion-item lines="none" *ngIf="order.tel">
 
         <span slot="start">Telefone</span>
 
-        <ion-label class="ion-text-wrap ion-text-end">(62) 3227-2400</ion-label>
+        <ion-label class="ion-text-wrap ion-text-end">({{ order.ddd.slice(-2) }}) {{ order.tel }}</ion-label>
 
       </ion-item>
 
-      <ion-item lines="none">
+      <ion-item lines="none" *ngIf="order.cod_cliente">
 
         <span slot="start">Código do Cliente</span>
 
-        <ion-label class="ion-text-wrap ion-text-end">01.640.671/0001-80</ion-label>
+        <ion-label class="ion-text-wrap ion-text-end">{{ order.cod_cliente }}</ion-label>
 
       </ion-item>
 
-      <ion-item lines="none">
+      <ion-item lines="none" *ngIf="order.ie">
 
         <span slot="start">IE</span>
 
-        <ion-label class="ion-text-wrap ion-text-end"></ion-label>
+        <ion-label class="ion-text-wrap ion-text-end">{{ order.ie }}</ion-label>
 
       </ion-item>
 
-      <ion-item lines="none">
+      <ion-item lines="none" *ngIf="order.email">
 
         <span slot="start">Email</span>
 
-        <ion-label class="ion-text-wrap ion-text-end">presidencia@fecomerciogo.org.br</ion-label>
+        <ion-label class="ion-text-wrap ion-text-end">{{ order.email }}</ion-label>
 
       </ion-item>
 
-      <ion-item lines="none">
+      <ion-item lines="none" *ngIf="order.cidade && order.estado">
 
         <span slot="start">Cidade/UF</span>
 
-        <ion-label class="ion-text-wrap ion-text-end">GOIÂNIA/GO</ion-label>
+        <ion-label class="ion-text-wrap ion-text-end">{{ order.cidade }}/{{ order.estado }}</ion-label>
 
       </ion-item>
 
-      <ion-item lines="none">
+      <ion-item lines="none" *ngIf="order.motivocancelamento">
 
         <span slot="start">Motivo do<br>cancelamento</span>
 
-        <ion-label class="ion-text-wrap ion-text-end"></ion-label>
+        <ion-label class="ion-text-wrap ion-text-end">{{ order.motivocancelamento }}</ion-label>
 
       </ion-item>
 
@@ -158,21 +160,23 @@
 
       </ion-item>
 
-      <ion-item class="product" lines="none">
+      <ion-item class="product" lines="none" *ngFor="let item of order.items">
 
-        <ion-badge slot="start" color="light" mode="ios">2x</ion-badge>
+        <ion-badge slot="start" color="light" mode="ios">{{ item.qtde }}x</ion-badge>
 
         <ion-label class="ion-text-wrap">
 
-          <span>MophClean - Álcool Gel c/ Triclosan 480 ml</span>
+          <span>{{ item.nome }}</span>
 
-          <span>Código 258</span>
+          <span>Código {{ item.cod }}</span>
 
-          <span>R$ 132,00</span>
+          <span>{{ item.valor | money }}</span>
 
         </ion-label>
 
-        <ion-icon slot="end" name="checkmark-circle" color="success"></ion-icon>
+        <ion-icon slot="end" name="checkmark-circle" color="success" *ngIf="item.faturado == '0'"></ion-icon>
+
+        <ion-icon slot="end" name="close-circle" color="danger" *ngIf="item.faturado != '0'"></ion-icon>
 
       </ion-item>
 
@@ -190,7 +194,7 @@
 
       <span slot="start">Total S/ IPI</span>
 
-      <ion-label class="ion-text-end">R$ 264,00</ion-label>
+      <ion-label class="ion-text-end">{{ order.total | money }}</ion-label>
 
     </ion-item>
 
@@ -198,7 +202,7 @@
 
       <span slot="start">IPI</span>
 
-      <ion-label class="ion-text-end">R$ 13,20</ion-label>
+      <ion-label class="ion-text-end">{{ order.ipi | money }}</ion-label>
 
     </ion-item>
 
@@ -206,7 +210,7 @@
 
       <span slot="start">Total</span>
 
-      <ion-label class="ion-text-end">R$ 277,20</ion-label>
+      <ion-label class="ion-text-end total">{{ order.total + order.ipi | money }}</ion-label>
 
     </ion-item>
 
@@ -214,10 +218,16 @@
 
       <span slot="start">Previsão de Comissão</span>
 
-      <ion-label class="ion-text-end">R$ 26,40</ion-label>
+      <ion-label class="ion-text-end">{{ comissao | money }}</ion-label>
 
     </ion-item>
 
   </ion-list>
+
+  <ion-button expand="block" (click)="print()">
+
+    <ion-icon slot="start" name="print-outline"></ion-icon> Imprimir
+  
+  </ion-button>
 
 </ion-footer>

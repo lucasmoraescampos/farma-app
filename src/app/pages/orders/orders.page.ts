@@ -30,16 +30,22 @@ export class OrdersPage implements OnInit, OnDestroy {
     this.unsubscribe.complete();
   }
 
-  public async detail(order: any) {
+  public detail(id: number) {
 
-    const modal = await this.modalCtrl.create({
-      component: ModalOrderComponent,
-      componentProps: {
-        order: order
-      }
-    });
+    this.apiSrv.getOrderById(id)
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(async (res) => {
 
-    return await modal.present();
+        const modal = await this.modalCtrl.create({
+          component: ModalOrderComponent,
+          componentProps: {
+            order: res.data
+          }
+        });
+
+        return await modal.present();
+
+      });
 
   }
 
