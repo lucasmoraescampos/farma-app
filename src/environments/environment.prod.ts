@@ -2,6 +2,6 @@ export const environment = {
 
   production: true,
 
-  apiUrl: 'https://api.gynjob.com.br'
+  apiUrl: 'https://api.francefarmasistemas.com.br'
   
 };

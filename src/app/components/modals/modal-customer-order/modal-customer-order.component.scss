@@ -32,6 +32,27 @@ ion-list {
         }
     }
 
+    &.customers {
+        padding: 0;
+
+        ion-item {
+            --inner-padding-top: 8px;
+            --inner-padding-bottom: 8px;
+            --padding-start: 20px;
+            --inner-padding-end: 16px;
+            --detail-icon-color: var(--ion-color-primary);
+            --detail-icon-opacity: 1;
+
+            ion-label {
+                margin: 0;
+            }
+
+            &:last-child {
+                --border-width: 0;
+            }
+        }
+    }
+
     &.products {
         background: var(--ion-color-light);
         padding: 0;

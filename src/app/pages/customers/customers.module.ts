@@ -9,6 +9,7 @@ import { FilterModule } from 'src/app/pipes/filter/filter.module';
 import { ModalInvoiceModule } from 'src/app/components/modals/modal-invoice/modal-invoice.module';
 import { ModalCustomerOrderModule } from 'src/app/components/modals/modal-customer-order/modal-customer-order.module';
 import { ModalCustomerModule } from 'src/app/components/modals/modal-customer/modal-customer.module';
+import { CustomScrollModule } from 'src/app/directives/custom-scroll/custom-scroll.module';
 
 @NgModule({
   imports: [
@@ -20,7 +21,8 @@ import { ModalCustomerModule } from 'src/app/components/modals/modal-customer/mo
     FilterModule,
     ModalCustomerOrderModule,
     ModalInvoiceModule,
-    ModalCustomerModule
+    ModalCustomerModule,
+    CustomScrollModule
   ],
   declarations: [CustomersPage]
 })

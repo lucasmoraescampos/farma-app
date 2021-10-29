@@ -1,4 +1,4 @@
-<ion-header mode="ios">
+<ion-header class="ion-no-border" mode="ios">
 
   <ion-toolbar>
 
@@ -16,11 +16,11 @@
 
 <ion-content color="light">
 
-  <ion-grid class="animate__animated animate__fadeIn" *ngIf="dashboard">
+  <ion-grid *ngIf="dashboard">
 
     <ion-row>
 
-      <ion-col class="animate__animated animate__fadeIn" size-xs="12" size-md="6">
+      <ion-col class="animation-order" [style]="{ '--animation-order': 1 % 10 }" size-xs="12" size-md="6">
 
         <ion-card>
 
@@ -46,7 +46,7 @@
 
       </ion-col>
 
-      <ion-col class="animate__animated animate__fadeIn" size-xs="12" size-md="6">
+      <ion-col class="animation-order" [style]="{ '--animation-order': 2 % 10 }" size-xs="12" size-md="6">
 
         <ion-card>
 
@@ -72,54 +72,10 @@
 
       </ion-col>
 
-      <ion-col class="animate__animated animate__fadeIn" size="12">
-
-        <ion-card class="customers">
-
-          <ion-card-header>
-
-            <ion-card-title>Clientes</ion-card-title>
-
-          </ion-card-header>
-
-          <ion-card-content>
-
-            <ion-searchbar placeholder="Buscar" (ionChange)="searchChanged($event)" (ionClear)="customers = []"></ion-searchbar>
-
-            <div class="ion-scroll">
-
-              <ion-list>
-
-                <ion-item lines="none" *ngIf="noloader">
-
-                  <ion-label class="ion-text-center">
-
-                    <ion-spinner name="dots" color="primary"></ion-spinner>
-
-                  </ion-label>
-
-                </ion-item>
-
-                <ion-item lines="full" button="true" detail="true" *ngFor="let customer of customers" (click)="selectCustomer(customer)">
-
-                  <ion-label class="ion-text-wrap">{{ customer.razao_social }}</ion-label>
-
-                </ion-item>
-
-              </ion-list>
-
-            </div>
-
-          </ion-card-content>
-
-        </ion-card>
-
-      </ion-col>
-
     </ion-row>
 
   </ion-grid>
 
 </ion-content>
 
-<app-loader *ngIf="!noloader"></app-loader>
+<app-loader></app-loader>

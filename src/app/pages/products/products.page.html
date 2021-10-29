@@ -4,11 +4,19 @@
 
     <ion-buttons slot="start">
 
-      <ion-menu-button></ion-menu-button>
+      <ion-menu-button *ngIf="!labSelected"></ion-menu-button>
+
+      <ion-button (click)="changeLab()" *ngIf="labSelected">
+
+        <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
+
+      </ion-button>
 
     </ion-buttons>
 
-    <ion-title>Produtos</ion-title>
+    <ion-title *ngIf="!labSelected">Produtos</ion-title>
+
+    <ion-title *ngIf="labSelected">{{ labSelected.nome }}</ion-title>
 
   </ion-toolbar>
 
@@ -16,71 +24,53 @@
 
 <ion-content>
 
-  <ion-slides class="swiper-no-swiping">
+  <ng-container *ngIf="!labSelected">
 
-    <ion-slide>
+    <ion-list class="animate__animated animate__fadeIn" *ngIf="labs?.length > 0">
 
-      <div class="ion-scroll">
-    
-        <ion-list class="animate__animated animate__fadeIn" *ngIf="labs?.length > 0">
+      <ion-list-header>
 
-          <ion-list-header>
+        <ion-label>Selecione uma linha</ion-label>
 
-            <ion-label>Selecione uma linha</ion-label>
+      </ion-list-header>
 
-          </ion-list-header>
+      <ion-item class="animation-order" [style]="{ '--animation-order': i % 10 }" lines="full" lines="full"
+        button="true" detail="true" (click)="selectLab(lab)" *ngFor="let lab of labs; let i=index">
 
-          <ion-item lines="full" button="true" detail="true" (click)="selectLab(lab)" *ngFor="let lab of labs">
+        <ion-label>{{ lab.nome }}</ion-label>
 
-            <ion-label>{{ lab.nome }}</ion-label>
+      </ion-item>
 
-          </ion-item>
+    </ion-list>
 
-        </ion-list>
-    
-      </div>
+  </ng-container>
 
-    </ion-slide>
+  <ng-container *ngIf="labSelected">
 
-    <ion-slide>
+    <ion-list class="animate__animated animate__fadeIn" *ngIf="labSelected">
 
-      <div class="ion-scroll">
+      <ion-list-header>
 
-        <ion-list class="animate__animated animate__fadeIn" *ngIf="labSelected">
+        <ion-searchbar mode="ios" placeholder="Buscar" [(ngModel)]="search"></ion-searchbar>
 
-          <ion-list-header class="ion-no-padding">
+      </ion-list-header>
 
-            <ion-button fill="clear" size="small" (click)="changeLab()">
+      <ion-item class="animation-order" [style]="{ '--animation-order': i % 10 }" lines="full"
+        *ngFor="let product of products | filter:'nome':search; let i=index">
 
-              <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
+        <ion-label class="ion-text-wrap">
 
-            </ion-button>
+          <span class="name">{{ product.nome }}</span>
 
-            <ion-label>{{ labSelected.nome }}</ion-label>
+          <span class="price">{{ product.valor_01 | money }}</span>
 
-          </ion-list-header>
+        </ion-label>
 
-          <ion-searchbar placeholder="Buscar"></ion-searchbar>
+      </ion-item>
 
-          <ion-item lines="full" *ngFor="let product of products">
-              
-            <ion-label class="ion-text-wrap">
-  
-              <span class="name">{{ product.nome }}</span>
-  
-              <span class="price">{{ product.valor_01 | money }}</span>
-  
-            </ion-label>
-  
-          </ion-item>
+    </ion-list>
 
-        </ion-list>
-
-      </div>
-
-    </ion-slide>
-
-  </ion-slides>
+  </ng-container>
 
 </ion-content>
 

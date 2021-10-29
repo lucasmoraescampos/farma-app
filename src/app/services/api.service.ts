@@ -57,12 +57,8 @@ export class ApiService {
     return this.http.get<HttpResult>(`${this.apiUrl}/dashboard`);
   }
 
-  public searchCustomers(params: any) {
-    return this.http.get<HttpResult>(`${this.apiUrl}/customer/search`, { params: params });
-  }
-
-  public getCustomers() {
-    return this.http.get<HttpResult>(`${this.apiUrl}/customer`);
+  public getCustomers(params?: any) {
+    return this.http.get<HttpResult>(`${this.apiUrl}/customer`, { params: params });
   }
 
   public getExpiredCustomers() {
@@ -89,8 +85,8 @@ export class ApiService {
     return this.http.get<HttpResult>(`${this.apiUrl}/product/labs`);
   }
 
-  public getOrders() {
-    return this.http.get<HttpResult>(`${this.apiUrl}/order`);
+  public getOrders(params?: any) {
+    return this.http.get<HttpResult>(`${this.apiUrl}/order`, { params: params });
   }
 
   public getOrderById(id: number) {

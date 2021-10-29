@@ -4,30 +4,75 @@
 
     <ion-buttons slot="start">
 
-      <ion-menu-button></ion-menu-button>
+      <ion-menu-button *ngIf="!isSearch"></ion-menu-button>
+
+      <ion-button class="animate__animated animate__fadeIn" (click)="cancelSearch()" *ngIf="isSearch">
+
+        <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
+
+      </ion-button>
 
     </ion-buttons>
 
-    <ion-title>Pedidos</ion-title>
+    <ion-title *ngIf="!isSearch">Pedidos</ion-title>
+
+    <ion-title class="animate__animated animate__fadeIn" *ngIf="isSearch">Buscar Pedido</ion-title>
+
+  </ion-toolbar>
+
+  <ion-toolbar>
+
+    <ion-searchbar class="animate__animated animate__fadeIn" placeholder="Buscar" [(ngModel)]="search" (ionFocus)="isSearch = true" (ionClear)="searchItems = null" (ionCancel)="cancelSearch()" (ionChange)="searchChanged()"></ion-searchbar>
 
   </ion-toolbar>
 
 </ion-header>
 
-<ion-content>
+<ion-content customScroll>
 
-  <div class="ion-scroll">
+  <ng-container *ngIf="isSearch">
 
-    <ion-list>
+    <ion-list class="animate__animated animate__fadeIn search">
 
-      <ion-list-header>
+      <ion-item lines="none" color="light" *ngIf="searchItems?.length == 0">
 
-        <ion-searchbar placeholder="Buscar"></ion-searchbar>
+        <ion-label class="ion-text-center animate__animated animate__fadeIn">Nada encontrado</ion-label>
 
-      </ion-list-header>
+      </ion-item>
 
-      <ion-item class="animate__animated animate__fadeIn" lines="full" button="true" detail="false"
-        (click)="detail(order.id_pedido)" *ngFor="let order of orders">
+      <ion-item class="animation-order" [style]="{ '--animation-order': i % 10 }" lines="full" button="true"
+        detail="false" (click)="detail(item.id_pedido)" *ngFor="let item of searchItems; let i=index">
+
+        <ion-badge slot="start" mode="ios" color="light">{{ item.id_pedido }}</ion-badge>
+
+        <ion-label class="ion-text-wrap">
+
+          <span class="customer">{{ item.razao_social }}</span>
+
+          <span class="date">{{ item.datas | date }}</span>
+
+          <span class="price">{{ (item.total + item.ipi) | money }}</span>
+
+          <ion-badge mode="ios" color="secondary" *ngIf="item.status == '4'">Pré Faturado</ion-badge>
+
+          <ion-badge mode="ios" color="danger" *ngIf="item.status == '2'">Cancelado</ion-badge>
+
+          <ion-badge mode="ios" color="success" *ngIf="item.status == '1'">Faturado</ion-badge>
+
+        </ion-label>
+
+      </ion-item>
+
+    </ion-list>
+
+  </ng-container>
+
+  <ng-container *ngIf="!isSearch">
+
+    <ion-list class="animate__animated animate__fadeIn" *ngIf="orders?.length > 0">
+
+      <ion-item class="animation-order" [style]="{ '--animation-order': i % 10 }" lines="full" button="true"
+        detail="false" (click)="detail(order.id_pedido)" *ngFor="let order of orders; let i=index">
 
         <ion-badge slot="start" mode="ios" color="light">{{ order.id_pedido }}</ion-badge>
 
@@ -51,8 +96,24 @@
 
     </ion-list>
 
-  </div>
+    <ion-fab class="animate__animated animate__fadeIn" slot="fixed" vertical="bottom" horizontal="end">
+
+      <ion-fab-button (click)="newOrder()">
+
+        <ion-icon name="add"></ion-icon>
+
+      </ion-fab-button>
+
+    </ion-fab>
+
+    <ion-infinite-scroll threshold="100px" (ionInfinite)="loadOrders($event)">
+
+      <ion-infinite-scroll-content loadingSpinner="dots"></ion-infinite-scroll-content>
+
+    </ion-infinite-scroll>
+
+  </ng-container>
 
 </ion-content>
 
-<app-loader></app-loader>
+<app-loader *ngIf="!noloader"></app-loader>

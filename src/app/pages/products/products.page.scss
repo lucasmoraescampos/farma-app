@@ -1,32 +1,18 @@
-ion-slides {
-    height: 100%;
-}
+ion-list-header {
+    padding: 8px;
 
-ion-slide {
-    text-align: left;
-}
-
-ion-list-header ion-label {
-    font-family: "Oswald", sans-serif;
-    font-size: 0.9rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    color: var(--ion-color-primary);
-}
-
-ion-list-header ion-button {
-    --border-radius: 100%;
-    width: 46px;
-    height: 46px;
-    margin: 2px 5px 2px 2px;
+    ion-label {
+        font-family: "Oswald", sans-serif;
+        font-size: 0.9rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: var(--ion-color-primary);
+        margin: 0 8px;
+    }
 }
 
 ion-list {
     padding: 0;
-}
-
-ion-list ion-searchbar {
-    padding: 8px 16px;
 }
 
 ion-item {

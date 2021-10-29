@@ -1,10 +1,11 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ActionSheetController, IonSlides, ModalController } from '@ionic/angular';
-import { Subject } from 'rxjs';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActionSheetController, ModalController } from '@ionic/angular';
+import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ModalCustomerOrderComponent } from 'src/app/components/modals/modal-customer-order/modal-customer-order.component';
 import { ModalCustomerComponent } from 'src/app/components/modals/modal-customer/modal-customer.component';
 import { ModalInvoiceComponent } from 'src/app/components/modals/modal-invoice/modal-invoice.component';
+import { HttpResult } from 'src/app/models/http-result';
 import { ApiService } from 'src/app/services/api.service';
 
 @Component({
@@ -14,17 +15,27 @@ import { ApiService } from 'src/app/services/api.service';
 })
 export class CustomersPage implements OnInit, OnDestroy {
 
-  @ViewChild(IonSlides) slides: IonSlides;
-
   public customerSearch: string;
 
   public expiredSearch: string;
 
-  public segment: number = 0;
-
-  public customers: any[];
+  public customers: any[] = [];
 
   public expired: any[];
+
+  public page: number = 1;
+
+  public total: number;
+
+  public noloader: boolean;
+
+  public segment: number = 0;
+
+  public isSearch: boolean;
+
+  public searchItems: any[];
+
+  private customers$: Observable<HttpResult>;
 
   private unsubscribe = new Subject();
 
@@ -44,12 +55,22 @@ export class CustomersPage implements OnInit, OnDestroy {
     this.unsubscribe.complete();
   }
 
-  public segmentChanged() {
-    this.slides.slideTo(this.segment);
+  public cancelSearch() {
+    this.isSearch = false;
+    this.customerSearch = '';
+    this.searchItems = null;
   }
 
-  public slideChanged(ev: any) {
-    this.segment = ev.target.swiper.activeIndex;
+  public searchChanged() {
+
+    if (this.customerSearch.length < 3) return;
+
+    this.apiSrv.getCustomers({ search: this.customerSearch })
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(res => {
+        this.searchItems = res.data;
+      });
+      
   }
 
   public async choose(customer: any) {
@@ -73,9 +94,9 @@ export class CustomersPage implements OnInit, OnDestroy {
                 customer: customer
               }
             });
-        
+
             return await modal.present();
-            
+
           }
         }
       ]
@@ -115,10 +136,40 @@ export class CustomersPage implements OnInit, OnDestroy {
 
   }
 
+  public loadCustomers(event: any) {
+
+    this.page++;
+
+    this.noloader = true;
+
+    this.customers$.subscribe(res => {
+
+      this.noloader = false;
+
+      this.customers = this.customers.concat(res.data.customers);
+
+      this.total = res.data.total;
+
+      event.target.complete();
+
+      if (this.customers.length == this.total) {
+        event.target.disabled = true;
+      }
+
+    });
+
+  }
+
   private initCustomers() {
-    this.apiSrv.getCustomers()
-      .pipe(takeUntil(this.unsubscribe))
-      .subscribe(res => this.customers = res.data);
+
+    this.customers$ = this.apiSrv.getCustomers({ page: this.page })
+      .pipe(takeUntil(this.unsubscribe));
+
+    this.customers$.subscribe(res => {
+      this.customers = this.customers.concat(res.data.customers);
+      this.total = res.data.total;
+    });
+
   }
 
   private initExpired() {

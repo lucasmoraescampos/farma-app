@@ -4,27 +4,35 @@
 
     <ion-buttons slot="start">
 
-      <ion-menu-button></ion-menu-button>
+      <ion-menu-button *ngIf="!isSearch"></ion-menu-button>
+
+      <ion-button class="animate__animated animate__fadeIn" (click)="cancelSearch()" *ngIf="isSearch">
+
+        <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
+
+      </ion-button>
 
     </ion-buttons>
 
-    <ion-title>Clientes</ion-title>
+    <ion-title *ngIf="!isSearch">Clientes</ion-title>
+
+    <ion-title class="animate__animated animate__fadeIn" *ngIf="isSearch">Buscar Cliente</ion-title>
 
   </ion-toolbar>
 
-  <ion-toolbar mode="md">
+  <ion-toolbar class="animate__animated animate__fadeIn" mode="md" *ngIf="!isSearch">
 
-    <ion-segment [(ngModel)]="segment" (ionChange)="segmentChanged()">
+    <ion-segment [(ngModel)]="segment">
 
       <ion-segment-button value="0">
 
-        <ion-label>Vencidos</ion-label>
+        <ion-label>Todos</ion-label>
 
       </ion-segment-button>
 
       <ion-segment-button value="1">
 
-        <ion-label>Todos</ion-label>
+        <ion-label>Vencidos</ion-label>
 
       </ion-segment-button>
 
@@ -34,98 +42,120 @@
 
 </ion-header>
 
-<ion-content>
+<ion-content customScroll>
 
-  <ion-slides (ionSlideDidChange)="slideChanged($event)">
+  <ng-container *ngIf="segment == 0">
 
-    <ion-slide>
+    <ion-header class="ion-no-border search animate__animated animate__fadeIn">
 
-      <div class="ion-scroll">
+      <ion-toolbar>
 
-        <ion-header class="ion-no-border search">
+        <ion-searchbar mode="ios" placeholder="Buscar" [(ngModel)]="customerSearch" (ionFocus)="isSearch = true"
+          (ionCancel)="cancelSearch()" (ionChange)="searchChanged()"></ion-searchbar>
 
-          <ion-toolbar>
+      </ion-toolbar>
 
-            <ion-searchbar placeholder="Buscar" [(ngModel)]="expiredSearch"></ion-searchbar>
+    </ion-header>
 
-          </ion-toolbar>
+    <ion-list class="animate__animated animate__fadeIn" *ngIf="!isSearch">
 
-        </ion-header>
+      <ion-item class="animation-order" [style]="{ '--animation-order': i % 10 }" lines="full" button="true"
+        detail="false" (click)="selectCustomer(customer)"
+        *ngFor="let customer of customers | filter:'razao_social,id_cliente':customerSearch; let i=index">
 
-        <ion-list>
+        <ion-label>
 
-          <ion-item class="animate__animated animate__fadeIn" lines="full" button="true" detail="false"
-            (click)="choose(customer)"
-            *ngFor="let customer of expired | filter:'razao_social,id_cliente':expiredSearch">
+          <span class="name">{{ customer.razao_social }}</span>
 
-            <ion-label>
+          <span class="code">{{ customer.id_cliente }}</span>
 
-              <span class="name">{{ customer.razao_social }}</span>
+          <span class="phone">{{ customer.tel }}</span>
 
-              <span class="code">{{ customer.id_cliente }}</span>
+        </ion-label>
 
-              <span class="phone">{{ customer.tel }}</span>
+      </ion-item>
 
-            </ion-label>
+    </ion-list>
 
-          </ion-item>
+    <ion-list class="animate__animated animate__fadeIn" *ngIf="isSearch">
 
-        </ion-list>
+      <ion-item lines="none" color="light" *ngIf="searchItems?.length == 0">
 
-      </div>
+        <ion-label class="ion-text-center animate__animated animate__fadeIn">Nada encontrado</ion-label>
 
-    </ion-slide>
+      </ion-item>
 
-    <ion-slide>
+      <ion-item class="animation-order" [style]="{ '--animation-order': i % 10 }" lines="full" button="true"
+        detail="false" (click)="selectCustomer(item)"
+        *ngFor="let item of searchItems | filter:'razao_social,id_cliente':customerSearch; let i=index">
 
-      <div class="ion-scroll">
+        <ion-label>
 
-        <ion-header class="ion-no-border search">
+          <span class="name">{{ item.razao_social }}</span>
 
-          <ion-toolbar>
+          <span class="code">{{ item.id_cliente }}</span>
 
-            <ion-searchbar placeholder="Buscar" [(ngModel)]="customerSearch"></ion-searchbar>
+          <span class="phone">{{ item.tel }}</span>
 
-          </ion-toolbar>
+        </ion-label>
 
-        </ion-header>
+      </ion-item>
 
-        <ion-list>
+    </ion-list>
 
-          <ion-item class="animate__animated animate__fadeIn" lines="full" button="true" detail="false"
-            (click)="selectCustomer(customer)"
-            *ngFor="let customer of customers | filter:'razao_social,id_cliente':customerSearch">
+    <ion-fab class="animate__animated animate__fadeIn" slot="fixed" vertical="bottom" horizontal="end"
+      *ngIf="!isSearch">
 
-            <ion-label>
+      <ion-fab-button (click)="newCustomer()">
 
-              <span class="name">{{ customer.razao_social }}</span>
+        <ion-icon name="add"></ion-icon>
 
-              <span class="code">{{ customer.id_cliente }}</span>
+      </ion-fab-button>
 
-              <span class="phone">{{ customer.tel }}</span>
+    </ion-fab>
 
-            </ion-label>
+    <ion-infinite-scroll threshold="100px" (ionInfinite)="loadCustomers($event)">
 
-          </ion-item>
+      <ion-infinite-scroll-content loadingSpinner="dots"></ion-infinite-scroll-content>
 
-        </ion-list>
+    </ion-infinite-scroll>
 
-        <ion-fab vertical="bottom" horizontal="end">
+  </ng-container>
 
-          <ion-fab-button (click)="newCustomer()">
+  <ng-container *ngIf="segment == 1">
 
-            <ion-icon name="add"></ion-icon>
+    <ion-header class="ion-no-border search animate__animated animate__fadeIn">
 
-          </ion-fab-button>
+      <ion-toolbar>
 
-        </ion-fab>
+        <ion-searchbar mode="ios" placeholder="Buscar" [(ngModel)]="expiredSearch"></ion-searchbar>
 
-      </div>
+      </ion-toolbar>
 
-    </ion-slide>
+    </ion-header>
 
-  </ion-slides>
+    <ion-list class="animate__animated animate__fadeIn">
+
+      <ion-item class="animation-order" [style]="{ '--animation-order': i % 10 }" lines="full" button="true"
+        detail="false" (click)="choose(customer)"
+        *ngFor="let customer of expired | filter:'razao_social,id_cliente':expiredSearch; let i=index">
+
+        <ion-label>
+
+          <span class="name">{{ customer.razao_social }}</span>
+
+          <span class="code">{{ customer.id_cliente }}</span>
+
+          <span class="phone">{{ customer.tel }}</span>
+
+        </ion-label>
+
+      </ion-item>
+
+    </ion-list>
+
+  </ng-container>
 
 </ion-content>
 
-<app-loader></app-loader>
+<app-loader *ngIf="!noloader"></app-loader>

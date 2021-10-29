@@ -6,6 +6,7 @@ import { ProductsPageRoutingModule } from './products-routing.module';
 import { ProductsPage } from './products.page';
 import { LoaderModule } from 'src/app/components/common/loader/loader.module';
 import { MoneyModule } from 'src/app/pipes/money/money.module';
+import { FilterModule } from 'src/app/pipes/filter/filter.module';
 
 @NgModule({
   imports: [
@@ -14,7 +15,8 @@ import { MoneyModule } from 'src/app/pipes/money/money.module';
     IonicModule,
     ProductsPageRoutingModule,
     LoaderModule,
-    MoneyModule
+    MoneyModule,
+    FilterModule
   ],
   declarations: [ProductsPage]
 })

@@ -80,6 +80,26 @@ ion-card {
     margin: 0;
 }
 
+.animation-order {
+    animation: popIn 0.2s calc(var(--animation-order) * 100ms) both ease-in;
+}
+
+.infinite-loading-spinner ion-spinner {
+    color: var(--ion-color-primary);
+}
+
+@keyframes popIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.6) translateY(-8px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: none;
+    }
+}
+
 @media (pointer: fine) {
     .ion-scroll {
         &::-webkit-scrollbar {

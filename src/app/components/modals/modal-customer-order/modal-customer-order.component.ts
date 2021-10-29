@@ -28,6 +28,8 @@ export class ModalCustomerOrderComponent implements OnInit, OnDestroy {
 
   public cart: any;
 
+  public customers: any[];
+
   public formGroup: FormGroup;
 
   private unsubscribe = new Subject();
@@ -45,7 +47,6 @@ export class ModalCustomerOrderComponent implements OnInit, OnDestroy {
     this.user = this.apiSrv.getCurrentUser();
 
     this.formGroup = this.formBuilder.group({
-      id_cliente:     [this.customer.id_cliente],
       id_prazo:       ['', Validators.required],
       id_tabela:      ['', Validators.required],
       freight:        ['', Validators.required],
@@ -73,7 +74,9 @@ export class ModalCustomerOrderComponent implements OnInit, OnDestroy {
   }
 
   ionViewDidEnter() {
-    this.slides.update();
+    if (this.customer) {
+      this.slides.update();
+    }
   }
 
   public get formControl() {
@@ -82,6 +85,25 @@ export class ModalCustomerOrderComponent implements OnInit, OnDestroy {
 
   public dismiss() {
     this.modalCtrl.dismiss();
+  }
+
+  public searchChanged(ev: any) {
+
+    const search = ev.detail.value;
+
+    if (search.length < 3) {
+      this.customers = [];
+      return;
+    }
+
+    this.apiSrv.getCustomers({ search: search })
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(
+        res => {
+          this.customers = res.data;
+        }
+      );
+
   }
 
   public segmentChanged() {
@@ -94,6 +116,15 @@ export class ModalCustomerOrderComponent implements OnInit, OnDestroy {
 
   public tableChanged(ev: any) {
     this.cartSrv.setIdTabela(ev.detail.value);
+  }
+
+  public cancelCustomer() {
+    this.customer = null;
+  }
+
+  public selectCustomer(customer: any) {
+    this.customer = customer;
+    setTimeout(() => this.slides.update());
   }
 
   public async addProduct() {
@@ -160,6 +191,8 @@ export class ModalCustomerOrderComponent implements OnInit, OnDestroy {
     if (this.formGroup.valid) {
 
       const data: any = this.formGroup.value;
+
+      data.id_cliente = this.customer.id_cliente;
 
       data.products = [];
 
