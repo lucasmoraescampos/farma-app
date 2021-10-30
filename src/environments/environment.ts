@@ -6,7 +6,7 @@ export const environment = {
 
   production: false,
 
-  apiUrl: 'http://api.francefarmasistemas.com.br'
+  apiUrl: 'http://localhost:8000'
 
 };
 

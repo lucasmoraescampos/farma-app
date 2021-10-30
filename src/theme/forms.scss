@@ -17,14 +17,6 @@ ion-input.custom {
     }
 }
 
-ion-item {
-    --highlight-background: none;
-
-    &.item-has-focus.ion-valid, &.item-has-focus.ion-invalid {
-        --highlight-background: var(--ion-color-primary) !important;
-    }
-}
-
 ion-input {
     --padding-start: 8px !important;
     --padding-end: 8px !important;

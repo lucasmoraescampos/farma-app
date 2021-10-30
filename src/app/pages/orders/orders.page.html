@@ -51,7 +51,7 @@
 
           <span class="date">{{ item.datas | date }}</span>
 
-          <span class="price">{{ (item.total + item.ipi) | money }}</span>
+          <span class="price">{{ sum(item.total, item.ipi) | money }}</span>
 
           <ion-badge mode="ios" color="secondary" *ngIf="item.status == '4'">Pré Faturado</ion-badge>
 
@@ -82,7 +82,7 @@
 
           <span class="date">{{ order.datas | date }}</span>
 
-          <span class="price">{{ (order.total + order.ipi) | money }}</span>
+          <span class="price">{{ sum(order.total, order.ipi) | money }}</span>
 
           <ion-badge mode="ios" color="secondary" *ngIf="order.status == '4'">Pré Faturado</ion-badge>
 

@@ -44,6 +44,10 @@ export class OrdersPage implements OnInit, OnDestroy {
     this.unsubscribe.complete();
   }
 
+  public sum(a: string, b: string) {
+    return Number(a) + Number(b);
+  }
+
   public cancelSearch() {
     this.isSearch = false;
     this.search = '';
