@@ -70,7 +70,7 @@ export class SQLiteService {
     if (result.rows.length > 0) {
 
       for (let i = 0; i < result.rows.length; i++) {
-        customers.push(result.rows.item(0));
+        customers.push(result.rows.item(i));
       }
 
     }
@@ -110,7 +110,7 @@ export class SQLiteService {
     if (result.rows.length > 0) {
 
       for (let i = 0; i < result.rows.length; i++) {
-        customers.push(result.rows.item(0));
+        customers.push(result.rows.item(i));
       }
 
     }
@@ -150,7 +150,7 @@ export class SQLiteService {
     if (result.rows.length > 0) {
 
       for (let i = 0; i < result.rows.length; i++) {
-        labs.push(result.rows.item(0));
+        labs.push(result.rows.item(i));
       }
 
     }
@@ -196,7 +196,7 @@ export class SQLiteService {
     if (result.rows.length > 0) {
 
       for (let i = 0; i < result.rows.length; i++) {
-        labs.push(result.rows.item(0));
+        labs.push(result.rows.item(i));
       }
 
     }
@@ -242,7 +242,7 @@ export class SQLiteService {
     if (result.rows.length > 0) {
 
       for (let i = 0; i < result.rows.length; i++) {
-        orders.push(result.rows.item(0));
+        orders.push(result.rows.item(i));
       }
 
     }
@@ -274,8 +274,6 @@ export class SQLiteService {
       }
 
     }
-
-    console.log(sql);
 
     db.sqlBatch(sql);
 
