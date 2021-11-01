@@ -20,7 +20,7 @@ export class ModalOrderComponent implements OnInit {
 
   ngOnInit() {
 
-    this.order.items.forEach((item: any) => {
+    this.order.produtos.forEach((item: any) => {
       this.comissao += item.comissao * item.qtde;
     });
 

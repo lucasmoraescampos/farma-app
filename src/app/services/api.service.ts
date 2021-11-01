@@ -65,6 +65,10 @@ export class ApiService {
     return this.http.get<HttpResult>(`${this.apiUrl}/customer/expired`);
   }
 
+  public getPositiveCustomers() {
+    return this.http.get<HttpResult>(`${this.apiUrl}/customer/positive`);
+  }
+
   public createCustomer(data: any) {
     return this.http.post<HttpResult>(`${this.apiUrl}/customer`, data);
   }

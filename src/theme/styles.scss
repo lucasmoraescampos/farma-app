@@ -23,24 +23,27 @@
     }
 }
 
-ion-header ion-toolbar ion-title {
-    font-family: "Oswald", sans-serif;
-    font-size: 1.125rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    color: var(--ion-color-primary);
-}
-
 ion-searchbar {
     --background: rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.07) !important;
     --border-radius: 8px !important;
     --box-shadow: none !important;
+    height: 74px !important;
+
+    input {
+        height: 50px !important;
+        padding-inline-start: 40px !important;
+    }
+
+    ion-icon {
+        top: 7px !important;
+        left: 10px !important;
+    }
 }
 
 ion-segment-button {
-    font-family: "Oswald", sans-serif;
     font-size: 0.875rem;
-    font-weight: 600;
+    font-weight: 400;
+    text-transform: none;
     letter-spacing: 0;
 }
 

@@ -10,12 +10,15 @@ ion-card-title {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    font-family: "Oswald", sans-serif;
     font-size: 0.9rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    color: var(--ion-color-primary);
+    font-weight: 600;
     min-height: 30px;
+}
+
+ion-card-subtitle {
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: var(--ion-color-medium);
 }
 
 ion-card-title ion-button {
@@ -30,7 +33,7 @@ ion-progress-bar {
 }
 
 ion-note {
-    color: var(--ion-color-secondary);
+    color: var(--ion-color-medium);
 }
 
 ion-searchbar {

@@ -7,7 +7,7 @@ import { HomePage } from './home.page';
 import { BrMaskerModule } from 'br-mask';
 import { MoneyModule } from 'src/app/pipes/money/money.module';
 import { LoaderModule } from 'src/app/components/common/loader/loader.module';
-import { ModalCustomerOrderModule } from 'src/app/components/modals/modal-customer-order/modal-customer-order.module';
+import { ModalPositiveCustomersModule } from 'src/app/components/modals/modal-positive-customers/modal-positive-customers.module';
 
 @NgModule({
   imports: [
@@ -18,9 +18,9 @@ import { ModalCustomerOrderModule } from 'src/app/components/modals/modal-custom
     BrMaskerModule,
     MoneyModule,
     ReactiveFormsModule,
-    ModalCustomerOrderModule,
     LoaderModule,
-    MoneyModule
+    MoneyModule,
+    ModalPositiveCustomersModule
   ],
   declarations: [HomePage]
 })

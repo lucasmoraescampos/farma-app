@@ -160,23 +160,23 @@
 
       </ion-item>
 
-      <ion-item class="product" lines="none" *ngFor="let item of order.items">
+      <ion-item class="product" lines="none" *ngFor="let produto of order.produtos">
 
-        <ion-badge slot="start" color="light" mode="ios">{{ item.qtde }}x</ion-badge>
+        <ion-badge slot="start" color="light" mode="ios">{{ produto.qtde }}x</ion-badge>
 
         <ion-label class="ion-text-wrap">
 
-          <span>{{ item.nome }}</span>
+          <span>{{ produto.nome }}</span>
 
-          <span>Código {{ item.cod }}</span>
+          <span>Código {{ produto.cod }}</span>
 
-          <span>{{ item.valor | money }}</span>
+          <span>{{ produto.valor | money }}</span>
 
         </ion-label>
 
-        <ion-icon slot="end" name="checkmark-circle" color="success" *ngIf="item.faturado == '0'"></ion-icon>
+        <ion-icon slot="end" name="checkmark-circle" color="success" *ngIf="produto.faturado == '0'"></ion-icon>
 
-        <ion-icon slot="end" name="close-circle" color="danger" *ngIf="item.faturado != '0'"></ion-icon>
+        <ion-icon slot="end" name="close-circle" color="danger" *ngIf="produto.faturado != '0'"></ion-icon>
 
       </ion-item>
 

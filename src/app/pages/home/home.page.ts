@@ -1,7 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Capacitor } from '@capacitor/core';
+import { ModalController } from '@ionic/angular';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { ModalPositiveCustomersComponent } from 'src/app/components/modals/modal-positive-customers/modal-positive-customers.component';
 import { ApiService } from 'src/app/services/api.service';
+import { SQLiteService } from 'src/app/services/sqlite.service';
+import { Network } from '@capacitor/network';
 
 @Component({
   selector: 'app-home',
@@ -15,7 +20,9 @@ export class HomePage implements OnInit, OnDestroy {
   private unsubscribe = new Subject();
 
   constructor(
-    private apiSrv: ApiService
+    private apiSrv: ApiService,
+    private modalCtrl: ModalController,
+    private sqliteSrv: SQLiteService
   ) { }
 
   ngOnInit() {
@@ -27,10 +34,48 @@ export class HomePage implements OnInit, OnDestroy {
     this.unsubscribe.complete();
   }
 
-  private async initDashboard() {
-    this.apiSrv.dashboard()
-      .pipe(takeUntil(this.unsubscribe))
-      .subscribe(res => this.dashboard = res.data);
+  public async customers() {
+
+    const modal = await this.modalCtrl.create({
+      component: ModalPositiveCustomersComponent
+    });
+
+    return await modal.present();
+
+  }
+
+  private initDashboard() {
+
+    Network.getStatus()
+      .then(status => {
+
+        if (status.connected) {
+
+          this.apiSrv.dashboard()
+            .pipe(takeUntil(this.unsubscribe))
+            .subscribe(res => {
+
+              this.dashboard = res.data;
+
+              if (Capacitor.isNativePlatform()) {
+                this.sqliteSrv.setDashboard(res.data);
+              }
+
+            });
+
+        }
+
+        else {
+
+          this.sqliteSrv.getDashboard()
+            .then(dashboard => {
+              this.dashboard = dashboard;
+            });
+
+        }
+
+      });
+      
   }
 
 }

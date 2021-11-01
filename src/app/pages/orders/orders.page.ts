@@ -1,11 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Network } from '@capacitor/network';
 import { ModalController } from '@ionic/angular';
-import { Observable, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ModalCustomerOrderComponent } from 'src/app/components/modals/modal-customer-order/modal-customer-order.component';
 import { ModalOrderComponent } from 'src/app/components/modals/modal-order/modal-order.component';
-import { HttpResult } from 'src/app/models/http-result';
 import { ApiService } from 'src/app/services/api.service';
+import { SQLiteService } from 'src/app/services/sqlite.service';
 
 @Component({
   selector: 'app-orders',
@@ -32,7 +33,8 @@ export class OrdersPage implements OnInit, OnDestroy {
 
   constructor(
     private apiSrv: ApiService,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
+    private sqliteSrv: SQLiteService
   ) { }
 
   ngOnInit() {
@@ -120,11 +122,37 @@ export class OrdersPage implements OnInit, OnDestroy {
   }
 
   private initOrders() {
-    this.apiSrv.getOrders({ page: this.page })
-      .pipe(takeUntil(this.unsubscribe))
-      .subscribe(res => {
-        this.orders = this.orders.concat(res.data.orders);
-        this.total = res.data.total;
+
+    Network.getStatus()
+      .then(status => {
+
+        if (status.connected) {
+
+          this.apiSrv.getOrders({ page: this.page })
+            .pipe(takeUntil(this.unsubscribe))
+            .subscribe(res => {
+
+              this.orders = this.orders.concat(res.data.orders);
+
+              this.total = res.data.total;
+
+            });
+
+        }
+
+        else {
+
+          this.sqliteSrv.getOrders()
+            .then(orders => {
+
+              this.orders = orders;
+
+              this.total = orders.length;
+
+            });
+
+        }
+
       });
   }
 

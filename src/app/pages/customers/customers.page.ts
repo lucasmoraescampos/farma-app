@@ -1,12 +1,14 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Capacitor } from '@capacitor/core';
+import { Network } from '@capacitor/network';
 import { ActionSheetController, ModalController } from '@ionic/angular';
-import { Observable, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ModalCustomerOrderComponent } from 'src/app/components/modals/modal-customer-order/modal-customer-order.component';
 import { ModalCustomerComponent } from 'src/app/components/modals/modal-customer/modal-customer.component';
 import { ModalInvoiceComponent } from 'src/app/components/modals/modal-invoice/modal-invoice.component';
-import { HttpResult } from 'src/app/models/http-result';
 import { ApiService } from 'src/app/services/api.service';
+import { SQLiteService } from 'src/app/services/sqlite.service';
 
 @Component({
   selector: 'app-customers',
@@ -35,14 +37,13 @@ export class CustomersPage implements OnInit, OnDestroy {
 
   public searchItems: any[];
 
-  private customers$: Observable<HttpResult>;
-
   private unsubscribe = new Subject();
 
   constructor(
     private apiSrv: ApiService,
     private modalCtrl: ModalController,
-    private actionSheetCtrl: ActionSheetController
+    private actionSheetCtrl: ActionSheetController,
+    private sqliteSrv: SQLiteService
   ) { }
 
   ngOnInit() {
@@ -142,40 +143,69 @@ export class CustomersPage implements OnInit, OnDestroy {
 
     this.noloader = true;
 
-    this.customers$.subscribe(res => {
+    this.apiSrv.getCustomers({ page: this.page })
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(res => {
 
-      this.noloader = false;
+        this.noloader = false;
 
-      this.customers = this.customers.concat(res.data.customers);
+        this.customers = this.customers.concat(res.data.customers);
 
-      this.total = res.data.total;
+        this.total = res.data.total;
 
-      event.target.complete();
+        event.target.complete();
 
-      if (this.customers.length == this.total) {
-        event.target.disabled = true;
-      }
+        if (this.customers.length == this.total) {
+          event.target.disabled = true;
+        }
 
-    });
+      });
 
   }
 
   private initCustomers() {
 
-    this.customers$ = this.apiSrv.getCustomers({ page: this.page })
-      .pipe(takeUntil(this.unsubscribe));
-
-    this.customers$.subscribe(res => {
-      this.customers = this.customers.concat(res.data.customers);
-      this.total = res.data.total;
-    });
+    this.apiSrv.getCustomers({ page: this.page })
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(res => {
+        this.customers = this.customers.concat(res.data.customers);
+        this.total = res.data.total;
+      });
 
   }
 
   private initExpired() {
-    this.apiSrv.getExpiredCustomers()
-      .pipe(takeUntil(this.unsubscribe))
-      .subscribe(res => this.expired = res.data);
+
+    Network.getStatus()
+      .then(status => {
+
+        if (status.connected) {
+
+          this.apiSrv.getExpiredCustomers()
+            .pipe(takeUntil(this.unsubscribe))
+            .subscribe(res => {
+              
+              this.expired = res.data;
+
+              if (Capacitor.isNativePlatform()) {
+                this.sqliteSrv.setExpiredCustomers(res.data);
+              }
+            
+            });
+
+        }
+
+        else {
+
+          this.sqliteSrv.getExpiredCustomers()
+            .then(expired => {
+              this.expired = expired;
+            });
+
+        }
+
+      });
+
   }
 
 }

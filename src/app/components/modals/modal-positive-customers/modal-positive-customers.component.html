@@ -1,0 +1,45 @@
+<ion-header class="ion-no-border" mode="ios">
+
+  <ion-toolbar>
+
+    <ion-title>Positivados</ion-title>
+
+    <ion-buttons slot="end">
+
+      <ion-button (click)="dismiss()">
+
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+
+      </ion-button>
+
+    </ion-buttons>
+
+  </ion-toolbar>
+
+</ion-header>
+
+<ion-content>
+
+  <div class="ion-scroll">
+
+    <ion-list>
+
+      <ion-item lines="full" *ngFor="let customer of customers">
+
+        <ion-label class="ion-text-wrap">
+          
+          {{ customer.razao_social }}
+
+          <span>{{ customer.cnpj }}</span>        
+        
+        </ion-label>
+
+      </ion-item>
+
+    </ion-list>
+
+  </div>
+
+</ion-content>
+
+<app-loader></app-loader>

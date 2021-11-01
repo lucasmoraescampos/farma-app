@@ -63,13 +63,13 @@
         detail="false" (click)="selectCustomer(customer)"
         *ngFor="let customer of customers | filter:'razao_social,id_cliente':customerSearch; let i=index">
 
-        <ion-label>
+        <ion-label class="ion-text-wrap">
 
           <span class="name">{{ customer.razao_social }}</span>
 
           <span class="code">{{ customer.id_cliente }}</span>
 
-          <span class="phone">{{ customer.tel }}</span>
+          <span class="phone">({{ customer.ddd.slice(-2) }}) {{ customer.tel }}</span>
 
         </ion-label>
 
@@ -89,13 +89,13 @@
         detail="false" (click)="selectCustomer(item)"
         *ngFor="let item of searchItems | filter:'razao_social,id_cliente':customerSearch; let i=index">
 
-        <ion-label>
+        <ion-label class="ion-text-wrap">
 
           <span class="name">{{ item.razao_social }}</span>
 
           <span class="code">{{ item.id_cliente }}</span>
 
-          <span class="phone">{{ item.tel }}</span>
+          <span class="phone">({{ item.ddd.slice(-2) }}) {{ item.tel }}</span>
 
         </ion-label>
 
@@ -140,13 +140,13 @@
         detail="false" (click)="choose(customer)"
         *ngFor="let customer of expired | filter:'razao_social,id_cliente':expiredSearch; let i=index">
 
-        <ion-label>
+        <ion-label class="ion-text-wrap">
 
           <span class="name">{{ customer.razao_social }}</span>
 
           <span class="code">{{ customer.id_cliente }}</span>
 
-          <span class="phone">{{ customer.tel }}</span>
+          <span class="phone">({{ customer.ddd.slice(-2) }}) {{ customer.tel }}</span>
 
         </ion-label>
 

@@ -1,122 +1,116 @@
 export const CREATE_TABLES = [
-    // ['DROP TABLE IF EXISTS cliente'],
-    // ['DROP TABLE IF EXISTS produto'],
     [
         `CREATE TABLE IF NOT EXISTS dashboard (
-            id INT(11) PRIMARY KEY,
-            billed DECIMAL(15,2) DEFAULT NULL,
-            goal DECIMAL(15,2) DEFAULT NULL,
-            total_customers INT(11) DEFAULT NULL,
-            total_positive_customers INT(11) DEFAULT NULL
+            id              INT(11) PRIMARY KEY,
+            valor_faturado  DECIMAL(15,2) DEFAULT NULL,
+            valor_meta      DECIMAL(15,2) DEFAULT NULL,
+            total_clientes  INT(11)       DEFAULT NULL,
+            total_positivos INT(11)       DEFAULT NULL
         )`
     ],
     [
-        `CREATE TABLE IF NOT EXISTS cliente (
+        `CREATE TABLE IF NOT EXISTS clientes_positivados (
+            razao_social VARCHAR(200)  NOT NULL,
+            cnpj         DECIMAL(15,2) NOT NULL,
+            PRIMARY KEY(razao_social, cnpj)
+        )`
+    ],
+    [
+        `CREATE TABLE IF NOT EXISTS clientes_vencidos (
+            id_cliente     VARCHAR(200) DEFAULT NULL,
+            razao_social   VARCHAR(200) DEFAULT NULL,
+            fantasia       VARCHAR(200) DEFAULT NULL,
+            email          VARCHAR(200) DEFAULT NULL,
+            cep            VARCHAR(200) DEFAULT NULL,
+            end            VARCHAR(200) DEFAULT NULL,
+            bairro         VARCHAR(200) DEFAULT NULL,
+            cidade         VARCHAR(200) DEFAULT NULL,
+            tel            VARCHAR(200) DEFAULT NULL,
+            cnpj           VARCHAR(200) DEFAULT NULL,
+            ie             VARCHAR(200) DEFAULT NULL,
+            empresa        VARCHAR(200) DEFAULT NULL,
+            juros          VARCHAR(200) DEFAULT NULL,
+            nota           VARCHAR(200) DEFAULT NULL,
+            pedido         VARCHAR(200) DEFAULT NULL,
+            status         CHAR(1)      DEFAULT NULL,
+            tipo_documento VARCHAR(50)  DEFAULT NULL,
+            valor          VARCHAR(200) DEFAULT NULL,
+            venc           VARCHAR(200) DEFAULT NULL
+        )`
+    ],
+    [
+        `CREATE TABLE IF NOT EXISTS clientes (
             id_cliente VARCHAR(200) NOT NULL,
             razao_social VARCHAR(200) NOT NULL,
-            fantasia VARCHAR(200) NULL DEFAULT NULL,
-            email VARCHAR(200) NULL DEFAULT NULL,
-            cep VARCHAR(200) NULL DEFAULT NULL,
-            end VARCHAR(200) NULL DEFAULT NULL,
+            fantasia VARCHAR(200) DEFAULT NULL,
+            email VARCHAR(200) DEFAULT NULL,
+            cep VARCHAR(200) DEFAULT NULL,
+            end VARCHAR(200) DEFAULT NULL,
             bairro VARCHAR(200) NOT NULL,
-            cidade VARCHAR(200) NULL DEFAULT NULL,
-            tel VARCHAR(200) NULL DEFAULT NULL,
-            cnpj VARCHAR(200) NULL DEFAULT NULL,
-            ie VARCHAR(200) NULL DEFAULT NULL,
-            updated_at TIMESTAMP NULL DEFAULT NULL
+            cidade VARCHAR(200) DEFAULT NULL,
+            tel VARCHAR(200) DEFAULT NULL,
+            cnpj VARCHAR(200) DEFAULT NULL,
+            ie VARCHAR(200) DEFAULT NULL,
+            updated_at TIMESTAMP DEFAULT NULL
         )`
     ],
     [
-        `CREATE TABLE IF NOT EXISTS produto (
-            id_produto INT(11) PRIMARY KEY,
-            id_lab VARCHAR(200) NOT NULL,
-            nome VARCHAR(200) NOT NULL,
-            upc INT(11) NULL DEFAULT NULL,
-            ipi INT(11) NOT NULL DEFAULT 0,
-            estoque BIGINT(20) NULL DEFAULT NULL,
-            status CHAR(1) NOT NULL,
-            updated_at TIMESTAMP NULL DEFAULT NULL
+        `CREATE TABLE IF NOT EXISTS labs (
+            id_lab VARCHAR(200) DEFAULT NULL,
+            nome   VARCHAR(200) DEFAULT NULL,
+            status CHAR(1)      DEFAULT NULL
         )`
     ],
     [
-        `CREATE TABLE IF NOT EXISTS tabelas_produtos (
-            id_produto INT(11) NOT NULL,
-            id_tabela INT(11) NOT NULL,
-            valor DOUBLE(8,2) NOT NULL,
-            updated_at TIMESTAMP NULL DEFAULT NULL
+        `CREATE TABLE IF NOT EXISTS produtos (
+            id_produto INT(11)      PRIMARY KEY,
+            id_lab     VARCHAR(200) DEFAULT NULL,
+            nome       VARCHAR(200) DEFAULT NULL,
+            upc        INT(11)      DEFAULT NULL,
+            ipi        INT(11)      DEFAULT NULL,
+            estoque    BIGINT(20)   DEFAULT NULL,
+            valor_01   DOUBLE(8, 2) DEFAULT NULL,
+            status     CHAR(1)      DEFAULT NULL
         )`
     ],
     [
-        `CREATE TABLE IF NOT EXISTS prazo (
-            id_prazo INT(11) PRIMARY KEY,
-            nome VARCHAR(200) NOT NULL,
-            updated_at TIMESTAMP NULL DEFAULT NULL
+        `CREATE TABLE IF NOT EXISTS pedidos (
+            id_pedido          INT(11)      PRIMARY KEY,
+            pag_prazo          VARCHAR(200) DEFAULT NULL,
+            promo              TEXT         DEFAULT NULL,
+            promo_aut_por      VARCHAR(200) DEFAULT NULL,
+            promo_data_aut     VARCHAR(200) DEFAULT NULL,
+            comentario         TEXT         DEFAULT NULL,
+            vendedor           VARCHAR(200) DEFAULT NULL,
+            cod_vendedor       VARCHAR(200) DEFAULT NULL,
+            cliente            VARCHAR(200) DEFAULT NULL,
+            cod_cliente        VARCHAR(200) DEFAULT NULL,
+            cnpj               VARCHAR(200) DEFAULT NULL,
+            fantasia           VARCHAR(200) DEFAULT NULL,
+            ie                 VARCHAR(200) DEFAULT NULL,
+            novo               CHAR(1)      DEFAULT NULL,
+            email              VARCHAR(200) DEFAULT NULL,
+            ddd                VARCHAR(200) DEFAULT NULL,
+            tel                VARCHAR(200) DEFAULT NULL,
+            cidade             VARCHAR(200) DEFAULT NULL,
+            estado             VARCHAR(200) DEFAULT NULL,
+            total              DOUBLE       DEFAULT NULL,
+            ipi                DOUBLE       DEFAULT NULL,
+            motivocancelamento LONGTEXT     DEFAULT NULL,
+            datas              DATE         DEFAULT NULL,
+            status             CHAR(1)      DEFAULT NULL
         )`
     ],
     [
-        `CREATE TABLE IF NOT EXISTS tabelas (
-            id_tabela INT(11) PRIMARY KEY,
-            descricao VARCHAR(200) NOT NULL,
-            updated_at TIMESTAMP NULL DEFAULT NULL
-        )`
-    ],
-    [
-        `CREATE TABLE IF NOT EXISTS usuario_has_tabelas (
-            id_tablelas INT(11) NOT NULL,
-            id_usuario VARCHAR(200) NOT NULL,
-            updated_at TIMESTAMP NULL DEFAULT NULL,
-            FOREIGN KEY (id_tablelas)
-                REFERENCES tabelas (id_tabela)
-                    ON UPDATE NO ACTION
-                    ON DELETE CASCADE
-        )`
-    ],
-    [
-        `CREATE TABLE IF NOT EXISTS lab (
-            id_lab VARCHAR(200) NOT NULL,
-            nome VARCHAR(200) NOT NULL,
-            status CHAR(1) NOT NULL,
-            updated_at TIMESTAMP NULL DEFAULT NULL
-        )`
-    ],
-    [
-        `CREATE TABLE IF NOT EXISTS pedido (
-            id_pedido INT(11) PRIMARY KEY,
-            datas DATE NULL DEFAULT NULL,
-            pag_forma VARCHAR(200) NULL DEFAULT NULL,
-            pag_prazo VARCHAR(200) NULL DEFAULT NULL,
-            promo TEXT NULL DEFAULT NULL,
-            promo_aut_por VARCHAR(200) NULL DEFAULT NULL,
-            promo_data_aut VARCHAR(200) NULL DEFAULT NULL,
-            comentario TEXT NULL DEFAULT NULL,
-            id_cliente VARCHAR(200) NOT NULL,
-            id_usuario VARCHAR(200) NOT NULL,
-            total DOUBLE NOT NULL,
-            diferenca DOUBLE NOT NULL,
-            email CHAR(1) NOT NULL DEFAULT '0',
-            datahora DATETIME NOT NULL,
-            compra VARCHAR(200) NULL DEFAULT NULL,
-            frete VARCHAR(200) NULL DEFAULT NULL,
-            agendamento VARCHAR(200) NULL DEFAULT NULL,
-            paletizacao VARCHAR(200) NULL DEFAULT NULL,
-            tabela VARCHAR(200) NULL DEFAULT NULL,
-            ipi DOUBLE NOT NULL,
-            val_faturado VARCHAR(200) NOT NULL,
-            motivocancelamento LONGTEXT NOT NULL,          
-            updated_at TIMESTAMP NULL DEFAULT NULL
-        )`
-    ],
-    [
-        `CREATE TABLE IF NOT EXISTS pedido_item (
-            id_produto INT(11) NOT NULL,
-            id_pedido INT(11) NOT NULL,
-            qtde FLOAT NOT NULL,
-            valor VARCHAR(200) NOT NULL,
-            valor_tabela VARCHAR(200) NULL DEFAULT NULL,
-            ipi DOUBLE(8,2) NULL DEFAULT NULL,
-            diferenca DOUBLE(8,2) NOT NULL DEFAULT 0,          
-            comissao DOUBLE(8,2) NULL DEFAULT NULL,
-            updated_at TIMESTAMP NULL DEFAULT NULL
+        `CREATE TABLE IF NOT EXISTS pedido_itens (
+            id_pedido INT(11)      NOT NULL,
+            nome      VARCHAR(200) NOT NULL,
+            cod       INT(11)      NOT NULL,
+            qtde      FLOAT        NOT NULL,
+            valor     VARCHAR(200) NOT NULL,
+            ipi       DOUBLE(8,2)  DEFAULT NULL,     
+            comissao  DOUBLE(8,2)  DEFAULT NULL,
+            faturado  VARCHAR(200) DEFAULT NULL
         )`
     ]
 ];

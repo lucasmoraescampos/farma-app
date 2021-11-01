@@ -26,19 +26,23 @@
 
           <ion-card-header>
 
-            <ion-card-title>Total Faturado: {{ dashboard.billed | money }}</ion-card-title>
+            <ion-card-title>Total Faturado: {{ dashboard.valor_faturado | money }}</ion-card-title>
 
-            <ion-card-subtitle>Meta: {{ dashboard.goal | money }}</ion-card-subtitle>
+            <ion-card-subtitle>Meta: {{ dashboard.valor_meta | money }}</ion-card-subtitle>
 
           </ion-card-header>
 
           <ion-card-content>
 
-            <ion-progress-bar [value]="dashboard.billed / dashboard.goal" color="primary"></ion-progress-bar>
+            <ion-progress-bar [value]="dashboard.valor_faturado / dashboard.valor_meta" color="primary"></ion-progress-bar>
 
-            <span class="progress-value">{{ (dashboard.billed * 100 / dashboard.goal) | number:'1.1-2' }}%</span>
+            <span class="progress-value" *ngIf="dashboard.valor_meta > 0">{{ (dashboard.valor_faturado * 100 / dashboard.valor_meta) |
+              number:'1.1-2' }}%</span>
 
-            <ion-note class="animate__animated animate__fadeIn animate__infinite">Falta {{ (dashboard.goal - dashboard.billed) | money }} para você cumprir sua meta</ion-note>
+            <span class="progress-value" *ngIf="dashboard.valor_meta == 0">100%</span>
+
+            <ion-note class="animate__animated animate__fadeIn animate__infinite" *ngIf="dashboard.valor_meta > 0">Falta {{
+              (dashboard.valor_meta - dashboard.valor_faturado) | money }} para você cumprir sua meta</ion-note>
 
           </ion-card-content>
 
@@ -52,19 +56,32 @@
 
           <ion-card-header>
 
-            <ion-card-title>Total de clientes: {{ dashboard.total_customers }} <ion-button fill="clear" size="small">Ver todos</ion-button></ion-card-title>
+            <ion-card-title>
+              
+              Total de clientes: {{ dashboard.total_clientes }}
+              
+              <ion-button fill="clear" size="small" (click)="customers()">Ver todos</ion-button>
 
-            <ion-card-subtitle>Positivados: {{ dashboard.total_positive_customers }}</ion-card-subtitle>
+            </ion-card-title>
+
+            <ion-card-subtitle>
+              
+              Positivados: {{ dashboard.total_positivos }}
+            
+            </ion-card-subtitle>
 
           </ion-card-header>
 
           <ion-card-content>
 
-            <ion-progress-bar [value]="dashboard.total_positive_customers / dashboard.total_customers" color="primary"></ion-progress-bar>
+            <ion-progress-bar [value]="dashboard.total_positivos / dashboard.total_clientes" color="primary">
+            </ion-progress-bar>
 
-            <span class="progress-value">{{ (dashboard.total_positive_customers * 100 / dashboard.total_customers) | number:'1.1-2' }}%</span>
+            <span class="progress-value">{{ (dashboard.total_positivos * 100 / dashboard.total_clientes) |
+              number:'1.1-2' }}%</span>
 
-            <ion-note class="animate__animated animate__fadeIn animate__infinite">Falta {{ dashboard.total_customers - dashboard.total_positive_customers }} para você cumprir sua meta!</ion-note>
+            <ion-note class="animate__animated animate__fadeIn animate__infinite">Falta {{ dashboard.total_clientes -
+              dashboard.total_positivos }} para você cumprir sua meta!</ion-note>
 
           </ion-card-content>
 
