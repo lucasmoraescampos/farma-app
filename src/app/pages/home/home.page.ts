@@ -53,24 +53,14 @@ export class HomePage implements OnInit, OnDestroy {
 
           this.apiSrv.dashboard()
             .pipe(takeUntil(this.unsubscribe))
-            .subscribe(res => {
-
-              this.dashboard = res.data;
-
-              if (Capacitor.isNativePlatform()) {
-                this.sqliteSrv.setDashboard(res.data);
-              }
-
-            });
+            .subscribe(res => this.dashboard = res.data);
 
         }
 
-        else {
+        else if (Capacitor.isNativePlatform()) {
 
           this.sqliteSrv.getDashboard()
-            .then(dashboard => {
-              this.dashboard = dashboard;
-            });
+            .then(dashboard => this.dashboard = dashboard);
 
         }
 

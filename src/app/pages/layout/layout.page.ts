@@ -46,7 +46,23 @@ export class LayoutPage implements OnInit, OnDestroy {
 
           if (status.connected) {
 
+            this.syncDashboard();
+
             this.syncOrders();
+
+            this.syncLabs();
+
+            this.syncProducts();
+
+            this.syncCustomers();
+
+            this.syncExpiredCustomers();
+
+            this.syncPaymentOptions();
+
+            this.syncTablesProducts();
+
+            this.syncPositiveCustomers();
 
           }
 
@@ -77,11 +93,75 @@ export class LayoutPage implements OnInit, OnDestroy {
     });
   }
 
+  private syncDashboard() {
+    this.apiSrv.dashboard()
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(res => {
+        this.sqliteSrv.setCustomers(res.data);
+      });
+  }
+
   private syncOrders() {
     this.apiSrv.getOrders()
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(res => {
         this.sqliteSrv.setOrders(res.data);
+      });
+  }
+
+  private syncLabs() {
+    this.apiSrv.getLabs()
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(res => {
+        this.sqliteSrv.setLabs(res.data);
+      });
+  }
+
+  private syncProducts() {
+    this.apiSrv.getProducts()
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(res => {
+        this.sqliteSrv.setProducts(res.data);
+      });
+  }
+
+  private syncCustomers() {
+    this.apiSrv.getCustomers()
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(res => {
+        this.sqliteSrv.setCustomers(res.data);
+      });
+  }
+
+  private syncExpiredCustomers() {
+    this.apiSrv.getExpiredCustomers()
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(res => {
+        this.sqliteSrv.setExpiredCustomers(res.data);
+      });
+  }
+
+  private syncPaymentOptions() {
+    this.apiSrv.getPaymentOptions()
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(res => {
+        this.sqliteSrv.setPaymentOptions(res.data);
+      });
+  }
+
+  private syncTablesProducts() {
+    this.apiSrv.getProductTables()
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(res => {
+        this.sqliteSrv.setTablesProducts(res.data);
+      });
+  }
+
+  private syncPositiveCustomers() {
+    this.apiSrv.getPositiveCustomers()
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(res => {
+        this.sqliteSrv.setPositiveCustomers(res.data);
       });
   }
 

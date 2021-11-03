@@ -85,6 +85,10 @@ export class ApiService {
     return this.http.get<HttpResult>(`${this.apiUrl}/product/prices`, { params: params });
   }
 
+  public getProductTables() {
+    return this.http.get<HttpResult>(`${this.apiUrl}/product/tables`);
+  }
+
   public getLabs() {
     return this.http.get<HttpResult>(`${this.apiUrl}/product/labs`);
   }

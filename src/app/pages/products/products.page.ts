@@ -56,19 +56,19 @@ export class ProductsPage implements OnInit, OnDestroy {
 
               this.products = res.data;
 
-              if (Capacitor.isNativePlatform()) {
-                this.sqliteSrv.setProducts(res.data, lab.id_lab);
-              }
-
             });
 
         }
 
-        else {
+        else if (Capacitor.isNativePlatform()) {
 
           this.sqliteSrv.getProducts(lab.id_lab)
-            .then(labs => {
-              this.labs = labs;
+            .then(products => {
+
+              this.labSelected = lab;
+
+              this.products = products;
+
             });
 
         }
@@ -86,24 +86,14 @@ export class ProductsPage implements OnInit, OnDestroy {
 
           this.apiSrv.getLabs()
             .pipe(takeUntil(this.unsubscribe))
-            .subscribe(res => {
-
-              this.labs = res.data;
-
-              if (Capacitor.isNativePlatform()) {
-                this.sqliteSrv.setLabs(res.data);
-              }
-            
-            });
+            .subscribe(res => this.labs = res.data);
 
         }
 
-        else {
+        else if (Capacitor.isNativePlatform()) {
 
           this.sqliteSrv.getLabs()
-            .then(labs => {
-              this.labs = labs;
-            });
+            .then(labs => this.labs = labs);
 
         }
 

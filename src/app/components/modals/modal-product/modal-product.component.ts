@@ -1,4 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Capacitor } from '@capacitor/core';
+import { Network } from '@capacitor/network';
 import { ModalController } from '@ionic/angular';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -6,6 +8,7 @@ import { ArrayHelper } from 'src/app/helpers/array.helper';
 import { AlertService } from 'src/app/services/alert.service';
 import { ApiService } from 'src/app/services/api.service';
 import { CartService } from 'src/app/services/cart.service';
+import { SQLiteService } from 'src/app/services/sqlite.service';
 
 @Component({
   selector: 'app-modal-product',
@@ -42,7 +45,8 @@ export class ModalProductComponent implements OnInit, OnDestroy {
     private modalCtrl: ModalController,
     private apiSrv: ApiService,
     private cartSrv: CartService,
-    private alertSrv: AlertService
+    private alertSrv: AlertService,
+    private sqliteSrv: SQLiteService
   ) { }
 
   ngOnInit() {
@@ -67,27 +71,67 @@ export class ModalProductComponent implements OnInit, OnDestroy {
   }
 
   public labChanged() {
+
     this.total = 0;
+
     this.qty = 1;
-    this.apiSrv.getProducts({ id_lab: this.lab_id })
-      .pipe(takeUntil(this.unsubscribe))
-      .subscribe(res => {
-        this.products = res.data;
+
+    Network.getStatus()
+      .then(status => {
+
+        if (status.connected) {
+
+          this.apiSrv.getProducts({ id_lab: this.lab_id })
+            .pipe(takeUntil(this.unsubscribe))
+            .subscribe(res => this.products = res.data);
+
+        }
+
+        else if (Capacitor.isNativePlatform()) {
+
+          this.sqliteSrv.getProducts(this.lab_id)
+            .then(products => this.products = products);
+
+        }
+
       });
+      
   }
 
   public productChanged() {
-    this.apiSrv.getProductPrices({ id_produto: this.product_id, id_tabela: this.table_id })
-      .pipe(takeUntil(this.unsubscribe))
-      .subscribe(res => {
-        this.prices = res.data
-        this.total = this.prices.price - ((this.prices.price * this.discount) / 100);
-        this.qty = 1;
+
+    Network.getStatus()
+      .then(status => {
+
+        if (status.connected) {
+
+          this.apiSrv.getProductPrices({ id_produto: this.product_id, id_tabela: this.table_id })
+            .pipe(takeUntil(this.unsubscribe))
+            .subscribe(res => {
+              this.prices = res.data
+              this.total = this.prices.valor - ((this.prices.valor * this.discount) / 100);
+              this.qty = 1;
+            });
+
+        }
+
+        else if (Capacitor.isNativePlatform()) {
+
+          this.sqliteSrv.getTableProduct(this.table_id, this.product_id)
+            .then(prices => {
+              this.prices = prices;
+              this.total = this.prices.valor - ((this.prices.valor * this.discount) / 100);
+              this.qty = 1;
+            });
+
+        }
+
       });
+
   }
 
   public discountChanged() {
-    this.total = this.prices.price * this.qty;
+    this.total = this.prices.valor * this.qty;
     this.total -= (this.total * this.discount) / 100;
   }
 
@@ -95,7 +139,7 @@ export class ModalProductComponent implements OnInit, OnDestroy {
 
     this.qty = ev.qty;
 
-    this.total = this.prices.price * this.qty;
+    this.total = this.prices.valor * this.qty;
 
     this.total -= (this.total * this.discount) / 100;
 
@@ -123,7 +167,7 @@ export class ModalProductComponent implements OnInit, OnDestroy {
       qty: this.qty,
       packaging_type: this.segment,
       upc: this.prices.upc,
-      price: this.prices.price,
+      price: this.prices.valor,
       ipi: this.products[index].ipi,
       commission: 0,
       discount: this.discount,

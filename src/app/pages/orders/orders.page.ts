@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Capacitor } from '@capacitor/core';
 import { Network } from '@capacitor/network';
 import { ModalController } from '@ionic/angular';
 import { Subject } from 'rxjs';
@@ -60,26 +61,71 @@ export class OrdersPage implements OnInit, OnDestroy {
 
     if (this.search.length < 3) return;
 
-    this.apiSrv.getOrders({ search: this.search })
-      .pipe(takeUntil(this.unsubscribe))
-      .subscribe(res => this.searchItems = res.data);
+    Network.getStatus()
+      .then(status => {
+
+        if (status.connected) {
+
+          this.apiSrv.getOrders({ search: this.search })
+            .pipe(takeUntil(this.unsubscribe))
+            .subscribe(res => this.searchItems = res.data);
+
+        }
+
+        else if (Capacitor.isNativePlatform()) {
+
+          this.sqliteSrv.searchOrders(this.search)
+            .then(orders => this.searchItems = orders);
+
+        }
+
+      });
       
   }
 
   public detail(id: number) {
 
-    this.apiSrv.getOrderById(id)
-      .pipe(takeUntil(this.unsubscribe))
-      .subscribe(async (res) => {
+    Network.getStatus()
+      .then(status => {
 
-        const modal = await this.modalCtrl.create({
-          component: ModalOrderComponent,
-          componentProps: {
-            order: res.data
-          }
-        });
+        if (status.connected) {
 
-        return await modal.present();
+          this.apiSrv.getOrderById(id)
+            .pipe(takeUntil(this.unsubscribe))
+            .subscribe(async (res) => {
+
+              const modal = await this.modalCtrl.create({
+                component: ModalOrderComponent,
+                componentProps: {
+                  order: res.data
+                }
+              });
+
+              return await modal.present();
+
+            });
+
+        }
+
+        else if (Capacitor.isNativePlatform()) {
+
+          this.sqliteSrv.getOrderById(id)
+            .then(async (order) => {
+
+              console.log(order);
+
+              const modal = await this.modalCtrl.create({
+                component: ModalOrderComponent,
+                componentProps: {
+                  order: order
+                }
+              });
+
+              return await modal.present();
+
+            });
+
+        }
 
       });
 
@@ -96,25 +142,53 @@ export class OrdersPage implements OnInit, OnDestroy {
   }
 
   public loadOrders(event: any) {
-    
+
     this.page++;
 
-    this.noloader = true;
+    Network.getStatus()
+      .then(status => {
 
-    this.apiSrv.getOrders({ page: this.page })
-      .pipe(takeUntil(this.unsubscribe))
-      .subscribe(res => {
+        if (status.connected) {
 
-        this.noloader = false;
+          this.noloader = true;
 
-        this.orders = this.orders.concat(res.data.orders);
+          this.apiSrv.getOrders({ page: this.page })
+            .pipe(takeUntil(this.unsubscribe))
+            .subscribe(res => {
 
-        this.total = res.data.total;
+              this.noloader = false;
 
-        event.target.complete();
+              this.orders = this.orders.concat(res.data.orders);
 
-        if (this.orders.length == this.total) {
-          event.target.disabled = true;
+              this.total = res.data.total;
+
+              event.target.complete();
+
+              if (this.orders.length == this.total) {
+                event.target.disabled = true;
+              }
+
+            });
+
+        }
+
+        else if (Capacitor.isNativePlatform()) {
+
+          this.sqliteSrv.getOrders(this.page)
+            .then(res => {
+
+              this.orders = this.orders.concat(res.orders);
+
+              this.total = res.total;
+
+              event.target.complete();
+
+              if (this.orders.length == this.total) {
+                event.target.disabled = true;
+              }
+
+            });
+
         }
 
       });
@@ -140,20 +214,21 @@ export class OrdersPage implements OnInit, OnDestroy {
 
         }
 
-        else {
+        else if (Capacitor.isNativePlatform()) {
 
-          this.sqliteSrv.getOrders()
-            .then(orders => {
+          this.sqliteSrv.getOrders(this.page)
+            .then(res => {
 
-              this.orders = orders;
+              this.orders = this.orders.concat(res.orders);
 
-              this.total = orders.length;
+              this.total = res.total;
 
             });
 
         }
 
       });
+
   }
 
 }

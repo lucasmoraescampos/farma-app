@@ -69,7 +69,7 @@
 
           <span class="code">{{ customer.id_cliente }}</span>
 
-          <span class="phone">({{ customer.ddd.slice(-2) }}) {{ customer.tel }}</span>
+          <span class="phone">({{ customer?.ddd?.slice(-2) }}) {{ customer.tel }}</span>
 
         </ion-label>
 
@@ -86,8 +86,7 @@
       </ion-item>
 
       <ion-item class="animation-order" [style]="{ '--animation-order': i % 10 }" lines="full" button="true"
-        detail="false" (click)="selectCustomer(item)"
-        *ngFor="let item of searchItems | filter:'razao_social,id_cliente':customerSearch; let i=index">
+        detail="false" (click)="selectCustomer(item)" *ngFor="let item of searchItems; let i=index">
 
         <ion-label class="ion-text-wrap">
 
@@ -95,7 +94,7 @@
 
           <span class="code">{{ item.id_cliente }}</span>
 
-          <span class="phone">({{ item.ddd.slice(-2) }}) {{ item.tel }}</span>
+          <span class="phone">({{ item?.ddd?.slice(-2) }}) {{ item.tel }}</span>
 
         </ion-label>
 
@@ -146,7 +145,7 @@
 
           <span class="code">{{ customer.id_cliente }}</span>
 
-          <span class="phone">({{ customer.ddd.slice(-2) }}) {{ customer.tel }}</span>
+          <span class="phone">({{ customer?.ddd?.slice(-2) }}) {{ customer.tel }}</span>
 
         </ion-label>
 

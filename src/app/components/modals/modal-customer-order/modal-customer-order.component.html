@@ -4,7 +4,7 @@
 
     <ion-buttons class="animate__animated animate__fadeIn" slot="start" *ngIf="customer">
 
-      <ion-button (click)="cancelCustomer()">
+      <ion-button (click)="cancelCustomer()" *ngIf="!customer">
 
         <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
 
@@ -16,7 +16,7 @@
 
     <ion-title class="animate__animated animate__fadeIn" *ngIf="customer">Cliente</ion-title>
     
-    <ion-buttons slot="end" *ngIf="!customer">
+    <ion-buttons slot="end" *ngIf="customer">
 
       <ion-button (click)="dismiss()">
 
@@ -245,8 +245,8 @@
                 <ion-select formControlName="id_prazo" placeholder="Selecione" interface="action-sheet"
                   cancelText="Cancelar">
 
-                  <ion-select-option [value]="condition.id_prazo" *ngFor="let condition of paymentOptions?.conditions">
-                    {{ condition.nome }}</ion-select-option>
+                  <ion-select-option [value]="prazo.id_prazo" *ngFor="let prazo of paymentOptions?.prazos">
+                    {{ prazo.nome }}</ion-select-option>
 
                 </ion-select>
 
@@ -259,8 +259,8 @@
                 <ion-select formControlName="id_tabela" placeholder="Selecione" interface="action-sheet"
                   cancelText="Cancelar" (ionChange)="tableChanged($event)">
 
-                  <ion-select-option [value]="price.id_tabela" *ngFor="let price of paymentOptions?.prices">{{
-                    price.descricao }}</ion-select-option>
+                  <ion-select-option [value]="tabela.id_tabela" *ngFor="let tabela of paymentOptions?.tabelas">{{
+                    tabela.descricao }}</ion-select-option>
 
                 </ion-select>
 

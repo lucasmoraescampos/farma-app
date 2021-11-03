@@ -106,7 +106,7 @@
 
     </ion-fab>
 
-    <ion-infinite-scroll threshold="100px" [disabled]="orders?.length == total" (ionInfinite)="loadOrders($event)">
+    <ion-infinite-scroll threshold="100px" (ionInfinite)="loadOrders($event)">
 
       <ion-infinite-scroll-content loadingSpinner="dots"></ion-infinite-scroll-content>
 

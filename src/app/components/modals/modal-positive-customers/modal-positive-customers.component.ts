@@ -41,24 +41,14 @@ export class ModalPositiveCustomersComponent implements OnInit {
 
           this.apiSrv.getPositiveCustomers()
             .pipe(takeUntil(this.unsubscribe$))
-            .subscribe(res => {
-              
-              this.customers = res.data;
-
-              if (Capacitor.isNativePlatform()) {
-                this.sqliteSrv.setDashboard(res.data);
-              }
-              
-            });
+            .subscribe(res => this.customers = res.data);
 
         }
 
-        else {
+        else if (Capacitor.isNativePlatform()) {
 
           this.sqliteSrv.getPositiveCustomers()
-            .then(customers => {
-              this.customers = customers;
-            });
+            .then(customers => this.customers = customers);
 
         }
 

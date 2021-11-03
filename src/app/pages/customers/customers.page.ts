@@ -64,12 +64,34 @@ export class CustomersPage implements OnInit, OnDestroy {
 
   public searchChanged() {
 
-    if (this.customerSearch.length < 3) return;
+    if (this.customerSearch.length < 3) {
 
-    this.apiSrv.getCustomers({ search: this.customerSearch })
-      .pipe(takeUntil(this.unsubscribe))
-      .subscribe(res => {
-        this.searchItems = res.data;
+      this.searchItems = null;
+
+      return;
+
+    }
+
+    Network.getStatus()
+      .then(status => {
+
+        if (status.connected) {
+
+          this.apiSrv.getCustomers({ search: this.customerSearch })
+            .pipe(takeUntil(this.unsubscribe))
+            .subscribe(res => {
+              this.searchItems = res.data;
+            });
+
+        }
+
+        else if (Capacitor.isNativePlatform()) {
+
+          this.sqliteSrv.searchCustomers(this.customerSearch)
+            .then(customers => this.searchItems = customers);
+
+        }
+
       });
       
   }
@@ -141,22 +163,50 @@ export class CustomersPage implements OnInit, OnDestroy {
 
     this.page++;
 
-    this.noloader = true;
+    Network.getStatus()
+      .then(status => {
 
-    this.apiSrv.getCustomers({ page: this.page })
-      .pipe(takeUntil(this.unsubscribe))
-      .subscribe(res => {
+        if (status.connected) {
 
-        this.noloader = false;
+          this.noloader = true;
 
-        this.customers = this.customers.concat(res.data.customers);
+          this.apiSrv.getCustomers({ page: this.page })
+            .pipe(takeUntil(this.unsubscribe))
+            .subscribe(res => {
 
-        this.total = res.data.total;
+              this.noloader = false;
 
-        event.target.complete();
+              this.customers = this.customers.concat(res.data.customers);
 
-        if (this.customers.length == this.total) {
-          event.target.disabled = true;
+              this.total = res.data.total;
+
+              event.target.complete();
+
+              if (this.customers.length == this.total) {
+                event.target.disabled = true;
+              }
+
+            });
+
+        }
+
+        else if (Capacitor.isNativePlatform()) {
+
+          this.sqliteSrv.getCustomers(this.page)
+            .then(res => {
+              
+              this.customers = this.customers.concat(res.customers);
+
+              this.total = res.total;
+
+              event.target.complete();
+
+              if (this.customers.length == this.total) {
+                event.target.disabled = true;
+              }
+
+            });
+
         }
 
       });
@@ -165,11 +215,30 @@ export class CustomersPage implements OnInit, OnDestroy {
 
   private initCustomers() {
 
-    this.apiSrv.getCustomers({ page: this.page })
-      .pipe(takeUntil(this.unsubscribe))
-      .subscribe(res => {
-        this.customers = this.customers.concat(res.data.customers);
-        this.total = res.data.total;
+    Network.getStatus()
+      .then(status => {
+
+        if (status.connected) {
+
+          this.apiSrv.getCustomers({ page: this.page })
+            .pipe(takeUntil(this.unsubscribe))
+            .subscribe(res => {
+              this.customers = this.customers.concat(res.data.customers);
+              this.total = res.data.total;
+            });
+
+        }
+
+        else if (Capacitor.isNativePlatform()) {
+
+          this.sqliteSrv.getCustomers(this.page)
+            .then(res => {
+              this.customers = this.customers.concat(res.customers);
+              this.total = res.total;
+            });
+
+        }
+
       });
 
   }
@@ -183,24 +252,14 @@ export class CustomersPage implements OnInit, OnDestroy {
 
           this.apiSrv.getExpiredCustomers()
             .pipe(takeUntil(this.unsubscribe))
-            .subscribe(res => {
-              
-              this.expired = res.data;
-
-              if (Capacitor.isNativePlatform()) {
-                this.sqliteSrv.setExpiredCustomers(res.data);
-              }
-            
-            });
+            .subscribe(res => this.expired = res.data);
 
         }
 
-        else {
+        else if (Capacitor.isNativePlatform()) {
 
           this.sqliteSrv.getExpiredCustomers()
-            .then(expired => {
-              this.expired = expired;
-            });
+            .then(expired => this.expired = expired);
 
         }
 

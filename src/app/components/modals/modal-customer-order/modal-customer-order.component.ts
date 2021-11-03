@@ -1,5 +1,7 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Capacitor } from '@capacitor/core';
+import { Network } from '@capacitor/network';
 import { IonSlides, ModalController } from '@ionic/angular';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -7,6 +9,7 @@ import { Product } from 'src/app/models/product';
 import { AlertService } from 'src/app/services/alert.service';
 import { ApiService } from 'src/app/services/api.service';
 import { CartService } from 'src/app/services/cart.service';
+import { SQLiteService } from 'src/app/services/sqlite.service';
 import { ModalProductComponent } from '../modal-product/modal-product.component';
 
 @Component({
@@ -39,7 +42,8 @@ export class ModalCustomerOrderComponent implements OnInit, OnDestroy {
     private apiSrv: ApiService,
     private formBuilder: FormBuilder,
     private cartSrv: CartService,
-    private alertSrv: AlertService
+    private alertSrv: AlertService,
+    private sqliteSrv: SQLiteService
   ) { }
 
   ngOnInit() {
@@ -222,11 +226,31 @@ export class ModalCustomerOrderComponent implements OnInit, OnDestroy {
   }
 
   private initPaymentOptions() {
-    this.apiSrv.getPaymentOptions()
-      .pipe(takeUntil(this.unsubscribe))
-      .subscribe(res => {
-        this.paymentOptions = res.data;
+
+    Network.getStatus()
+      .then(status => {
+
+        if (status.connected) {
+
+          this.apiSrv.getPaymentOptions()
+            .pipe(takeUntil(this.unsubscribe))
+            .subscribe(res => {
+              this.paymentOptions = res.data;
+            });
+
+        }
+
+        else if (Capacitor.isNativePlatform()) {
+
+          this.sqliteSrv.getPaymentOptions()
+            .then(paymentOptions => {
+              this.paymentOptions = paymentOptions;
+            });
+
+        }
+
       });
+
   }
 
 }

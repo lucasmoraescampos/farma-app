@@ -25,6 +25,7 @@ export const CREATE_TABLES = [
             end            VARCHAR(200) DEFAULT NULL,
             bairro         VARCHAR(200) DEFAULT NULL,
             cidade         VARCHAR(200) DEFAULT NULL,
+            ddd            VARCHAR(10)  DEFAULT NULL,
             tel            VARCHAR(200) DEFAULT NULL,
             cnpj           VARCHAR(200) DEFAULT NULL,
             ie             VARCHAR(200) DEFAULT NULL,
@@ -40,18 +41,18 @@ export const CREATE_TABLES = [
     ],
     [
         `CREATE TABLE IF NOT EXISTS clientes (
-            id_cliente VARCHAR(200) NOT NULL,
+            id_cliente   VARCHAR(200) NOT NULL,
             razao_social VARCHAR(200) NOT NULL,
-            fantasia VARCHAR(200) DEFAULT NULL,
-            email VARCHAR(200) DEFAULT NULL,
-            cep VARCHAR(200) DEFAULT NULL,
-            end VARCHAR(200) DEFAULT NULL,
-            bairro VARCHAR(200) NOT NULL,
-            cidade VARCHAR(200) DEFAULT NULL,
-            tel VARCHAR(200) DEFAULT NULL,
-            cnpj VARCHAR(200) DEFAULT NULL,
-            ie VARCHAR(200) DEFAULT NULL,
-            updated_at TIMESTAMP DEFAULT NULL
+            fantasia     VARCHAR(200) DEFAULT NULL,
+            email        VARCHAR(200) DEFAULT NULL,
+            cep          VARCHAR(200) DEFAULT NULL,
+            end          VARCHAR(200) DEFAULT NULL,
+            bairro       VARCHAR(200) DEFAULT NULL,
+            cidade       VARCHAR(200) DEFAULT NULL,
+            ddd          VARCHAR(10)  DEFAULT NULL,
+            tel          VARCHAR(200) DEFAULT NULL,
+            cnpj         VARCHAR(200) DEFAULT NULL,
+            ie           VARCHAR(200) DEFAULT NULL
         )`
     ],
     [
@@ -111,6 +112,36 @@ export const CREATE_TABLES = [
             ipi       DOUBLE(8,2)  DEFAULT NULL,     
             comissao  DOUBLE(8,2)  DEFAULT NULL,
             faturado  VARCHAR(200) DEFAULT NULL
+        )`
+    ],
+    [
+        `CREATE TABLE IF NOT EXISTS prazos (
+            id_prazo INT(11) PRIMARY KEY,
+            nome     VARCHAR(200) DEFAULT NULL,
+            valor    DOUBLE       DEFAULT NULL,
+            status   CHAR(1)      DEFAULT NULL
+        )`
+    ],
+    [
+        `CREATE TABLE IF NOT EXISTS tabelas (
+            id_tabela INT(11) PRIMARY KEY,
+            descricao VARCHAR(200) DEFAULT NULL
+        )`
+    ],
+    [
+        `CREATE TABLE IF NOT EXISTS labs (
+            id_lab VARCHAR(200)  DEFAULT NULL,
+            nome   VARCHAR(200)  DEFAULT NULL,
+            status CHAR(1)       DEFAULT NULL
+        )`
+    ],
+    [
+        `CREATE TABLE IF NOT EXISTS tabelas_produtos (
+            id_produto INT(11)     NOT NULL,
+            id_tabela  INT(11)     NOT NULL,
+            valor      DOUBLE(8,2) NOT NULL,
+            upc        INT(11)     NOT NULL,
+            estoque    INT(11)     NOT NULL
         )`
     ]
 ];
