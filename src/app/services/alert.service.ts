@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { ToastController } from '@ionic/angular';
 import Swal, { SweetAlertIcon, SweetAlertPosition } from 'sweetalert2';
 
 @Injectable({
@@ -6,7 +7,9 @@ import Swal, { SweetAlertIcon, SweetAlertPosition } from 'sweetalert2';
 })
 export class AlertService {
 
-  constructor() { }
+  constructor(
+    private toastCtrl: ToastController
+  ) { }
 
   public show(options: AlertOptions) {
     Swal.fire({
@@ -32,23 +35,17 @@ export class AlertService {
     });
   }
 
-  public toast(options: ToastOptions) {
-    const Toast = Swal.mixin({
-      toast: true,
-      position: options.position ?? 'top-end',
-      showConfirmButton: false,
-      timer: options.duration ? options.duration : 4500,
-      timerProgressBar: true,
-      didOpen: (toast) => {
-        toast.addEventListener('mouseenter', Swal.stopTimer)
-        toast.addEventListener('mouseleave', Swal.resumeTimer)
-      }
-    })
+  public async toast(options: ToastOptions) {
 
-    Toast.fire({
-      icon: options.icon,
-      title: options.message
+    const toast = await this.toastCtrl.create({
+      color: options.color,
+      message: options.message,
+      duration: options.duration ? options.duration : 4500,
+      position: options.position ? options.position : 'top'
     });
+
+    return await toast.present();
+
   }
 
 }
@@ -66,8 +63,8 @@ interface AlertOptions {
 }
 
 interface ToastOptions {
-  icon: SweetAlertIcon;
+  color: 'primary' | 'success' | 'danger' | 'dark' | 'warning';
   message: string;
   duration?: number;
-  position?: SweetAlertPosition
+  position?: 'top' | 'bottom';
 }

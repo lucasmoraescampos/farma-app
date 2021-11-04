@@ -1,7 +1,7 @@
 export const CREATE_TABLES = [
     [
         `CREATE TABLE IF NOT EXISTS dashboard (
-            id              INT(11) PRIMARY KEY,
+            id              INT(11)       PRIMARY KEY,
             valor_faturado  DECIMAL(15,2) DEFAULT NULL,
             valor_meta      DECIMAL(15,2) DEFAULT NULL,
             total_clientes  INT(11)       DEFAULT NULL,
@@ -49,10 +49,20 @@ export const CREATE_TABLES = [
             end          VARCHAR(200) DEFAULT NULL,
             bairro       VARCHAR(200) DEFAULT NULL,
             cidade       VARCHAR(200) DEFAULT NULL,
+            estado       VARCHAR(200) DEFAULT NULL,
             ddd          VARCHAR(10)  DEFAULT NULL,
             tel          VARCHAR(200) DEFAULT NULL,
+            cel          VARCHAR(200) DEFAULT NULL,
             cnpj         VARCHAR(200) DEFAULT NULL,
-            ie           VARCHAR(200) DEFAULT NULL
+            ie           VARCHAR(200) DEFAULT NULL,
+            grupo        INT(11)      DEFAULT NULL,
+            ref1         VARCHAR(200) DEFAULT NULL,
+            refnum1      VARCHAR(200) DEFAULT NULL,
+            ref2         VARCHAR(200) DEFAULT NULL,
+            refnum2      VARCHAR(200) DEFAULT NULL,
+            ref3         VARCHAR(200) DEFAULT NULL,
+            refnum3      VARCHAR(200) DEFAULT NULL,
+            sync         TINYINT(1)   DEFAULT 1
         )`
     ],
     [
@@ -116,7 +126,7 @@ export const CREATE_TABLES = [
     ],
     [
         `CREATE TABLE IF NOT EXISTS prazos (
-            id_prazo INT(11) PRIMARY KEY,
+            id_prazo INT(11)      PRIMARY KEY,
             nome     VARCHAR(200) DEFAULT NULL,
             valor    DOUBLE       DEFAULT NULL,
             status   CHAR(1)      DEFAULT NULL

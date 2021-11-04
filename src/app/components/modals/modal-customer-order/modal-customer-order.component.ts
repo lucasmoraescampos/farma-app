@@ -184,7 +184,7 @@ export class ModalCustomerOrderComponent implements OnInit, OnDestroy {
     if (this.cart?.products?.length == 0) {
 
       this.alertSrv.toast({
-        icon: 'error',
+        color: 'danger',
         message: 'Adicione produtos ao pedido!'
       });
 
@@ -213,7 +213,7 @@ export class ModalCustomerOrderComponent implements OnInit, OnDestroy {
         .subscribe(res => {
 
           this.alertSrv.toast({
-            icon: 'success',
+            color: 'success',
             message: res.message
           });
 

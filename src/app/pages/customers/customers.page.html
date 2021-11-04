@@ -51,7 +51,7 @@
       <ion-toolbar>
 
         <ion-searchbar mode="ios" placeholder="Buscar" [(ngModel)]="customerSearch" (ionFocus)="isSearch = true"
-          (ionCancel)="cancelSearch()" (ionChange)="searchChanged()"></ion-searchbar>
+          (ionClear)="searchItems = null" (ionChange)="searchChanged()"></ion-searchbar>
 
       </ion-toolbar>
 
@@ -69,7 +69,9 @@
 
           <span class="code">{{ customer.id_cliente }}</span>
 
-          <span class="phone">({{ customer?.ddd?.slice(-2) }}) {{ customer.tel }}</span>
+          <span class="phone" *ngIf="customer?.ddd && customer.tel">({{ customer?.ddd?.slice(-2) }}) {{ customer.tel }}</span>
+
+          <span class="phone" *ngIf="!customer?.ddd || !customer.tel">{{ customer?.cel }}</span>
 
         </ion-label>
 
@@ -94,7 +96,9 @@
 
           <span class="code">{{ item.id_cliente }}</span>
 
-          <span class="phone">({{ item?.ddd?.slice(-2) }}) {{ item.tel }}</span>
+          <span class="phone" *ngIf="item?.ddd && item.tel">({{ item?.ddd?.slice(-2) }}) {{ item.tel }}</span>
+
+          <span class="phone" *ngIf="!item?.ddd || !item.tel">{{ item?.cel }}</span>
 
         </ion-label>
 
@@ -145,7 +149,9 @@
 
           <span class="code">{{ customer.id_cliente }}</span>
 
-          <span class="phone">({{ customer?.ddd?.slice(-2) }}) {{ customer.tel }}</span>
+          <span class="phone" *ngIf="customer?.ddd && customer.tel">({{ customer?.ddd?.slice(-2) }}) {{ customer.tel }}</span>
+
+          <span class="phone" *ngIf="!customer?.ddd || !customer.tel">{{ customer?.cel }}</span>
 
         </ion-label>
 

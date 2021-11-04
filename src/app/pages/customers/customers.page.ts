@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Capacitor } from '@capacitor/core';
-import { Network } from '@capacitor/network';
 import { ActionSheetController, ModalController } from '@ionic/angular';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -72,27 +71,22 @@ export class CustomersPage implements OnInit, OnDestroy {
 
     }
 
-    Network.getStatus()
-      .then(status => {
+    if (Capacitor.isNativePlatform()) {
 
-        if (status.connected) {
+      this.sqliteSrv.searchCustomers(this.customerSearch)
+        .then(customers => this.searchItems = customers);
 
-          this.apiSrv.getCustomers({ search: this.customerSearch })
-            .pipe(takeUntil(this.unsubscribe))
-            .subscribe(res => {
-              this.searchItems = res.data;
-            });
+    }
 
-        }
+    else {
 
-        else if (Capacitor.isNativePlatform()) {
+      this.apiSrv.getCustomers({ search: this.customerSearch })
+        .pipe(takeUntil(this.unsubscribe))
+        .subscribe(res => {
+          this.searchItems = res.data;
+        });
 
-          this.sqliteSrv.searchCustomers(this.customerSearch)
-            .then(customers => this.searchItems = customers);
-
-        }
-
-      });
+    }
       
   }
 
@@ -163,107 +157,92 @@ export class CustomersPage implements OnInit, OnDestroy {
 
     this.page++;
 
-    Network.getStatus()
-      .then(status => {
+    if (Capacitor.isNativePlatform()) {
 
-        if (status.connected) {
+      this.sqliteSrv.getCustomers(this.page)
+        .then(res => {
+          
+          this.customers = this.customers.concat(res.customers);
 
-          this.noloader = true;
+          this.total = res.total;
 
-          this.apiSrv.getCustomers({ page: this.page })
-            .pipe(takeUntil(this.unsubscribe))
-            .subscribe(res => {
+          event.target.complete();
 
-              this.noloader = false;
+          if (this.customers.length == this.total) {
+            event.target.disabled = true;
+          }
 
-              this.customers = this.customers.concat(res.data.customers);
+        });
 
-              this.total = res.data.total;
+    }
 
-              event.target.complete();
+    else {
 
-              if (this.customers.length == this.total) {
-                event.target.disabled = true;
-              }
+      this.noloader = true;
 
-            });
+      this.apiSrv.getCustomers({ page: this.page })
+        .pipe(takeUntil(this.unsubscribe))
+        .subscribe(res => {
 
-        }
+          this.noloader = false;
 
-        else if (Capacitor.isNativePlatform()) {
+          this.customers = this.customers.concat(res.data.customers);
 
-          this.sqliteSrv.getCustomers(this.page)
-            .then(res => {
-              
-              this.customers = this.customers.concat(res.customers);
+          this.total = res.data.total;
 
-              this.total = res.total;
+          event.target.complete();
 
-              event.target.complete();
+          if (this.customers.length == this.total) {
+            event.target.disabled = true;
+          }
 
-              if (this.customers.length == this.total) {
-                event.target.disabled = true;
-              }
+        });
 
-            });
-
-        }
-
-      });
+    }
 
   }
 
   private initCustomers() {
 
-    Network.getStatus()
-      .then(status => {
+    if (Capacitor.isNativePlatform()) {
 
-        if (status.connected) {
+      this.sqliteSrv.getCustomers(this.page)
+        .then(res => {
+          this.customers = this.customers.concat(res.customers);
+          this.total = res.total;
+        });
 
-          this.apiSrv.getCustomers({ page: this.page })
-            .pipe(takeUntil(this.unsubscribe))
-            .subscribe(res => {
-              this.customers = this.customers.concat(res.data.customers);
-              this.total = res.data.total;
-            });
+    }
 
-        }
+    else {
 
-        else if (Capacitor.isNativePlatform()) {
+      this.apiSrv.getCustomers({ page: this.page })
+        .pipe(takeUntil(this.unsubscribe))
+        .subscribe(res => {
+          this.customers = this.customers.concat(res.data.customers);
+          this.total = res.data.total;
+        });
 
-          this.sqliteSrv.getCustomers(this.page)
-            .then(res => {
-              this.customers = this.customers.concat(res.customers);
-              this.total = res.total;
-            });
-
-        }
-
-      });
+    }
 
   }
 
   private initExpired() {
 
-    Network.getStatus()
-      .then(status => {
+    if (Capacitor.isNativePlatform()) {
 
-        if (status.connected) {
+      this.sqliteSrv.getExpiredCustomers()
+        .then(expired => this.expired = expired);
 
-          this.apiSrv.getExpiredCustomers()
-            .pipe(takeUntil(this.unsubscribe))
-            .subscribe(res => this.expired = res.data);
+    }
 
-        }
+    else {
 
-        else if (Capacitor.isNativePlatform()) {
+      this.apiSrv.getExpiredCustomers()
+        .pipe(takeUntil(this.unsubscribe))
+        .subscribe(res => this.expired = res.data);
 
-          this.sqliteSrv.getExpiredCustomers()
-            .then(expired => this.expired = expired);
-
-        }
-
-      });
+    }
 
   }
 

@@ -68,6 +68,10 @@ export class LayoutPage implements OnInit, OnDestroy {
 
         });
 
+        Network.addListener('networkStatusChange', status => {
+          console.log('Network status changed', status);
+        });
+
     }
     
   }

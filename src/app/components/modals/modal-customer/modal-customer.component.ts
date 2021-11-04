@@ -1,11 +1,14 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Capacitor } from '@capacitor/core';
+import { Network } from '@capacitor/network';
 import { ModalController } from '@ionic/angular';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { UtilsHelper } from 'src/app/helpers/utils.helper';
 import { AlertService } from 'src/app/services/alert.service';
 import { ApiService } from 'src/app/services/api.service';
+import { SQLiteService } from 'src/app/services/sqlite.service';
 
 @Component({
   selector: 'app-modal-customer',
@@ -22,7 +25,8 @@ export class ModalCustomerComponent implements OnInit, OnDestroy {
     private apiSrv: ApiService,
     private formBuilder: FormBuilder,
     private modalCtrl: ModalController,
-    private alertSrv: AlertService
+    private alertSrv: AlertService,
+    private sqliteSrv: SQLiteService
   ) { }
 
   ngOnInit() {
@@ -69,7 +73,7 @@ export class ModalCustomerComponent implements OnInit, OnDestroy {
       if (!UtilsHelper.validateEmail(data.email)) {
         
         return this.alertSrv.toast({
-          icon: 'error',
+          color: 'danger',
           message: 'Email Inválido!'
         });
 
@@ -78,37 +82,73 @@ export class ModalCustomerComponent implements OnInit, OnDestroy {
       if (!UtilsHelper.validateDocumentNumber(data.cnpj)) {
         
         return this.alertSrv.toast({
-          icon: 'error',
+          color: 'danger',
           message: 'CNPJ Inválido!'
         });
 
       }
-      
-      data.ddd = data.tel.slice(1, 3);
 
-      data.tel = data.tel.slice(5);
+      if (data.ddd) {
+        data.ddd = data.tel.slice(1, 3);
+      }
 
-      this.apiSrv.createCustomer(data)
-        .pipe(takeUntil(this.unsubscribe))
-        .subscribe(res => {
+      if (data.tel) {
+        data.tel = data.tel.slice(5);
+      }
 
-          if (res.success) {
+      Network.getStatus()
+        .then(status => {
 
-            this.alertSrv.toast({
-              icon: 'success',
-              message: res.message
-            });
+          if (status.connected) {
 
-            this.modalCtrl.dismiss(res.data);
+            this.apiSrv.createCustomer(data)
+              .pipe(takeUntil(this.unsubscribe))
+              .subscribe(res => {
+
+                if (res.success) {
+
+                  this.alertSrv.toast({
+                    color: 'success',
+                    message: res.message
+                  });
+
+                  this.modalCtrl.dismiss(res.data);
+
+                }
+
+                else {
+
+                  this.alertSrv.toast({
+                    color: 'danger',
+                    message: res.message
+                  });
+
+                }
+
+              });
 
           }
 
-          else {
+          else if (Capacitor.isNativePlatform()) {
 
-            this.alertSrv.toast({
-              icon: 'error',
-              message: res.message
-            });
+            this.sqliteSrv.createCustomer(data)
+              .then(customer => {
+
+                this.alertSrv.toast({
+                  color: 'success',
+                  message: 'Cliente cadastrado com sucesso!'
+                });
+
+                this.modalCtrl.dismiss(customer);
+
+              }).catch(err => {
+
+                this.alertSrv.toast({
+                  color: 'danger',
+                  message: err.message
+                });
+
+              });
 
           }
 

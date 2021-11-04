@@ -58,7 +58,7 @@ export class LoginPage implements OnInit, OnDestroy {
             }
             else {
               this.alertSrv.toast({
-                icon: 'error',
+                color: 'danger',
                 message: res.message
               });
             }
@@ -71,7 +71,7 @@ export class LoginPage implements OnInit, OnDestroy {
     else {
 
       this.alertSrv.toast({
-        icon: 'error',
+        color: 'danger',
         message: 'Preencha todos os campos'
       });
 

@@ -1,13 +1,16 @@
 import { Injectable } from '@angular/core';
 import { SQLite, SQLiteObject } from '@ionic-native/sqlite/ngx';
 import { CREATE_TABLES } from '../data/create_tables';
+import { Customer } from '../models/customer';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SQLiteService {
 
-  constructor(private sqlite: SQLite) { }
+  constructor(
+    private sqlite: SQLite
+  ) { }
 
   private getDB() {
     return this.sqlite.create({ name: 'francefarma.db', location: 'default' });
@@ -180,7 +183,7 @@ export class SQLiteService {
 
     const db: SQLiteObject = await this.getDB();
 
-    await db.executeSql('DELETE FROM clientes', []);
+    await db.executeSql('DELETE FROM clientes WHERE sync = 1', []);
 
     const sql = [];
 
@@ -194,6 +197,38 @@ export class SQLiteService {
 
     db.sqlBatch(sql);
 
+  }
+
+  public async createCustomer(customer: Customer) {
+
+    const db: SQLiteObject = await this.getDB();
+
+    const cnpj = customer.cnpj.replace(/[^0-9]/g, '');
+
+    let result = await db.executeSql(`SELECT COUNT(*) AS count FROM clientes WHERE REPLACE(REPLACE(REPLACE(cnpj, '/', ''), '-', ''), '.', '') = ? LIMIT 1`, [cnpj]);
+    
+    if (result.rows.item(0).count > 0) {
+
+      throw {
+        message: 'Esse CNPJ já foi cadastrado'
+      }
+
+    }
+
+    else {
+
+      const params = [customer.cnpj, customer.razao_social, customer.cnpj, customer.cel, customer.email, customer.grupo, customer.fantasia, customer.ie, customer.ddd, customer.tel, customer.cep, customer.end, customer.bairro, customer.cidade, customer.estado, customer.ref1, customer.refnum1, customer.ref2, customer.refnum2, customer.ref3, customer.refnum3];
+
+      const sql = 'INSERT INTO clientes (id_cliente, razao_social, cnpj, cel, email, grupo, fantasia, ie, ddd, tel, cep, end, bairro, cidade, estado, ref1, refnum1, ref2, refnum2, ref3, refnum3, sync) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)';
+
+      await db.executeSql(sql, params);
+
+      result = await db.executeSql('SELECT * FROM clientes WHERE id_cliente = ? LIMIT 1', [customer.cnpj]);
+
+      return result.rows.item(0);
+
+    }
+    
   }
 
   public async searchCustomers(search: string) {
@@ -456,7 +491,7 @@ export class SQLiteService {
       result = await db.executeSql(`SELECT * FROM pedido_itens WHERE id_pedido = ?`, [id]);
 
       if (result.rows.length > 0) {
-        
+
         for (let i = 0; i < result.rows.length; i++) {
           order.produtos.push(result.rows.item(i));
         }
@@ -489,7 +524,7 @@ export class SQLiteService {
 
       sql.push(['INSERT INTO pedidos (id_pedido, pag_prazo, promo, promo_aut_por, promo_data_aut, comentario, vendedor, cod_vendedor, cliente, cod_cliente, cnpj, fantasia, ie, novo, email, ddd, tel, cidade, estado, total, ipi, motivocancelamento, datas, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', params]);
 
-      for (let j=0; j < data[i].produtos.length; j++) {
+      for (let j = 0; j < data[i].produtos.length; j++) {
 
         const params = [data[i].produtos[j].id_pedido, data[i].produtos[j].nome, data[i].produtos[j].cod, data[i].produtos[j].qtde, data[i].produtos[j].valor, data[i].produtos[j].ipi, data[i].produtos[j].comissao, data[i].produtos[j].faturado];
 

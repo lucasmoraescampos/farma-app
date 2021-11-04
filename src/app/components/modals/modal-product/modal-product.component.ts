@@ -150,7 +150,7 @@ export class ModalProductComponent implements OnInit, OnDestroy {
     if (this.segment == 'UN' && this.qty % this.prices.upc > 0) {
 
       this.alertSrv.toast({
-        icon: 'error',
+        color: 'danger',
         message: `A quantidade por unidade deve ser múltipla de ${this.prices.upc}`
       });
 
