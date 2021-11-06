@@ -43,7 +43,9 @@
       <ion-item class="animation-order" [style]="{ '--animation-order': i % 10 }" lines="full" button="true"
         detail="false" (click)="detail(item.id_pedido)" *ngFor="let item of searchItems; let i=index">
 
-        <ion-badge slot="start" mode="ios" color="light">{{ item.id_pedido }}</ion-badge>
+        <ion-badge slot="start" mode="ios" color="light" *ngIf="item.sync">{{ item.id_pedido }}</ion-badge>
+
+        <ion-icon class="unsync" slot="start" name="cloud-upload-outline" *ngIf="!item.sync"></ion-icon>
 
         <ion-label class="ion-text-wrap">
 
@@ -53,11 +55,15 @@
 
           <span class="price">{{ sum(item.total, item.ipi) | money }}</span>
 
-          <ion-badge mode="ios" color="secondary" *ngIf="item.status == '4'">Pré Faturado</ion-badge>
+          <ion-badge mode="ios" color="secondary" *ngIf="item.sync && item.status == '4'">Pré Faturado</ion-badge>
 
-          <ion-badge mode="ios" color="danger" *ngIf="item.status == '2'">Cancelado</ion-badge>
+          <ion-badge mode="ios" color="danger" *ngIf="item.sync && item.status == '2'">Cancelado</ion-badge>
 
-          <ion-badge mode="ios" color="success" *ngIf="item.status == '1'">Faturado</ion-badge>
+          <ion-badge mode="ios" color="success" *ngIf="item.sync && item.status == '1'">Faturado</ion-badge>
+
+          <ion-badge mode="ios" color="medium" *ngIf="item.sync && item.status == '0'">Pendente</ion-badge>
+          
+          <ion-badge mode="ios" color="light" *ngIf="!item.sync">Aguardando</ion-badge>
 
         </ion-label>
 
@@ -74,7 +80,9 @@
       <ion-item class="animation-order" [style]="{ '--animation-order': i % 10 }" lines="full" button="true"
         detail="false" (click)="detail(order.id_pedido)" *ngFor="let order of orders; let i=index">
 
-        <ion-badge slot="start" mode="ios" color="light">{{ order.id_pedido }}</ion-badge>
+        <ion-badge slot="start" mode="ios" color="light" *ngIf="order.sync">{{ order.id_pedido }}</ion-badge>
+
+        <ion-icon class="unsync" slot="start" name="cloud-upload-outline" *ngIf="!order.sync"></ion-icon>
 
         <ion-label class="ion-text-wrap">
 
@@ -84,11 +92,15 @@
 
           <span class="price">{{ sum(order.total, order.ipi) | money }}</span>
 
-          <ion-badge mode="ios" color="secondary" *ngIf="order.status == '4'">Pré Faturado</ion-badge>
+          <ion-badge mode="ios" color="secondary" *ngIf="order.sync && order.status == '4'">Pré Faturado</ion-badge>
 
-          <ion-badge mode="ios" color="danger" *ngIf="order.status == '2'">Cancelado</ion-badge>
+          <ion-badge mode="ios" color="danger" *ngIf="order.sync && order.status == '2'">Cancelado</ion-badge>
 
-          <ion-badge mode="ios" color="success" *ngIf="order.status == '1'">Faturado</ion-badge>
+          <ion-badge mode="ios" color="success" *ngIf="order.sync && order.status == '1'">Faturado</ion-badge>
+
+          <ion-badge mode="ios" color="medium" *ngIf="order.sync && order.status == '0'">Pendente</ion-badge>
+
+          <ion-badge mode="ios" color="light" *ngIf="!order.sync">Aguardando</ion-badge>
 
         </ion-label>
 

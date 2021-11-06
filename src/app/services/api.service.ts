@@ -73,6 +73,10 @@ export class ApiService {
     return this.http.post<HttpResult>(`${this.apiUrl}/customer`, data);
   }
 
+  public syncCustomer(data: any) {
+    return this.http.post<HttpResult>(`${this.apiUrl}/customer/sync`, data);
+  }
+
   public getPaymentOptions() {
     return this.http.get<HttpResult>(`${this.apiUrl}/order/options`);
   }

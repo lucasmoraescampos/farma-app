@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { SQLite, SQLiteObject } from '@ionic-native/sqlite/ngx';
 import { CREATE_TABLES } from '../data/create_tables';
 import { Customer } from '../models/customer';
+import { Order } from '../models/order';
 
 @Injectable({
   providedIn: 'root'
@@ -179,11 +180,31 @@ export class SQLiteService {
 
   }
 
+  public async getUnsyncCustomers() {
+
+    const db: SQLiteObject = await this.getDB();
+
+    const result = await db.executeSql('SELECT * FROM clientes WHERE sync = 0', []);
+
+    const customers = [];
+
+    if (result.rows.length > 0) {
+
+      for (let i=0; i < result.rows.length; i++) {
+        customers.push(result.rows.item(i));
+      }
+
+    }
+
+    return customers;
+
+  }
+
   public async setCustomers(data: any[]) {
 
     const db: SQLiteObject = await this.getDB();
 
-    await db.executeSql('DELETE FROM clientes WHERE sync = 1', []);
+    await db.executeSql('DELETE FROM clientes', []);
 
     const sql = [];
 
@@ -237,17 +258,17 @@ export class SQLiteService {
 
     const result = await db.executeSql(`SELECT * FROM clientes WHERE razao_social LIKE '%${search}%' OR REPLACE(REPLACE(REPLACE(cnpj, '.', ''), '/', ''), '-', '') LIKE '%${search}%' ORDER BY razao_social`, []);
 
-    const orders = [];
+    const customers = [];
 
     if (result.rows.length > 0) {
 
       for (let i = 0; i < result.rows.length; i++) {
-        orders.push(result.rows.item(i));
+        customers.push(result.rows.item(i));
       }
 
     }
 
-    return orders;
+    return customers;
 
   }
 
@@ -433,7 +454,7 @@ export class SQLiteService {
 
     const db: SQLiteObject = await this.getDB();
 
-    let result = await db.executeSql(`SELECT datas, status, id_pedido, total, ipi, cliente FROM pedidos LIMIT ${limit} OFFSET ${offset}`, []);
+    let result = await db.executeSql(`SELECT datas, status, id_pedido, total, ipi, cliente, sync FROM pedidos LIMIT ${limit} OFFSET ${offset}`, []);
 
     const orders = [];
 
@@ -456,11 +477,31 @@ export class SQLiteService {
 
   }
 
+  public async getUnsyncOrders() {
+
+    const db: SQLiteObject = await this.getDB();
+
+    const result = await db.executeSql('SELECT * FROM pedidos WHERE sync = 0', []);
+
+    const orders = [];
+
+    if (result.rows.length > 0) {
+
+      for (let i=0; i < result.rows.length; i++) {
+        orders.push(result.rows.item(i));
+      }
+
+    }
+
+    return orders;
+
+  }
+
   public async searchOrders(search: string) {
 
     const db: SQLiteObject = await this.getDB();
 
-    const result = await db.executeSql(`SELECT datas, status, id_pedido, total, ipi, cliente FROM pedidos WHERE cliente LIKE '%${search}%' OR id_pedido = '${search}'`, []);
+    const result = await db.executeSql(`SELECT datas, status, id_pedido, total, ipi, cliente, sync FROM pedidos WHERE cliente LIKE '%${search}%' OR id_pedido = '${search}'`, []);
 
     const orders = [];
 
@@ -512,9 +553,9 @@ export class SQLiteService {
 
     const db: SQLiteObject = await this.getDB();
 
-    await db.executeSql('DELETE FROM pedido_itens', []);
+    await db.executeSql('DELETE FROM pedido_itens WHERE sync = 1', []);
 
-    await db.executeSql('DELETE FROM pedidos', []);
+    await db.executeSql('DELETE FROM pedidos WHERE sync = 1', []);
 
     const sql = [];
 
@@ -526,9 +567,9 @@ export class SQLiteService {
 
       for (let j = 0; j < data[i].produtos.length; j++) {
 
-        const params = [data[i].produtos[j].id_pedido, data[i].produtos[j].nome, data[i].produtos[j].cod, data[i].produtos[j].qtde, data[i].produtos[j].valor, data[i].produtos[j].ipi, data[i].produtos[j].comissao, data[i].produtos[j].faturado];
+        const params = [data[i].produtos[j].id_pedido, data[i].produtos[j].id_produto, data[i].produtos[j].nome, data[i].produtos[j].cod, data[i].produtos[j].qtde, data[i].produtos[j].valor, data[i].produtos[j].ipi, data[i].produtos[j].comissao, data[i].produtos[j].faturado];
 
-        sql.push(['INSERT INTO pedido_itens (id_pedido, nome, cod, qtde, valor, ipi, comissao, faturado) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', params]);
+        sql.push(['INSERT INTO pedido_itens (id_pedido, id_produto, nome, cod, qtde, valor, ipi, comissao, faturado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', params]);
 
       }
 
@@ -536,6 +577,85 @@ export class SQLiteService {
 
     db.sqlBatch(sql);
 
+  }
+
+  public async createOrder(order: Order) {
+
+    const db: SQLiteObject = await this.getDB();
+
+    const id_pedido = Math.floor(Date.now() / 1000);
+
+    let params = [
+      id_pedido,
+      order.id_prazo,
+      order.id_tabela,
+      order.id_cliente,
+      order.pag_prazo,
+      order.promo,
+      order.promo_aut_por,
+      order.promo_data_aut,
+      order.comentario,
+      order.vendedor,
+      order.cod_vendedor,
+      order.cliente,
+      order.cod_cliente,
+      order.cnpj,
+      order.fantasia,
+      order.ie,
+      order.email,
+      order.ddd,
+      order.tel,
+      order.cel,
+      order.cidade,
+      order.estado,
+      order.frete,
+      order.agendamento,
+      order.paletizacao,
+      order.compra,
+      order.total,
+      order.ipi,
+      order.datas,
+      '1',
+      0
+    ];
+
+    const sql = [
+      ['INSERT INTO pedidos (id_pedido, id_prazo, id_tabela, id_cliente, pag_prazo, promo, promo_aut_por, promo_data_aut, comentario, vendedor, cod_vendedor, cliente, cod_cliente, cnpj, fantasia, ie, email, ddd, tel, cel, cidade, estado, frete, agendamento, paletizacao, compra, total, ipi, datas, novo, sync) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', params]
+    ];
+
+    for (let i=0; i < order.produtos.length; i++) {
+
+      params = [
+        id_pedido,
+        order.produtos[i].id_produto,
+        order.produtos[i].qtde,
+        order.produtos[i].desconto,
+        order.produtos[i].ipi,
+        order.produtos[i].cod,
+        order.produtos[i].nome,
+        order.produtos[i].valor
+      ];
+
+      sql.push([`INSERT INTO pedido_itens (id_pedido, id_produto, qtde, desconto, ipi, cod, nome, valor) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`, params]);
+
+    }
+
+    await db.sqlBatch(sql);
+
+    let result = await db.executeSql('SELECT * FROM pedidos WHERE id_pedido = ? LIMIT 1', [id_pedido]);
+
+    const order_ = result.rows.item(0);
+
+    result = await db.executeSql('SELECT * FROM pedido_itens WHERE id_pedido = ?', [id_pedido]);
+
+    order_.produtos = [];
+
+    for (let i=0; i < result.rows.length; i++) {
+      order_.produtos.push(result.rows.item(i));
+    }
+
+    return order_;
+    
   }
 
   public async getTableProduct(table_id: number | string, product_id: number | string) {

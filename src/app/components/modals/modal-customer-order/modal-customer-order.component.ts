@@ -5,6 +5,7 @@ import { Network } from '@capacitor/network';
 import { IonSlides, ModalController } from '@ionic/angular';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { Order } from 'src/app/models/order';
 import { Product } from 'src/app/models/product';
 import { AlertService } from 'src/app/services/alert.service';
 import { ApiService } from 'src/app/services/api.service';
@@ -51,16 +52,16 @@ export class ModalCustomerOrderComponent implements OnInit, OnDestroy {
     this.user = this.apiSrv.getCurrentUser();
 
     this.formGroup = this.formBuilder.group({
-      id_prazo:       ['', Validators.required],
       id_tabela:      ['', Validators.required],
-      freight:        ['', Validators.required],
-      scheduling:     ['', Validators.required],
-      palletizing:    ['', Validators.required],
-      comment:        [''],
-      promotion:      [''],
-      authorization:  [''],
-      authorized_at:  [''],
-      purchase_order: ['']
+      prazo:          ['', Validators.required],
+      frete:          ['', Validators.required],
+      agendamento:    ['', Validators.required],
+      paletizacao:    ['', Validators.required],
+      comentario:     [''],
+      promo:          [''],
+      promo_aut_por:  [''],
+      promo_data_aut: [''],
+      compra:         ['']
     });
 
     this.cartSrv.clear();
@@ -100,13 +101,24 @@ export class ModalCustomerOrderComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.apiSrv.getCustomers({ search: search })
-      .pipe(takeUntil(this.unsubscribe))
-      .subscribe(
-        res => {
-          this.customers = res.data;
-        }
-      );
+    if (Capacitor.isNativePlatform()) {
+
+      this.sqliteSrv.searchCustomers(search)
+        .then(customers => this.customers = customers);
+
+    }
+    
+    else {
+
+      this.apiSrv.getCustomers({ search: search })
+        .pipe(takeUntil(this.unsubscribe))
+        .subscribe(
+          res => {
+            this.customers = res.data;
+          }
+        );
+
+    }
 
   }
 
@@ -194,30 +206,103 @@ export class ModalCustomerOrderComponent implements OnInit, OnDestroy {
 
     if (this.formGroup.valid) {
 
-      const data: any = this.formGroup.value;
+      const user = JSON.parse(localStorage.getItem('current_user'));
 
-      data.id_cliente = this.customer.id_cliente;
+      const products = [];
 
-      data.products = [];
+      let ipi = 0;
+
+      let total = 0;
 
       this.cart.products.forEach((product: Product) => {
-        data.products.push({
-          id: product.id,
-          qty: product.packaging_type == 'UN' ? product.qty / product.upc : product.qty,
-          discount: product.discount
+
+        product.valor = product.valor - ((product.valor * product.desconto) / 100);
+
+        product.ipi = product.valor * product.qtde * (product.ipi / 100);
+
+        products.push({
+          id_produto: product.id_produto,
+          qtde:       product.tipo == 'UN' ? product.qtde / product.upc : product.qtde,
+          desconto:   product.desconto,
+          nome:       product.nome,
+          ipi:        product.ipi,
+          valor:      product.valor,
+          cod:        product.cod
         });
+
+        ipi += product.ipi;
+
+        total += product.valor * product.qtde;
+
       });
 
-      this.apiSrv.createOrder(data)
-        .pipe(takeUntil(this.unsubscribe))
-        .subscribe(res => {
+      const data: Order = {
+        id_cliente:     this.customer.id_cliente,
+        id_tabela:      this.customer.razao_social,
+        id_prazo:       this.formGroup.value.prazo.id_prazo,
+        promo:          this.formGroup.value.promo,
+        promo_aut_por:  this.formGroup.value.promo_aut_por,
+        promo_data_aut: this.formGroup.value.promo_data_aut,
+        comentario:     this.formGroup.value.comentario,
+        compra:         this.formGroup.value.compra,
+        frete:          this.formGroup.value.frete,
+        paletizacao:    this.formGroup.value.paletizacao,
+        agendamento:    this.formGroup.value.agendamento,
+        vendedor:       user.nome,
+        cod_vendedor:   user.cod,
+        pag_prazo:      this.formGroup.value.prazo.nome,
+        cliente:        this.customer.razao_social,
+        cod_cliente:    this.customer.id_cliente,
+        cnpj:           this.customer.cnpj,
+        fantasia:       this.customer.fantasia,
+        ie:             this.customer.ie,
+        email:          this.customer.email,
+        cel:            this.customer.cel,
+        tel:            this.customer.tel,
+        ddd:            this.customer.ddd,
+        cidade:         this.customer.cidade,
+        estado:         this.customer.estado,
+        datas:          new Date(),
+        ipi:            ipi,
+        total:          total,   
+        produtos:       products
+      }
 
-          this.alertSrv.toast({
-            color: 'success',
-            message: res.message
-          });
+      Network.getStatus()
+        .then(status => {
 
-          this.modalCtrl.dismiss();
+          if (!status.connected) {
+
+            this.apiSrv.createOrder(data)
+              .pipe(takeUntil(this.unsubscribe))
+              .subscribe(res => {
+
+                this.alertSrv.toast({
+                  color: 'success',
+                  message: res.message
+                });
+
+                this.modalCtrl.dismiss(res.data);
+
+              });
+
+          }
+
+          else {
+
+            this.sqliteSrv.createOrder(data)
+              .then(order => {
+
+                this.alertSrv.toast({
+                  color: 'success',
+                  message: 'Pedido realizado com sucesso!'
+                });
+
+                this.modalCtrl.dismiss(order);
+
+              });
+
+          }
 
         });
 
@@ -227,29 +312,24 @@ export class ModalCustomerOrderComponent implements OnInit, OnDestroy {
 
   private initPaymentOptions() {
 
-    Network.getStatus()
-      .then(status => {
+    if (Capacitor.isNativePlatform()) {
 
-        if (status.connected) {
+      this.sqliteSrv.getPaymentOptions()
+        .then(paymentOptions => {
+          this.paymentOptions = paymentOptions;
+        });
 
-          this.apiSrv.getPaymentOptions()
-            .pipe(takeUntil(this.unsubscribe))
-            .subscribe(res => {
-              this.paymentOptions = res.data;
-            });
+    }
 
-        }
+    else {
 
-        else if (Capacitor.isNativePlatform()) {
+      this.apiSrv.getPaymentOptions()
+        .pipe(takeUntil(this.unsubscribe))
+        .subscribe(res => {
+          this.paymentOptions = res.data;
+        });
 
-          this.sqliteSrv.getPaymentOptions()
-            .then(paymentOptions => {
-              this.paymentOptions = paymentOptions;
-            });
-
-        }
-
-      });
+    }
 
   }
 

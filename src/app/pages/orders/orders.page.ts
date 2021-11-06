@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Capacitor } from '@capacitor/core';
-import { Network } from '@capacitor/network';
 import { ModalController } from '@ionic/angular';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -61,74 +60,62 @@ export class OrdersPage implements OnInit, OnDestroy {
 
     if (this.search.length < 3) return;
 
-    Network.getStatus()
-      .then(status => {
+    if (Capacitor.isNativePlatform()) {
 
-        if (status.connected) {
+      this.sqliteSrv.searchOrders(this.search)
+        .then(orders => this.searchItems = orders);
 
-          this.apiSrv.getOrders({ search: this.search })
-            .pipe(takeUntil(this.unsubscribe))
-            .subscribe(res => this.searchItems = res.data);
+    }
 
-        }
+    else {
 
-        else if (Capacitor.isNativePlatform()) {
+      this.apiSrv.getOrders({ search: this.search })
+        .pipe(takeUntil(this.unsubscribe))
+        .subscribe(res => this.searchItems = res.data);
 
-          this.sqliteSrv.searchOrders(this.search)
-            .then(orders => this.searchItems = orders);
+    }
 
-        }
-
-      });
-      
   }
 
   public detail(id: number) {
 
-    Network.getStatus()
-      .then(status => {
+    if (Capacitor.isNativePlatform()) {
 
-        if (status.connected) {
+      this.sqliteSrv.getOrderById(id)
+        .then(async (order) => {
 
-          this.apiSrv.getOrderById(id)
-            .pipe(takeUntil(this.unsubscribe))
-            .subscribe(async (res) => {
+          const modal = await this.modalCtrl.create({
+            component: ModalOrderComponent,
+            componentProps: {
+              order: order
+            }
+          });
 
-              const modal = await this.modalCtrl.create({
-                component: ModalOrderComponent,
-                componentProps: {
-                  order: res.data
-                }
-              });
+          return await modal.present();
 
-              return await modal.present();
+        });
 
-            });
+    }
 
-        }
+    else {
 
-        else if (Capacitor.isNativePlatform()) {
+      this.apiSrv.getOrderById(id)
+        .pipe(takeUntil(this.unsubscribe))
+        .subscribe(async (res) => {
 
-          this.sqliteSrv.getOrderById(id)
-            .then(async (order) => {
+          const modal = await this.modalCtrl.create({
+            component: ModalOrderComponent,
+            componentProps: {
+              order: res.data
+            }
+          });
 
-              console.log(order);
+          return await modal.present();
 
-              const modal = await this.modalCtrl.create({
-                component: ModalOrderComponent,
-                componentProps: {
-                  order: order
-                }
-              });
+        });
 
-              return await modal.present();
-
-            });
-
-        }
-
-      });
-
+    }
+  
   }
 
   public async newOrder() {
@@ -136,6 +123,13 @@ export class OrdersPage implements OnInit, OnDestroy {
     const modal = await this.modalCtrl.create({
       component: ModalCustomerOrderComponent
     });
+
+    modal.onDidDismiss()
+      .then(res => {
+        if (res.data) {
+          this.orders.unshift(res.data);
+        }
+      });
 
     return await modal.present();
 
@@ -145,89 +139,73 @@ export class OrdersPage implements OnInit, OnDestroy {
 
     this.page++;
 
-    Network.getStatus()
-      .then(status => {
+    if (Capacitor.isNativePlatform()) {
 
-        if (status.connected) {
+      this.sqliteSrv.getOrders(this.page)
+        .then(res => {
 
-          this.noloader = true;
+          this.orders = this.orders.concat(res.orders);
 
-          this.apiSrv.getOrders({ page: this.page })
-            .pipe(takeUntil(this.unsubscribe))
-            .subscribe(res => {
+          this.total = res.total;
 
-              this.noloader = false;
+          event.target.complete();
 
-              this.orders = this.orders.concat(res.data.orders);
+          if (this.orders.length == this.total) {
+            event.target.disabled = true;
+          }
 
-              this.total = res.data.total;
+        });
 
-              event.target.complete();
+    }
 
-              if (this.orders.length == this.total) {
-                event.target.disabled = true;
-              }
+    else {
 
-            });
+      this.noloader = true;
 
-        }
+      this.apiSrv.getOrders({ page: this.page })
+        .pipe(takeUntil(this.unsubscribe))
+        .subscribe(res => {
 
-        else if (Capacitor.isNativePlatform()) {
+          this.noloader = false;
 
-          this.sqliteSrv.getOrders(this.page)
-            .then(res => {
+          this.orders = this.orders.concat(res.data.orders);
 
-              this.orders = this.orders.concat(res.orders);
+          this.total = res.data.total;
 
-              this.total = res.total;
+          event.target.complete();
 
-              event.target.complete();
+          if (this.orders.length == this.total) {
+            event.target.disabled = true;
+          }
 
-              if (this.orders.length == this.total) {
-                event.target.disabled = true;
-              }
+        });
 
-            });
-
-        }
-
-      });
+    }
 
   }
 
   private initOrders() {
 
-    Network.getStatus()
-      .then(status => {
+    if (Capacitor.isNativePlatform()) {
 
-        if (status.connected) {
+      this.sqliteSrv.getOrders(this.page)
+        .then(res => {
+          this.orders = this.orders.concat(res.orders);
+          this.total = res.total;
+        });
 
-          this.apiSrv.getOrders({ page: this.page })
-            .pipe(takeUntil(this.unsubscribe))
-            .subscribe(res => {
+    }
 
-              this.orders = this.orders.concat(res.data.orders);
+    else {
 
-              this.total = res.data.total;
+      this.apiSrv.getOrders({ page: this.page })
+        .pipe(takeUntil(this.unsubscribe))
+        .subscribe(res => {
+          this.orders = this.orders.concat(res.data.orders);
+          this.total = res.data.total;
+        });
 
-            });
-
-        }
-
-        else if (Capacitor.isNativePlatform()) {
-
-          this.sqliteSrv.getOrders(this.page)
-            .then(res => {
-
-              this.orders = this.orders.concat(res.orders);
-
-              this.total = res.total;
-
-            });
-
-        }
-
-      });
+    }
 
   }
 

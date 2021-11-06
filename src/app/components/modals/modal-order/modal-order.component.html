@@ -2,8 +2,6 @@
 
   <ion-toolbar>
 
-    <ion-badge slot="start" color="dark" *ngIf="order.novo">Cliente Novo</ion-badge>
-
     <ion-title>Pedido</ion-title>
 
     <ion-buttons slot="end">
@@ -84,7 +82,13 @@
 
       <ion-item lines="none" *ngIf="order.cliente">
 
-        <span slot="start">Cliente</span>
+        <span slot="start">
+          
+          Cliente
+
+          <ion-badge class="new-customer" slot="start" mode="ios" *ngIf="order.novo">Novo</ion-badge>
+
+        </span>
 
         <ion-label class="ion-text-wrap ion-text-end">{{ order.cliente }}</ion-label>
 
@@ -174,9 +178,9 @@
 
         </ion-label>
 
-        <ion-icon slot="end" name="checkmark-circle" color="success" *ngIf="produto.faturado == '0'"></ion-icon>
+        <ion-icon slot="end" name="checkmark-circle" color="success" *ngIf="order.sync && produto.faturado == '0'"></ion-icon>
 
-        <ion-icon slot="end" name="close-circle" color="danger" *ngIf="produto.faturado != '0'"></ion-icon>
+        <ion-icon slot="end" name="close-circle" color="danger" *ngIf="order.sync && produto.faturado != '0'"></ion-icon>
 
       </ion-item>
 
@@ -214,7 +218,7 @@
 
     </ion-item>
 
-    <ion-item lines="none">
+    <ion-item lines="none" *ngIf="order.sync">
 
       <span slot="start">Previsão de Comissão</span>
 

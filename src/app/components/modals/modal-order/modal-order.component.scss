@@ -32,6 +32,11 @@ ion-item.product ion-label {
     }
 }
 
+ion-badge.new-customer {
+    zoom: 0.6;
+    font-weight: 400;
+}
+
 ion-footer {
     ion-item {
         --min-height: 20px;

@@ -74,19 +74,23 @@ export const CREATE_TABLES = [
     ],
     [
         `CREATE TABLE IF NOT EXISTS produtos (
-            id_produto INT(11)      PRIMARY KEY,
-            id_lab     VARCHAR(200) DEFAULT NULL,
-            nome       VARCHAR(200) DEFAULT NULL,
-            upc        INT(11)      DEFAULT NULL,
-            ipi        INT(11)      DEFAULT NULL,
-            estoque    BIGINT(20)   DEFAULT NULL,
-            valor_01   DOUBLE(8, 2) DEFAULT NULL,
-            status     CHAR(1)      DEFAULT NULL
+            id_produto  INT(11)      PRIMARY KEY,
+            id_lab      VARCHAR(200) DEFAULT NULL,
+            nome        VARCHAR(200) DEFAULT NULL,
+            upc         INT(11)      DEFAULT NULL,
+            ipi         INT(11)      DEFAULT NULL,
+            estoque     BIGINT(20)   DEFAULT NULL,
+            valor_01    DOUBLE(8, 2) DEFAULT NULL,
+            cod         INT(11)      DEFAULT NULL,
+            status      CHAR(1)      DEFAULT NULL
         )`
     ],
     [
         `CREATE TABLE IF NOT EXISTS pedidos (
             id_pedido          INT(11)      PRIMARY KEY,
+            id_prazo           INT(11)      DEFAULT NULL,
+            id_tabela          INT(11)      DEFAULT NULL,
+            id_cliente         VARCHAR(200) DEFAULT NULL,
             pag_prazo          VARCHAR(200) DEFAULT NULL,
             promo              TEXT         DEFAULT NULL,
             promo_aut_por      VARCHAR(200) DEFAULT NULL,
@@ -103,25 +107,34 @@ export const CREATE_TABLES = [
             email              VARCHAR(200) DEFAULT NULL,
             ddd                VARCHAR(200) DEFAULT NULL,
             tel                VARCHAR(200) DEFAULT NULL,
+            cel                VARCHAR(200) DEFAULT NULL,
             cidade             VARCHAR(200) DEFAULT NULL,
             estado             VARCHAR(200) DEFAULT NULL,
+            frete              VARCHAR(200) DEFAULT NULL,
+            agendamento        VARCHAR(200) DEFAULT NULL,
+            paletizacao        VARCHAR(200) DEFAULT NULL,
+            compra             VARCHAR(200) DEFAULT NULL,
             total              DOUBLE       DEFAULT NULL,
             ipi                DOUBLE       DEFAULT NULL,
             motivocancelamento LONGTEXT     DEFAULT NULL,
             datas              DATE         DEFAULT NULL,
-            status             CHAR(1)      DEFAULT NULL
+            status             CHAR(1)      DEFAULT NULL,
+            sync               TINYINT(1)   DEFAULT 1
         )`
     ],
     [
         `CREATE TABLE IF NOT EXISTS pedido_itens (
-            id_pedido INT(11)      NOT NULL,
-            nome      VARCHAR(200) NOT NULL,
-            cod       INT(11)      NOT NULL,
-            qtde      FLOAT        NOT NULL,
-            valor     VARCHAR(200) NOT NULL,
-            ipi       DOUBLE(8,2)  DEFAULT NULL,     
-            comissao  DOUBLE(8,2)  DEFAULT NULL,
-            faturado  VARCHAR(200) DEFAULT NULL
+            id_pedido  INT(11)      NOT NULL,
+            id_produto INT(11)      NOT NULL,
+            nome       VARCHAR(200) NOT NULL,
+            cod        INT(11)      NOT NULL,
+            qtde       FLOAT        NOT NULL,
+            valor      VARCHAR(200) NOT NULL,
+            desconto   VARCHAR(200) DEFAULT NULL,
+            ipi        DOUBLE(8,2)  DEFAULT NULL,     
+            comissao   DOUBLE(8,2)  DEFAULT NULL,
+            faturado   VARCHAR(200) DEFAULT NULL,
+            sync       TINYINT(1)   DEFAULT 1
         )`
     ],
     [

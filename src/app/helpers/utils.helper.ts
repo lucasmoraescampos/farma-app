@@ -159,5 +159,5 @@ export class UtilsHelper {
         phone = phone.replace(/[^0-9]/g, '');
         return phone.length == 11 && !isNaN(Number(phone));
     }
-    
+
 }

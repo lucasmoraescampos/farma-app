@@ -1,10 +1,10 @@
-<ion-header class="ion-no-border" mode="ios">
+<ion-header [class.ion-no-border]="!customer" mode="ios">
 
   <ion-toolbar>
 
     <ion-buttons class="animate__animated animate__fadeIn" slot="start" *ngIf="customer">
 
-      <ion-button (click)="cancelCustomer()" *ngIf="!customer">
+      <ion-button (click)="cancelCustomer()">
 
         <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
 
@@ -16,7 +16,7 @@
 
     <ion-title class="animate__animated animate__fadeIn" *ngIf="customer">Cliente</ion-title>
     
-    <ion-buttons slot="end" *ngIf="customer">
+    <ion-buttons slot="end" *ngIf="!customer">
 
       <ion-button (click)="dismiss()">
 
@@ -88,7 +88,7 @@
 
           <ion-list>
 
-            <ion-item lines="full">
+            <ion-item lines="none" *ngIf="customer.razao_social">
 
               <span slot="start">Razão social:</span>
 
@@ -96,7 +96,7 @@
 
             </ion-item>
 
-            <ion-item lines="full">
+            <ion-item lines="none" *ngIf="customer.fantasia">
 
               <span slot="start">Fantasia:</span>
 
@@ -104,7 +104,7 @@
 
             </ion-item>
 
-            <ion-item lines="full">
+            <ion-item lines="none" *ngIf="customer.email">
 
               <span slot="start">Email:</span>
 
@@ -112,7 +112,7 @@
 
             </ion-item>
 
-            <ion-item lines="full">
+            <ion-item lines="none" *ngIf="customer.cep">
 
               <span slot="start">CEP:</span>
 
@@ -120,7 +120,7 @@
 
             </ion-item>
 
-            <ion-item lines="full">
+            <ion-item lines="none" *ngIf="customer.end">
 
               <span slot="start">Endereço:</span>
 
@@ -128,7 +128,7 @@
 
             </ion-item>
 
-            <ion-item lines="full">
+            <ion-item lines="none" *ngIf="customer.bairro">
 
               <span slot="start">Bairro:</span>
 
@@ -136,7 +136,7 @@
 
             </ion-item>
 
-            <ion-item lines="full">
+            <ion-item lines="none" *ngIf="customer.cidade">
 
               <span slot="start">Cidade:</span>
 
@@ -144,15 +144,23 @@
 
             </ion-item>
 
-            <ion-item lines="full">
+            <ion-item lines="none" *ngIf="customer.tel">
 
               <span slot="start">Fone:</span>
 
-              <ion-label class="ion-text-wrap ion-text-end">{{ customer.tel }}</ion-label>
+              <ion-label class="ion-text-wrap ion-text-end">({{ customer.ddd?.slice(-2) }}) {{ customer.tel }}</ion-label>
 
             </ion-item>
 
-            <ion-item lines="full">
+            <ion-item lines="none" *ngIf="!customer.tel && customer.cel">
+
+              <span slot="start">Fone:</span>
+
+              <ion-label class="ion-text-wrap ion-text-end">{{ customer.cel }}</ion-label>
+
+            </ion-item>
+
+            <ion-item lines="none" *ngIf="customer.cnpj">
 
               <span slot="start">CNPJ:</span>
 
@@ -160,7 +168,7 @@
 
             </ion-item>
 
-            <ion-item lines="full">
+            <ion-item lines="none" *ngIf="customer.ie">
 
               <span slot="start">IE:</span>
 
@@ -168,7 +176,7 @@
 
             </ion-item>
 
-            <ion-item lines="full">
+            <ion-item lines="none" *ngIf="user.nome">
 
               <span slot="start">Vendedor:</span>
 
@@ -242,10 +250,10 @@
 
                 <ion-label class="stacked">Condição de pagamento <span>*</span></ion-label>
 
-                <ion-select formControlName="id_prazo" placeholder="Selecione" interface="action-sheet"
+                <ion-select formControlName="prazo" placeholder="Selecione" interface="action-sheet"
                   cancelText="Cancelar">
 
-                  <ion-select-option [value]="prazo.id_prazo" *ngFor="let prazo of paymentOptions?.prazos">
+                  <ion-select-option [value]="prazo" *ngFor="let prazo of paymentOptions?.prazos">
                     {{ prazo.nome }}</ion-select-option>
 
                 </ion-select>
@@ -272,7 +280,7 @@
 
                   <ion-item class="no-products" lines="none" *ngIf="cart?.products?.length == 0">
 
-                    <ion-label class="ion-text-center">Nenhum produto adicionado!</ion-label>
+                    <ion-label class="ion-text-center">Nenhum produto</ion-label>
 
                   </ion-item>
 
@@ -290,21 +298,21 @@
 
                       <span class="name">
 
-                        <ion-badge mode="ios" color="medium">{{ product.id }}</ion-badge>
+                        {{ product.nome }}
 
-                        {{ product.name }}
-
+                        <ion-badge mode="ios" color="medium">{{ product.id_produto }}</ion-badge>
+                        
                       </span>
 
                       <span class="qty">
 
-                        {{ product.qty }} CX <small>({{ product.upc }} UN)</small>
+                        {{ product.qtde }} CX <small>({{ product.upc }} UN)</small>
 
                       </span>
 
                       <span class="price">
 
-                        {{ product.price | money }} CX <small>({{ (product.price / product.upc) | money }} UN)</small>
+                        {{ product.valor | money }} CX <small>({{ (product.valor / product.upc) | money }} UN)</small>
 
                       </span>
 
@@ -316,7 +324,7 @@
 
                       <span class="total">
 
-                        {{ product.total | money }} <small *ngIf="product.discount">{{ product.discount }}% OFF</small>
+                        {{ product.total | money }} <small *ngIf="product.desconto">{{ product.desconto }}% OFF</small>
 
                       </span>
 
@@ -342,7 +350,7 @@
 
                 <ion-label class="stacked">Comentários</ion-label>
 
-                <ion-textarea formControlName="comment"></ion-textarea>
+                <ion-textarea formControlName="comentario"></ion-textarea>
 
               </ion-col>
 
@@ -350,7 +358,7 @@
 
                 <ion-label class="stacked">Promoção</ion-label>
 
-                <ion-textarea formControlName="promotion"></ion-textarea>
+                <ion-textarea formControlName="promo"></ion-textarea>
 
               </ion-col>
 
@@ -358,7 +366,7 @@
 
                 <ion-label class="stacked">Autorizada por</ion-label>
 
-                <ion-input formControlName="authorization"></ion-input>
+                <ion-input formControlName="promo_aut_por"></ion-input>
 
               </ion-col>
 
@@ -366,7 +374,7 @@
 
                 <ion-label class="stacked">Data de autorização</ion-label>
 
-                <ion-input formControlName="authorized_at"></ion-input>
+                <ion-input formControlName="promo_data_aut"></ion-input>
 
               </ion-col>
 
@@ -374,7 +382,7 @@
 
                 <ion-label class="stacked">Ordem de compra</ion-label>
 
-                <ion-input formControlName="purchase_order"></ion-input>
+                <ion-input formControlName="compra"></ion-input>
 
               </ion-col>
 
@@ -382,7 +390,7 @@
 
                 <ion-label class="stacked">Frete <span>*</span></ion-label>
 
-                <ion-select formControlName="freight" placeholder="Selecione" interface="action-sheet"
+                <ion-select formControlName="frete" placeholder="Selecione" interface="action-sheet"
                   cancelText="Cancelar">
 
                   <ion-select-option value="CIF">CIF</ion-select-option>
@@ -397,7 +405,7 @@
 
                 <ion-label class="stacked">Agendamento <span>*</span></ion-label>
 
-                <ion-select formControlName="scheduling" placeholder="Selecione" interface="action-sheet"
+                <ion-select formControlName="agendamento" placeholder="Selecione" interface="action-sheet"
                   cancelText="Cancelar">
 
                   <ion-select-option [value]="true">Sim</ion-select-option>
@@ -412,7 +420,7 @@
 
                 <ion-label class="stacked">Paletização <span>*</span></ion-label>
 
-                <ion-select formControlName="palletizing" placeholder="Selecione" interface="action-sheet"
+                <ion-select formControlName="paletizacao" placeholder="Selecione" interface="action-sheet"
                   cancelText="Cancelar">
 
                   <ion-select-option [value]="true">Sim</ion-select-option>

@@ -48,32 +48,38 @@ export class LayoutPage implements OnInit, OnDestroy {
 
             this.syncDashboard();
 
-            this.syncOrders();
-
-            this.syncLabs();
-
-            this.syncProducts();
+            this.syncPositiveCustomers();
 
             this.syncCustomers();
 
             this.syncExpiredCustomers();
 
-            this.syncPaymentOptions();
+            this.syncLabs();
+
+            this.syncProducts();
+
+            this.syncOrders();
 
             this.syncTablesProducts();
 
-            this.syncPositiveCustomers();
+            this.syncPaymentOptions();
 
           }
 
         });
 
-        Network.addListener('networkStatusChange', status => {
-          console.log('Network status changed', status);
-        });
+      Network.addListener('networkStatusChange', status => {
+
+        if (status.connected) {
+        
+          this.syncCustomers();
+
+        }
+        
+      });
 
     }
-    
+
   }
 
   ngOnDestroy() {
@@ -130,11 +136,42 @@ export class LayoutPage implements OnInit, OnDestroy {
   }
 
   private syncCustomers() {
-    this.apiSrv.getCustomers()
-      .pipe(takeUntil(this.unsubscribe))
-      .subscribe(res => {
-        this.sqliteSrv.setCustomers(res.data);
+
+    this.sqliteSrv.getUnsyncCustomers()
+      .then(customers => {
+
+        if (customers.length > 0) {
+
+          this.apiSrv.syncCustomer({ clientes: customers })
+            .pipe(takeUntil(this.unsubscribe))
+            .subscribe(res => {
+
+              this.apiSrv.getCustomers()
+                .pipe(takeUntil(this.unsubscribe))
+                .subscribe(res => {
+
+                  this.sqliteSrv.setCustomers(res.data);
+
+                });
+                
+            });
+
+        }
+
+        else {
+
+          this.apiSrv.getCustomers()
+            .pipe(takeUntil(this.unsubscribe))
+            .subscribe(res => {
+
+              this.sqliteSrv.setCustomers(res.data);
+
+            });
+
+        }
+
       });
+      
   }
 
   private syncExpiredCustomers() {

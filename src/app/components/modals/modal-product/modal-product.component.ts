@@ -161,17 +161,18 @@ export class ModalProductComponent implements OnInit, OnDestroy {
     const index = ArrayHelper.getIndexByKey(this.products, 'id_produto', this.product_id);
 
     this.cartSrv.addProduct({
-      id: this.products[index].id_produto,
-      lab_id: this.lab_id,
-      name: this.products[index].nome,
-      qty: this.qty,
-      packaging_type: this.segment,
-      upc: this.prices.upc,
-      price: this.prices.valor,
-      ipi: this.products[index].ipi,
-      commission: 0,
-      discount: this.discount,
-      total: this.total
+      id_produto: this.products[index].id_produto,
+      id_lab:     this.lab_id,
+      nome:       this.products[index].nome,
+      qtde:       this.qty,
+      tipo:       this.segment,
+      upc:        this.prices.upc,
+      valor:      this.prices.valor,
+      ipi:        this.products[index].ipi,
+      desconto:   this.discount,
+      total:      this.total,
+      cod:        this.products[index].cod,
+      comissao:   0
     });
 
     this.modalCtrl.dismiss();

@@ -38,10 +38,10 @@ export class CartService {
 
     const cart = this.currentUserSubject.value;
 
-    const index = ArrayHelper.getIndexByKey(cart.products, 'id', product.id);
+    const index = ArrayHelper.getIndexByKey(cart.products, 'id', product.id_produto);
 
-    if (product.packaging_type == 'UN') {
-      product.qty = product.qty / product.upc;
+    if (product.tipo == 'UN') {
+      product.qtde = product.qtde / product.upc;
     }
 
     if (index != -1) {
