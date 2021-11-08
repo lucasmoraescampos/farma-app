@@ -7,6 +7,7 @@ import { takeUntil } from 'rxjs/operators';
 import { AlertService } from 'src/app/services/alert.service';
 import { ApiService } from 'src/app/services/api.service';
 import { SQLiteService } from 'src/app/services/sqlite.service';
+import { SplashScreen } from '@capacitor/splash-screen';
 
 @Component({
   selector: 'app-layout',
@@ -25,6 +26,10 @@ export class LayoutPage implements OnInit, OnDestroy {
   ];
 
   public user: any;
+
+  private syncCount: number = 0;
+
+  private readonly syncSize: number = 9;
 
   private unsubscribe = new Subject();
 
@@ -74,6 +79,8 @@ export class LayoutPage implements OnInit, OnDestroy {
         
           this.syncCustomers();
 
+          this.syncOrders();
+
         }
         
       });
@@ -89,15 +96,17 @@ export class LayoutPage implements OnInit, OnDestroy {
 
   public logout() {
     this.alertSrv.show({
-      icon: 'warning',
+      header: 'Sair',
       message: 'Tem certeza que deseja sair?',
       onConfirm: () => {
         this.apiSrv.logout()
-          .pipe(takeUntil(this.unsubscribe))
-          .subscribe(res => {
-            if (res.success) {
-              this.navCtrl.navigateRoot('/login');
-            }
+          .toPromise()
+          .then(res => {
+            localStorage.clear();
+            this.navCtrl.navigateRoot('/login');
+          }).catch(err => {
+            localStorage.clear();
+            this.navCtrl.navigateRoot('/login');
           });
       }
     });
@@ -107,23 +116,78 @@ export class LayoutPage implements OnInit, OnDestroy {
     this.apiSrv.dashboard()
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(res => {
-        this.sqliteSrv.setCustomers(res.data);
+        this.syncCount++;
+        this.sqliteSrv.setDashboard(res.data);
+        if (this.syncCount == this.syncSize) {
+          this.navCtrl.navigateRoot('/home');
+          SplashScreen.hide();
+        }
       });
   }
 
   private syncOrders() {
-    this.apiSrv.getOrders()
-      .pipe(takeUntil(this.unsubscribe))
-      .subscribe(res => {
-        this.sqliteSrv.setOrders(res.data);
+
+    this.sqliteSrv.getUnsyncOrders()
+      .then(orders => {
+
+        if (orders.length > 0) {
+
+          this.apiSrv.syncOrder({ pedidos: orders })
+            .pipe(takeUntil(this.unsubscribe))
+            .subscribe(res => {
+
+              this.apiSrv.getOrders()
+                .pipe(takeUntil(this.unsubscribe))
+                .subscribe(res => {
+
+                  this.syncCount++;
+
+                  this.sqliteSrv.setOrders(res.data);
+
+                  if (this.syncCount == this.syncSize) {
+                    this.navCtrl.navigateRoot('/home');
+                    SplashScreen.hide();
+                  }
+
+                });
+                
+            });
+
+        }
+
+        else {
+
+          this.apiSrv.getOrders()
+            .pipe(takeUntil(this.unsubscribe))
+            .subscribe(res => {
+
+              this.syncCount++;
+
+              this.sqliteSrv.setOrders(res.data);
+
+              if (this.syncCount == this.syncSize) {
+                this.navCtrl.navigateRoot('/home');
+                SplashScreen.hide();
+              }
+
+            });
+
+        }
+
       });
+      
   }
 
   private syncLabs() {
     this.apiSrv.getLabs()
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(res => {
+        this.syncCount++;
         this.sqliteSrv.setLabs(res.data);
+        if (this.syncCount == this.syncSize) {
+          this.navCtrl.navigateRoot('/home');
+          SplashScreen.hide();
+        }
       });
   }
 
@@ -131,7 +195,12 @@ export class LayoutPage implements OnInit, OnDestroy {
     this.apiSrv.getProducts()
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(res => {
+        this.syncCount++;
         this.sqliteSrv.setProducts(res.data);
+        if (this.syncCount == this.syncSize) {
+          this.navCtrl.navigateRoot('/home');
+          SplashScreen.hide();
+        }
       });
   }
 
@@ -150,7 +219,14 @@ export class LayoutPage implements OnInit, OnDestroy {
                 .pipe(takeUntil(this.unsubscribe))
                 .subscribe(res => {
 
+                  this.syncCount++;
+
                   this.sqliteSrv.setCustomers(res.data);
+
+                  if (this.syncCount == this.syncSize) {
+                    this.navCtrl.navigateRoot('/home');
+                    SplashScreen.hide();
+                  }
 
                 });
                 
@@ -164,7 +240,14 @@ export class LayoutPage implements OnInit, OnDestroy {
             .pipe(takeUntil(this.unsubscribe))
             .subscribe(res => {
 
+              this.syncCount++;
+
               this.sqliteSrv.setCustomers(res.data);
+
+              if (this.syncCount == this.syncSize) {
+                this.navCtrl.navigateRoot('/home');
+                SplashScreen.hide();
+              }
 
             });
 
@@ -178,7 +261,12 @@ export class LayoutPage implements OnInit, OnDestroy {
     this.apiSrv.getExpiredCustomers()
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(res => {
+        this.syncCount++;
         this.sqliteSrv.setExpiredCustomers(res.data);
+        if (this.syncCount == this.syncSize) {
+          this.navCtrl.navigateRoot('/home');
+          SplashScreen.hide();
+        }
       });
   }
 
@@ -186,7 +274,12 @@ export class LayoutPage implements OnInit, OnDestroy {
     this.apiSrv.getPaymentOptions()
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(res => {
+        this.syncCount++;
         this.sqliteSrv.setPaymentOptions(res.data);
+        if (this.syncCount == this.syncSize) {
+          this.navCtrl.navigateRoot('/home');
+          SplashScreen.hide();
+        }
       });
   }
 
@@ -194,7 +287,12 @@ export class LayoutPage implements OnInit, OnDestroy {
     this.apiSrv.getProductTables()
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(res => {
+        this.syncCount++;
         this.sqliteSrv.setTablesProducts(res.data);
+        if (this.syncCount == this.syncSize) {
+          this.navCtrl.navigateRoot('/home');
+          SplashScreen.hide();
+        }
       });
   }
 
@@ -202,7 +300,12 @@ export class LayoutPage implements OnInit, OnDestroy {
     this.apiSrv.getPositiveCustomers()
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(res => {
+        this.syncCount++;
         this.sqliteSrv.setPositiveCustomers(res.data);
+        if (this.syncCount == this.syncSize) {
+          this.navCtrl.navigateRoot('/home');
+          SplashScreen.hide();
+        }
       });
   }
 

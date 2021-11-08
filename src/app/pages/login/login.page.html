@@ -1,39 +1,93 @@
 <ion-content>
 
-  <ion-grid class="ion-no-padding">
+  <div class="no-mobile">
 
-    <ion-row>
+    <ion-grid class="ion-no-padding no-mobile">
 
-      <ion-col class="ion-no-padding" size-xs="12" size-md="7">
+      <ion-row>
 
-        <div class="image"></div>
+        <ion-col class="ion-no-padding content-img" size-xs="12" size-md="7">
 
-      </ion-col>
+          <div class="image"></div>
 
-      <ion-col size-xs="12" size-md="5">
+        </ion-col>
 
-        <form class="login" [formGroup]="formGroup">
+        <ion-col size-xs="12" size-md="5">
 
-          <img class="logo" src="../../../assets/image/logo.png">
+          <form class="login" [formGroup]="formGroup">
 
-          <ion-input class="custom" placeholder="Login" maxlength="255" formControlName="user"></ion-input>
+            <img class="logo" src="../../../assets/image/logo.png">
 
-          <ion-input class="custom" type="password" placeholder="Senha" maxlength="255" formControlName="password"></ion-input>
+            <div>
 
-          <ion-button expand="block" (click)="login()">
+              <ion-input class="custom" placeholder="Login" maxlength="255" formControlName="user"></ion-input>
 
-            <span *ngIf="!loading">Entrar</span>
+              <div class="input-button">
 
-            <ion-spinner name="dots" *ngIf="loading"></ion-spinner>
+                <ion-input class="custom" [type]="eye ? 'text' : 'password'" placeholder="Senha" maxlength="255" formControlName="password"></ion-input>
+        
+                <ion-button (click)="toggleEye()">
+        
+                  <ion-icon slot="icon-only" name="eye-outline" *ngIf="!eye"></ion-icon>
+        
+                  <ion-icon slot="icon-only" name="eye-off-outline" *ngIf="eye"></ion-icon>
+        
+                </ion-button>
+        
+              </div>
 
-          </ion-button>
+            </div>
+            
+            <ion-button expand="block" (click)="login()">
 
-        </form>
+              <span *ngIf="!loading">Entrar</span>
 
-      </ion-col>
+              <ion-spinner name="dots" *ngIf="loading"></ion-spinner>
 
-    </ion-row>
+            </ion-button>
 
-  </ion-grid>
+          </form>
+
+        </ion-col>
+
+      </ion-row>
+
+    </ion-grid>
+
+  </div>
+
+  <div class="mobile">
+
+    <img class="logo" src="../../../assets/image/logo.png">
+
+    <form [formGroup]="formGroup">
+
+      <ion-input class="custom" placeholder="Login" maxlength="255" formControlName="user"></ion-input>
+
+      <div class="input-button">
+
+        <ion-input class="custom" [type]="eye ? 'text' : 'password'" placeholder="Senha" maxlength="255" formControlName="password"></ion-input>
+
+        <ion-button (click)="toggleEye()">
+
+          <ion-icon slot="icon-only" name="eye-outline" *ngIf="!eye"></ion-icon>
+
+          <ion-icon slot="icon-only" name="eye-off-outline" *ngIf="eye"></ion-icon>
+
+        </ion-button>
+
+      </div>
+
+    </form>
+
+    <ion-button expand="block" (click)="login()">
+
+      <span *ngIf="!loading">Entrar</span>
+  
+      <ion-spinner name="dots" *ngIf="loading"></ion-spinner>
+  
+    </ion-button>
+
+  </div>
 
 </ion-content>

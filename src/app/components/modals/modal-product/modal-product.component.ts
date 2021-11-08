@@ -1,6 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Capacitor } from '@capacitor/core';
-import { Network } from '@capacitor/network';
 import { ModalController } from '@ionic/angular';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -76,57 +75,47 @@ export class ModalProductComponent implements OnInit, OnDestroy {
 
     this.qty = 1;
 
-    Network.getStatus()
-      .then(status => {
+    if (Capacitor.isNativePlatform()) {
 
-        if (status.connected) {
+      this.sqliteSrv.getProducts(this.lab_id)
+        .then(products => this.products = products);
 
-          this.apiSrv.getProducts({ id_lab: this.lab_id })
-            .pipe(takeUntil(this.unsubscribe))
-            .subscribe(res => this.products = res.data);
+    }
 
-        }
+    else {
 
-        else if (Capacitor.isNativePlatform()) {
+      this.apiSrv.getProducts({ id_lab: this.lab_id })
+        .pipe(takeUntil(this.unsubscribe))
+        .subscribe(res => this.products = res.data);
 
-          this.sqliteSrv.getProducts(this.lab_id)
-            .then(products => this.products = products);
+    }
 
-        }
-
-      });
-      
   }
 
   public productChanged() {
 
-    Network.getStatus()
-      .then(status => {
+    if (Capacitor.isNativePlatform()) {
 
-        if (status.connected) {
+      this.sqliteSrv.getTableProduct(this.table_id, this.product_id)
+        .then(prices => {
+          this.prices = prices;
+          this.total = this.prices.valor - ((this.prices.valor * this.discount) / 100);
+          this.qty = 1;
+        });
 
-          this.apiSrv.getProductPrices({ id_produto: this.product_id, id_tabela: this.table_id })
-            .pipe(takeUntil(this.unsubscribe))
-            .subscribe(res => {
-              this.prices = res.data
-              this.total = this.prices.valor - ((this.prices.valor * this.discount) / 100);
-              this.qty = 1;
-            });
+    }
 
-        }
+    else {
 
-        else if (Capacitor.isNativePlatform()) {
+      this.apiSrv.getProductPrices({ id_produto: this.product_id, id_tabela: this.table_id })
+        .pipe(takeUntil(this.unsubscribe))
+        .subscribe(res => {
+          this.prices = res.data
+          this.total = this.prices.valor - ((this.prices.valor * this.discount) / 100);
+          this.qty = 1;
+        });
 
-          this.sqliteSrv.getTableProduct(this.table_id, this.product_id)
-            .then(prices => {
-              this.prices = prices;
-              this.total = this.prices.valor - ((this.prices.valor * this.discount) / 100);
-              this.qty = 1;
-            });
-
-        }
-
-      });
+    }
 
   }
 

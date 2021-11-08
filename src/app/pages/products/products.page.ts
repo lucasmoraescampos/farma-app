@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Capacitor } from '@capacitor/core';
-import { Network } from '@capacitor/network';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ApiService } from 'src/app/services/api.service';
@@ -42,62 +41,52 @@ export class ProductsPage implements OnInit, OnDestroy {
   }
 
   public selectLab(lab: any) {
-    
-    Network.getStatus()
-      .then(status => {
 
-        if (status.connected) {
+    if (Capacitor.isNativePlatform()) {
 
-          this.apiSrv.getProducts({ id_lab: lab.id_lab })
-            .pipe(takeUntil(this.unsubscribe))
-            .subscribe(res => {
+      this.sqliteSrv.getProducts(lab.id_lab)
+        .then(products => {
 
-              this.labSelected = lab;
+          this.labSelected = lab;
 
-              this.products = res.data;
+          this.products = products;
 
-            });
+        });
 
-        }
+    }
 
-        else if (Capacitor.isNativePlatform()) {
+    else {
 
-          this.sqliteSrv.getProducts(lab.id_lab)
-            .then(products => {
+      this.apiSrv.getProducts({ id_lab: lab.id_lab })
+        .pipe(takeUntil(this.unsubscribe))
+        .subscribe(res => {
 
-              this.labSelected = lab;
+          this.labSelected = lab;
 
-              this.products = products;
+          this.products = res.data;
 
-            });
+        });
 
-        }
+    }
 
-      });
-      
   }
 
   public initLabs() {
 
-    Network.getStatus()
-      .then(status => {
+    if (Capacitor.isNativePlatform()) {
 
-        if (status.connected) {
+      this.sqliteSrv.getLabs()
+        .then(labs => this.labs = labs);
 
-          this.apiSrv.getLabs()
-            .pipe(takeUntil(this.unsubscribe))
-            .subscribe(res => this.labs = res.data);
+    }
 
-        }
+    else {
 
-        else if (Capacitor.isNativePlatform()) {
+      this.apiSrv.getLabs()
+        .pipe(takeUntil(this.unsubscribe))
+        .subscribe(res => this.labs = res.data);
 
-          this.sqliteSrv.getLabs()
-            .then(labs => this.labs = labs);
-
-        }
-
-      });
+    }
 
   }
 

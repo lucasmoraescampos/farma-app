@@ -1,10 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Capacitor } from '@capacitor/core';
 import { NavController } from '@ionic/angular';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AlertService } from 'src/app/services/alert.service';
 import { ApiService } from 'src/app/services/api.service';
+import { SplashScreen } from '@capacitor/splash-screen';
 
 @Component({
   selector: 'app-login',
@@ -14,6 +16,8 @@ import { ApiService } from 'src/app/services/api.service';
 export class LoginPage implements OnInit, OnDestroy {
 
   public loading: boolean;
+
+  public eye: boolean;
 
   public formGroup: FormGroup;
 
@@ -33,11 +37,19 @@ export class LoginPage implements OnInit, OnDestroy {
       password: ['', Validators.required]
     });
 
+    if (Capacitor.isNativePlatform()) {
+      SplashScreen.hide();
+    }
+
   }
 
   ngOnDestroy() {
     this.unsubscribe.next();
     this.unsubscribe.complete();
+  }
+
+  public toggleEye() {
+    this.eye = !this.eye;
   }
 
   public login() {
@@ -54,7 +66,7 @@ export class LoginPage implements OnInit, OnDestroy {
           res => {
             this.loading = false;
             if (res.success) {
-              this.navCtrl.navigateRoot(['/home']);
+              this.navCtrl.navigateRoot(['/']);
             }
             else {
               this.alertSrv.toast({

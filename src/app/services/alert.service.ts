@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ToastController } from '@ionic/angular';
-import Swal, { SweetAlertIcon, SweetAlertPosition } from 'sweetalert2';
+import { AlertController, ToastController } from '@ionic/angular';
 
 @Injectable({
   providedIn: 'root'
@@ -8,31 +7,33 @@ import Swal, { SweetAlertIcon, SweetAlertPosition } from 'sweetalert2';
 export class AlertService {
 
   constructor(
-    private toastCtrl: ToastController
+    private toastCtrl: ToastController,
+    private alertCtrl: AlertController
   ) { }
 
-  public show(options: AlertOptions) {
-    Swal.fire({
-      icon: options.icon,
-      title: options.title,
-      text: options.message,
-      showCancelButton: options.showCancelButton !== undefined ? options.showCancelButton : true,
-      confirmButtonText: options.confirmButtonText ? options.confirmButtonText : 'Confirmar',
-      cancelButtonText: options.cancelButtonText ? options.cancelButtonText : 'Cancelar',
-      heightAuto: false,
-      allowOutsideClick: false,
-    }).then(result => {
-      if (result.value) {
-        if (options.onConfirm) {
-          options.onConfirm();
+  public async show(options: AlertOptions) {
+
+    const alert = await this.alertCtrl.create({
+      header: options.header,
+      message: options.message,
+      buttons: [
+        {
+          text: options.cancelButtonText ? options.cancelButtonText : 'Cancelar',
+          role: 'cancel',
+          handler: () => {
+            options.onCancel();
+          }
+        }, {
+          text: options.confirmButtonText ? options.confirmButtonText : 'Confirmar',
+          handler: () => {
+            options.onConfirm();
+          }
         }
-      }
-      else {
-        if (options.onCancel) {
-          options.onCancel();
-        }
-      }
+      ]
     });
+
+    return await alert.present();
+
   }
 
   public async toast(options: ToastOptions) {
@@ -51,15 +52,12 @@ export class AlertService {
 }
 
 interface AlertOptions {
-  title?: string;
-  message?: string;
+  header: string;
+  message: string;
   confirmButtonText?: string;
   cancelButtonText?: string;
-  showCancelButton?: boolean;
   onConfirm?: Function;
   onCancel?: Function;
-  duration?: number;
-  icon?: SweetAlertIcon;
 }
 
 interface ToastOptions {

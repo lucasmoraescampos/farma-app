@@ -10,11 +10,6 @@ const routes: Routes = [
     component: LayoutPage,
     children: [
       {
-        path: '',
-        redirectTo: 'home',
-        pathMatch: 'full'
-      },
-      {
         path: 'home',
         loadChildren: () => import('../home/home.module').then( m => m.HomePageModule),
         canActivate: [AuthGuard]

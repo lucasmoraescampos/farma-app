@@ -6,7 +6,6 @@ import { takeUntil } from 'rxjs/operators';
 import { ModalPositiveCustomersComponent } from 'src/app/components/modals/modal-positive-customers/modal-positive-customers.component';
 import { ApiService } from 'src/app/services/api.service';
 import { SQLiteService } from 'src/app/services/sqlite.service';
-import { Network } from '@capacitor/network';
 
 @Component({
   selector: 'app-home',
@@ -46,26 +45,23 @@ export class HomePage implements OnInit, OnDestroy {
 
   private initDashboard() {
 
-    Network.getStatus()
-      .then(status => {
+    if (Capacitor.isNativePlatform()) {
 
-        if (status.connected) {
+      this.sqliteSrv.getDashboard()
+        .then(dashboard => {
+          this.dashboard = dashboard;
+        });
 
-          this.apiSrv.dashboard()
-            .pipe(takeUntil(this.unsubscribe))
-            .subscribe(res => this.dashboard = res.data);
+    }
 
-        }
+    else {
 
-        else if (Capacitor.isNativePlatform()) {
+      this.apiSrv.dashboard()
+        .pipe(takeUntil(this.unsubscribe))
+        .subscribe(res => this.dashboard = res.data);
 
-          this.sqliteSrv.getDashboard()
-            .then(dashboard => this.dashboard = dashboard);
+    }
 
-        }
-
-      });
-      
   }
 
 }

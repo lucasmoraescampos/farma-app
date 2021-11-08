@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { StatusBar, Style } from '@capacitor/status-bar';
-import { SplashScreen } from '@capacitor/splash-screen';
 import { Capacitor } from '@capacitor/core';
 import { Platform } from '@ionic/angular';
 import { SQLiteService } from './services/sqlite.service';
@@ -30,8 +29,6 @@ export class AppComponent {
         StatusBar.setBackgroundColor({ color: '#FFFFFF' });
 
         StatusBar.setStyle({ style: Style.Light });
-
-        SplashScreen.hide();
 
       }
 

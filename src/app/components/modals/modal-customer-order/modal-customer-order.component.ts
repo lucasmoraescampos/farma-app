@@ -180,8 +180,7 @@ export class ModalCustomerOrderComponent implements OnInit, OnDestroy {
   public deleteProduct(product: any) {
 
     this.alertSrv.show({
-      icon: 'warning',
-      title: product.name,
+      header: product.name,
       message: 'Tem certeza que deseja excluir?',
       confirmButtonText: 'Excluir',
       onConfirm: () => {
@@ -238,7 +237,7 @@ export class ModalCustomerOrderComponent implements OnInit, OnDestroy {
 
       const data: Order = {
         id_cliente:     this.customer.id_cliente,
-        id_tabela:      this.customer.razao_social,
+        id_tabela:      this.formGroup.value.id_tabela,
         id_prazo:       this.formGroup.value.prazo.id_prazo,
         promo:          this.formGroup.value.promo,
         promo_aut_por:  this.formGroup.value.promo_aut_por,
@@ -271,7 +270,7 @@ export class ModalCustomerOrderComponent implements OnInit, OnDestroy {
       Network.getStatus()
         .then(status => {
 
-          if (!status.connected) {
+          if (status.connected) {
 
             this.apiSrv.createOrder(data)
               .pipe(takeUntil(this.unsubscribe))

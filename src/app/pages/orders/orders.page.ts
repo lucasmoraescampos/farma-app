@@ -58,6 +58,8 @@ export class OrdersPage implements OnInit, OnDestroy {
 
   public searchChanged() {
 
+    if (this.search.length == 0) this.searchItems = null;
+
     if (this.search.length < 3) return;
 
     if (Capacitor.isNativePlatform()) {

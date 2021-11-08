@@ -46,7 +46,6 @@ export class ApiService {
     return this.http.post<HttpResult>(`${this.apiUrl}/auth/logout`, null)
       .pipe(map(res => {
         if (res.success) {
-          localStorage.clear();
           this.currentUserSubject.next(null);
         }
         return res;
@@ -107,6 +106,10 @@ export class ApiService {
 
   public createOrder(data: any) {
     return this.http.post<HttpResult>(`${this.apiUrl}/order`, data);
+  }
+
+  public syncOrder(data: any) {
+    return this.http.post<HttpResult>(`${this.apiUrl}/order/sync`, data);
   }
 
 }

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Capacitor } from '@capacitor/core';
-import { Network } from '@capacitor/network';
 import { ModalController } from '@ionic/angular';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -34,26 +33,21 @@ export class ModalPositiveCustomersComponent implements OnInit {
 
   private initCustomers() {
 
-    Network.getStatus()
-      .then(status => {
+    if (Capacitor.isNativePlatform()) {
 
-        if (status.connected) {
+      this.sqliteSrv.getPositiveCustomers()
+        .then(customers => this.customers = customers);
 
-          this.apiSrv.getPositiveCustomers()
-            .pipe(takeUntil(this.unsubscribe$))
-            .subscribe(res => this.customers = res.data);
+    }
 
-        }
+    else {
 
-        else if (Capacitor.isNativePlatform()) {
+      this.apiSrv.getPositiveCustomers()
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe(res => this.customers = res.data);
 
-          this.sqliteSrv.getPositiveCustomers()
-            .then(customers => this.customers = customers);
-
-        }
-
-      });
-
+    }
+    
   }
 
 }

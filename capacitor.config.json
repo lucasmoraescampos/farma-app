@@ -6,10 +6,10 @@
 	"plugins": {
 		"SplashScreen": {
 			"launchAutoHide": false,
-			"androidScaleType": "CENTER_CROP",
+			"androidScaleType": "CENTER",
 			"splashFullScreen": true,
-			"splashImmersive": false,
-			"backgroundColor": "#ffffff"
+			"splashImmersive": true,
+			"backgroundColor": "#FFFFFF"
 		}
 	}
 }

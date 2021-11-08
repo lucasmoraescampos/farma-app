@@ -10,8 +10,8 @@ export const CREATE_TABLES = [
     ],
     [
         `CREATE TABLE IF NOT EXISTS clientes_positivados (
-            razao_social VARCHAR(200)  NOT NULL,
-            cnpj         DECIMAL(15,2) NOT NULL,
+            razao_social VARCHAR(200)  DEFAULT NULL,
+            cnpj         DECIMAL(15,2) DEFAULT NULL,
             PRIMARY KEY(razao_social, cnpj)
         )`
     ],
@@ -41,8 +41,8 @@ export const CREATE_TABLES = [
     ],
     [
         `CREATE TABLE IF NOT EXISTS clientes (
-            id_cliente   VARCHAR(200) NOT NULL,
-            razao_social VARCHAR(200) NOT NULL,
+            id_cliente   VARCHAR(200) DEFAULT NULL,
+            razao_social VARCHAR(200) DEFAULT NULL,
             fantasia     VARCHAR(200) DEFAULT NULL,
             email        VARCHAR(200) DEFAULT NULL,
             cep          VARCHAR(200) DEFAULT NULL,
@@ -124,12 +124,12 @@ export const CREATE_TABLES = [
     ],
     [
         `CREATE TABLE IF NOT EXISTS pedido_itens (
-            id_pedido  INT(11)      NOT NULL,
-            id_produto INT(11)      NOT NULL,
-            nome       VARCHAR(200) NOT NULL,
-            cod        INT(11)      NOT NULL,
-            qtde       FLOAT        NOT NULL,
-            valor      VARCHAR(200) NOT NULL,
+            id_pedido  INT(11)      DEFAULT NULL,
+            id_produto INT(11)      DEFAULT NULL,
+            nome       VARCHAR(200) DEFAULT NULL,
+            cod        INT(11)      DEFAULT NULL,
+            qtde       FLOAT        DEFAULT NULL,
+            valor      VARCHAR(200) DEFAULT NULL,
             desconto   VARCHAR(200) DEFAULT NULL,
             ipi        DOUBLE(8,2)  DEFAULT NULL,     
             comissao   DOUBLE(8,2)  DEFAULT NULL,
@@ -160,11 +160,11 @@ export const CREATE_TABLES = [
     ],
     [
         `CREATE TABLE IF NOT EXISTS tabelas_produtos (
-            id_produto INT(11)     NOT NULL,
-            id_tabela  INT(11)     NOT NULL,
-            valor      DOUBLE(8,2) NOT NULL,
-            upc        INT(11)     NOT NULL,
-            estoque    INT(11)     NOT NULL
+            id_produto INT(11)     DEFAULT NULL,
+            id_tabela  INT(11)     DEFAULT NULL,
+            valor      DOUBLE(8,2) DEFAULT NULL,
+            upc        INT(11)     DEFAULT NULL,
+            estoque    INT(11)     DEFAULT NULL
         )`
     ]
 ];

@@ -6,13 +6,10 @@
 	"plugins": {
 		"SplashScreen": {
 			"launchAutoHide": false,
-			"androidScaleType": "CENTER_CROP",
+			"androidScaleType": "CENTER",
 			"splashFullScreen": true,
-			"splashImmersive": false,
-			"backgroundColor": "#ffffff"
+			"splashImmersive": true,
+			"backgroundColor": "#FFFFFF"
 		}
-	},
-	"server": {
-		"url": "http://192.168.100.199:8100"
 	}
 }

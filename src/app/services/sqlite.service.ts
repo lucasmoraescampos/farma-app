@@ -488,7 +488,19 @@ export class SQLiteService {
     if (result.rows.length > 0) {
 
       for (let i=0; i < result.rows.length; i++) {
-        orders.push(result.rows.item(i));
+
+        const order = result.rows.item(i);
+
+        order.produtos = [];
+
+        const res = await db.executeSql('SELECT * FROM pedido_itens WHERE id_pedido = ?', [order.id_pedido]);
+
+        for (let j=0; j < res.rows.length; j++) {
+          order.produtos.push(res.rows.item(j));
+        }
+
+        orders.push(order);
+
       }
 
     }
@@ -553,9 +565,9 @@ export class SQLiteService {
 
     const db: SQLiteObject = await this.getDB();
 
-    await db.executeSql('DELETE FROM pedido_itens WHERE sync = 1', []);
+    await db.executeSql('DELETE FROM pedido_itens', []);
 
-    await db.executeSql('DELETE FROM pedidos WHERE sync = 1', []);
+    await db.executeSql('DELETE FROM pedidos', []);
 
     const sql = [];
 
